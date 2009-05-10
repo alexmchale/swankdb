@@ -2,14 +2,12 @@
 
 <table>
   <tr>
-    <th>User</th>
     <th>Content</th>
     <th>Tags</th>
   </tr>
 
 <% @entries.each do |entry| %>
   <tr>
-    <td><%=h entry.user %></td>
     <td><%=h entry.content %></td>
     <td><%=h entry.tags %></td>
     <td><%= link_to 'Show', entry %></td>
