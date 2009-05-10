@@ -9,4 +9,8 @@ module ApplicationHelper
   def nbsp(s)
     s.to_s.gsub(/\s/, '&nbsp;')
   end
+
+  def pretty_timedate(time)
+    time.strftime('%I:%M%P on  %m/ %d/%y').gsub(/(^0+)|( 0+)/, '').gsub(/\s+/, ' ').gsub(/\/\s+/, '/')
+  end
 end
