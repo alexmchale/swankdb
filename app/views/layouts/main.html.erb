@@ -19,6 +19,13 @@
 	<% end %>
 </p>
 
+<p>
+  <form method="get" action="/entries">
+		<input type="text" size="25" name="keywords" id="keywords" />
+		<input type="submit" value="Search" />
+  </form>
+</p>
+
 <p style="color: green"><%= flash[:notice] %></p>
 
 <%= yield %>
