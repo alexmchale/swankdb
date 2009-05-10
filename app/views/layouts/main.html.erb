@@ -9,6 +9,16 @@
 </head>
 <body>
 
+<p>
+	<% if session[:user] %>
+	  <%= link_to 'All', :controller => :entries, :action => :index %>
+
+	  <% session[:user].tags.each do |tag| %>
+			<%= link_to tag, :controller => :entries, :action => :index, :tag => tag %>
+	  <% end %>
+	<% end %>
+</p>
+
 <p style="color: green"><%= flash[:notice] %></p>
 
 <%= yield %>

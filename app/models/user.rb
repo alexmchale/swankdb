@@ -1,10 +1,17 @@
 class User < ActiveRecord::Base
+  has_many :entries
   before_save :rehash_password
 
   def self.authenticate(username, password)
     User.find :first,
               :conditions => { :username => username,
                                :password => hash_password(username, password) }
+  end
+
+  def tags
+    entries.map do |entry|
+      entry.tags_list
+    end.flatten.uniq.compact.sort
   end
 
 private
