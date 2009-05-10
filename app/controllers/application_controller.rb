@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user_account
 
+protected
+
+  def current_user_id
+    session[:user].andand.id
+  end
+
 private
 
   def authenticate_user_account
