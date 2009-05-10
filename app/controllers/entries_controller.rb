@@ -1,8 +1,8 @@
 class EntriesController < ApplicationController
-  # GET /entries
-  # GET /entries.xml
+  before_filter :strip_user_input
+
   def index
-    @entries = Entry.all
+    @entries = Entry.find(:all, :conditions => { :user_id => current_user_id })
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +13,7 @@ class EntriesController < ApplicationController
   # GET /entries/1
   # GET /entries/1.xml
   def show
-    @entry = Entry.find(params[:id])
+    @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,6 +25,7 @@ class EntriesController < ApplicationController
   # GET /entries/new.xml
   def new
     @entry = Entry.new
+    @entry.user_id = current_user_id
 
     respond_to do |format|
       format.html # new.html.erb
@@ -34,13 +35,14 @@ class EntriesController < ApplicationController
 
   # GET /entries/1/edit
   def edit
-    @entry = Entry.find(params[:id])
+    @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
   end
 
   # POST /entries
   # POST /entries.xml
   def create
     @entry = Entry.new(params[:entry])
+    @entry.user_id = current_user_id
 
     respond_to do |format|
       if @entry.save
@@ -57,7 +59,7 @@ class EntriesController < ApplicationController
   # PUT /entries/1
   # PUT /entries/1.xml
   def update
-    @entry = Entry.find(params[:id])
+    @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
 
     respond_to do |format|
       if @entry.update_attributes(params[:entry])
@@ -74,12 +76,19 @@ class EntriesController < ApplicationController
   # DELETE /entries/1
   # DELETE /entries/1.xml
   def destroy
-    @entry = Entry.find(params[:id])
+    @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
     @entry.destroy
 
     respond_to do |format|
       format.html { redirect_to(entries_url) }
       format.xml  { head :ok }
     end
+  end
+
+private
+
+  def strip_user_input
+    params[:entry].andand.delete :user
+    params[:entry].andand.delete :user_id
   end
 end
