@@ -24,9 +24,17 @@ class Entry < ActiveRecord::Base
     self.tags.to_s.split(/\s+/).find_all {|tag| !tag.blank?}
   end
 
-  def each_filter_item(type)
-    filter(type).each do |item|
-      yield(item, urlify(type, item))
+  def each_filter_item(type = nil)
+    if type
+      filter(type).each do |item|
+        yield(item, urlify(type, item))
+      end
+    else
+      FILTERS.each do |type, regex|
+        filter(type).each do |item|
+          yield(type, item, urlify(type, item))
+        end
+      end
     end
   end
 

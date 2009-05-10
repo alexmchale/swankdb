@@ -8,37 +8,17 @@
 	<%= link_entry_tags @entry %>
 </p>
 
-<p>
-	<b>URLs:</b>
+<% @entry.each_filter_item do |type, item, url| %>
+  <p>
+		<b><%=h type %>:</b>
 
-	<% @entry.each_filter_item(:url) do |item, url| %>
-		<%= link_to item, url %>
-	<% end %>
-</p>
-
-<p>
-	<b>UPS:</b>
-
-	<% @entry.each_filter_item(:ups) do |item, url| %>
-		<%= link_to item, url %>
-	<% end %>
-</p>
-
-<p>
-	<b>FedEx:</b>
-
-	<% @entry.each_filter_item(:fedex) do |item, url| %>
-		<%= link_to item, url %>
-	<% end %>
-</p>
-
-<p>
-	<b>Phone Numbers:</b>
-
-	<% @entry.each_filter_item(:phone) do |item, url| %>
-	  <%= item %>
-	<% end %>
-</p>
+		<% if url %>
+			<%= link_to item, url %>
+		<% else %>
+		  <%=h item %>
+		<% end %>
+	</p>
+<% end %>
 
 <%= link_to 'Edit', edit_entry_path(@entry) %> |
 <%= link_to 'Back', entries_path %>
