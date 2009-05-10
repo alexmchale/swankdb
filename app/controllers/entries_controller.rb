@@ -8,6 +8,10 @@ class EntriesController < ApplicationController
       @entries = Entry.find_all_by_user_id(current_user_id)
     end
 
+    if params[:with]
+      @entries = @entries.find_all {|e| e.filter(params[:with]).andand.length > 0}
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @entries }
