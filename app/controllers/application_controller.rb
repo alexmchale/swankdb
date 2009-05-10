@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user_account
 
+  layout 'main'
+
 protected
 
   def current_user_id
