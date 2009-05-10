@@ -13,4 +13,8 @@ module ApplicationHelper
   def pretty_timedate(time)
     time.strftime('%I:%M%P on  %m/ %d/%y').gsub(/(^0+)|( 0+)/, '').gsub(/\s+/, ' ').gsub(/\/\s+/, '/')
   end
+
+  def separator
+    '<div style="clear: both; margin: 0px; padding-top: 1em; padding-bottom: 1em"></div>'
+  end
 end

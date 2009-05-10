@@ -9,26 +9,50 @@
 </head>
 <body>
 
-<p>
-	<% if session[:user] %>
-	  <%= link_to 'All', :controller => :entries, :action => :index %>
+<div style="width: 950px; margin-left: auto; margin-right: auto">
+	<div style="">
+		<div style="float: left">
+			<h1>swankdb</h1>
+		</div>
 
-	  <% session[:user].tags.each do |tag| %>
-			<%= link_to tag, :controller => :entries, :action => :index, :tag => tag %>
-	  <% end %>
-	<% end %>
-</p>
+		<div style="position: relative; text-align: right">
+			<p style="">
+				<%= session[:user].andand.username %>
+			</p>
 
-<p>
-  <form method="get" action="/entries">
-		<input type="text" size="25" name="keywords" id="keywords" />
-		<input type="submit" value="Search" />
-  </form>
-</p>
+			<p style="">
+			  <form method="get" action="/entries">
+					<input type="text" size="50" name="keywords" id="keywords" />
+					<%= 3.spaces %>
+					<input type="submit" value="Search" />
+			  </form>
+			</p>
+		</div>
+	</div>
 
-<p style="color: green"><%= flash[:notice] %></p>
+	<%= separator %>
 
-<%= yield %>
+	<div style="">
+		<p style="">
+			<% if session[:user] %>
+			  <%= link_to 'All', :controller => :entries, :action => :index %>
+
+			  <% session[:user].tags.each do |tag| %>
+			    <%= 3.spaces %>
+					<%= link_to tag, :controller => :entries, :action => :index, :tag => tag %>
+			  <% end %>
+			<% end %>
+		</p>
+	</div>
+
+	<%= separator %>
+
+  <div style="">
+		<p style="color: green"><%= flash[:notice] %></p>
+
+		<%= yield %>
+	</div>
+</div>
 
 </body>
 </html>
