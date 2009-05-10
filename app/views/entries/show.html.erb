@@ -8,6 +8,26 @@
 	<%= link_entry_tags @entry %>
 </p>
 
+<p>
+	<b>URLs:</b>
+	<% for url in @entry.filter(:url) %>
+		<%= link_to url.to_s, url.to_s %>
+	<% end %>
+</p>
+
+<p>
+	<b>UPS:</b>
+	<% for ups in @entry.filter(:ups) %>
+	  <%=h ups %>
+	<% end %>
+</p>
+
+<p>
+	<b>FedEx:</b>
+	<% for fedex in @entry.filter(:fedex) %>
+		<%=h fedex %>
+	<% end %>
+</p>
 
 <%= link_to 'Edit', edit_entry_path(@entry) %> |
 <%= link_to 'Back', entries_path %>
