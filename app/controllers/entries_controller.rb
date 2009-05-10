@@ -2,7 +2,11 @@ class EntriesController < ApplicationController
   before_filter :strip_user_input
 
   def index
-    @entries = Entry.find(:all, :conditions => { :user_id => current_user_id })
+    if params[:tag]
+      @entries = Entry.find_by_tag(current_user_id, params[:tag])
+    else
+      @entries = Entry.find_all_by_user_id(current_user_id)
+    end
 
     respond_to do |format|
       format.html # index.html.erb
