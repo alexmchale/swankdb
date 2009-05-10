@@ -9,7 +9,7 @@
 <% @entries.each do |entry| %>
   <tr>
     <td><%=h entry.content %></td>
-    <td><%=h entry.tags %></td>
+    <td><%= link_entry_tags entry %></td>
     <td><%= link_to 'Show', entry %></td>
     <td><%= link_to 'Edit', edit_entry_path(entry) %></td>
     <td><%= link_to 'Destroy', entry, :confirm => 'Are you sure?', :method => :delete %></td>
