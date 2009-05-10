@@ -4,12 +4,14 @@
   <tr>
     <th>Content</th>
     <th>Tags</th>
+    <th>Last Update</th>
   </tr>
 
 <% @entries.each do |entry| %>
   <tr>
     <td><%=h entry.content %></td>
     <td><%= link_entry_tags entry %></td>
+    <td><%= nbsp entry.updated_at %></td>
     <td><%= link_to 'Show', entry %></td>
     <td><%= link_to 'Edit', edit_entry_path(entry) %></td>
     <td><%= link_to 'Destroy', entry, :confirm => 'Are you sure?', :method => :delete %></td>

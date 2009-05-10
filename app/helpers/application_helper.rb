@@ -5,4 +5,8 @@ module ApplicationHelper
       link_to tag, :controller => :entries, :action => :index, :tag => tag
     end.join ' '
   end
+
+  def nbsp(s)
+    s.to_s.gsub(/\s/, '&nbsp;')
+  end
 end
