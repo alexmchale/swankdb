@@ -6,7 +6,8 @@ class Entry < ActiveRecord::Base
   FILTERS = {
     'url' => /((http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?)$/ix,
     'ups' => /\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|[\dT]\d\d\d ?\d\d\d\d ?\d\d\d)\b/i,
-    'fedex' => /\b(\d\d\d\d ?\d\d\d\d ?\d\d\d\d)\b/i
+    'fedex' => /\b(\d\d\d\d ?\d\d\d\d ?\d\d\d\d)\b/,
+    'phone' => /((\+?\d{0,2}[ -])?\d{0,3}[ -]\d{3}[ -]\d{4})/
   }
 
   URLIFIERS = {
