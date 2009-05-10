@@ -2,15 +2,11 @@ class EntriesController < ApplicationController
   before_filter :strip_user_input
 
   def index
-    if params[:tag]
-      @entries = Entry.find_by_tag(current_user_id, params[:tag])
-    else
-      @entries = Entry.find_all_by_user_id(current_user_id)
-    end
-
-    if params[:with]
-      @entries = @entries.find_all {|e| e.filter(params[:with]).andand.length > 0}
-    end
+    @entries = Entry.search :user_id => current_user_id,
+                            :tag => params[:tag],
+                            :with => params[:with],
+                            :keywords => params[:keywords],
+                            :order => 'updated_at DESC'
 
     respond_to do |format|
       format.html # index.html.erb

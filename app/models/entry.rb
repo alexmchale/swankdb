@@ -16,8 +16,34 @@ class Entry < ActiveRecord::Base
     'fedex' => "http://www.fedex.com/Tracking?language=english&cntry_code=us&tracknumbers=%s"
   }
 
-  def self.find_by_tag(user_id, tag)
-    find :all, :conditions => [ 'user_id = ? AND tags LIKE ?', user_id, "% " + tag + " %" ]
+  def self.search(options = {})
+    fields = []
+    top_and = []
+
+    top_and << 'user_id = ?'
+    fields << options[:user_id]
+
+    if options[:tag]
+      top_and << 'tags LIKE ?'
+      fields << '% ' + options[:tag] + ' %'
+    end
+
+    if options[:keywords]
+      options[:keywords].split(/\s+/).each do |keyword|
+        top_and << 'LOWER(content) LIKE ?'
+        fields << '%' + keyword.downcase + '%'
+      end
+    end
+
+    entries = Entry.find(:all,
+                         :conditions => [top_and.join(' AND '), fields].flatten,
+                         :order => options[:order])
+
+    if options[:with]
+      entries = entries.find_all {|e| e.filter(options[:with]).andand.length > 0}
+    end
+
+    entries
   end
 
   def tags_list
