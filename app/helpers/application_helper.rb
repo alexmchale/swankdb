@@ -10,6 +10,10 @@ module ApplicationHelper
     s.to_s.gsub(/\s/, '&nbsp;')
   end
 
+  def nocrlf(s)
+    s.to_s.gsub(/[\r\n]/, '')
+  end
+
   def pretty_timedate(time)
     now = Time.now
     delta = now - time
