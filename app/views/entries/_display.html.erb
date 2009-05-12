@@ -4,6 +4,12 @@
 
 <%= separator %>
 
+<div class="submit_line">
+	<%= link_to 'Edit', edit_entry_path(@entry) %>
+</div>
+
+<%= separator %>
+
 <p>
   <b>Tags:</b>
 	<%= link_entry_tags @entry %>
@@ -22,8 +28,3 @@
 		<% end %>
 	</p>
 <% end %>
-
-<%= separator %>
-
-<%= link_to 'Edit', edit_entry_path(@entry) %> |
-<%= link_to 'Back', entries_path %>
