@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  has_many :entries
   before_save :rehash_password
 
   def self.authenticate(username, password)
@@ -9,7 +8,7 @@ class User < ActiveRecord::Base
   end
 
   def tags
-    entries.map do |entry|
+    Entry.find(:all, :conditions => { :user_id => id }).map do |entry|
       entry.tags_list
     end.flatten.uniq.compact.sort
   end
