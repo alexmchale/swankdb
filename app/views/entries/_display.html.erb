@@ -1,11 +1,13 @@
-<div class="content_display">
-  <%= markdown @entry.content %>
+<div class="submit_line">
+	<%= link_to 'Destroy', @entry, :confirm => 'Are you sure?', :method => :delete %>
+	<%= 3.spaces %>
+	<%= link_to 'Edit', edit_entry_path(@entry) %>
 </div>
 
 <%= separator %>
 
-<div class="submit_line">
-	<%= link_to 'Edit', edit_entry_path(@entry) %>
+<div class="content_display">
+  <%= markdown @entry.content %>
 </div>
 
 <%= separator %>
