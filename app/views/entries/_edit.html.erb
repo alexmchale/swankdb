@@ -1,0 +1,30 @@
+<% form_for(@entry) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="content_edit">
+	  <%= h3 'New Content' %>
+    <%= f.text_area :content, :class => 'entry_edit', :rows => 10 %>
+  </div>
+
+  <%= separator %>
+
+  <div class="tags_edit">
+	  <%= h3 'Tags' %>
+    <%= f.text_field :tags, :class => 'entry_edit' %>
+  </div>
+
+  <%= separator %>
+
+  <div class="submit_line">
+    <%= f.submit 'Create' %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', entries_path %>
+
+<script lang="JavaScript">
+  $('textarea#entry_content').autoResize({
+    animateDuration: 300,
+    extraSpace: 0
+  });
+</script>
