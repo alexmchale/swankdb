@@ -17,20 +17,17 @@ module ApplicationHelper
   def pretty_timedate(time)
     now = Time.now
     delta = now - time
+    result = ""
 
-    if delta < 1.minute
-      "%d&nbsp;seconds" % (delta / 1.second)
-    elsif delta < 1.hour
-      "%d&nbsp;minutes" % (delta / 1.minute)
-    elsif delta < 1.day
-      "%d&nbsp;hours" % (delta / 1.hour)
-    elsif delta < 1.month
-      "%d&nbsp;days" % (delta / 1.day)
-    elsif delta < 1.year
-      "%d&nbsp;months" % (delta / 1.month)
-    else
-      "%d&nbsp;years" % (delta / 1.year)
+    [ :second, :minute, :hour, :day, :month, :year ].each do |scale|
+      scale_seconds = 1.send(scale)
+      break if delta < scale_seconds
+      count = (delta / scale_seconds).to_i
+      s = count != 1 ? 's' : ''
+      result = "%d&nbsp;%s%s" % [ count, scale, s ]
     end
+
+    result
   end
 
   def separator
