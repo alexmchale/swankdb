@@ -23,6 +23,8 @@
 
 		<div style="position: relative; text-align: right">
 			<p style="">
+				<%= link_to 'New entry', new_entry_path %>
+				<%= 3.spaces %>
 				<%= session[:user].andand.username %>
 			</p>
 
@@ -56,6 +58,8 @@
 
 		<%= yield %>
 	</div>
+
+	<%= separator %>
 </div>
 
 </body>

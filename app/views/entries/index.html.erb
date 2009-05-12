@@ -1,38 +1,30 @@
 <table class="entry_list_table">
 
   <tr class="list_header_row">
-    <th class="list_header_cell">Content</th>
-    <th class="list_header_cell">Tags</th>
-    <th class="list_header_cell">Last&nbsp;Update</th>
-    <th class="list_header_cell">&nbsp;</th>
-    <th class="list_header_cell">&nbsp;</th>
-    <th class="list_header_cell">&nbsp;</th>
+    <th class="list_header_cell list_content_header_cell">Content</th>
+    <th class="list_header_cell list_tags_header_cell">Tags</th>
+    <th class="list_header_cell list_update_header_cell">Last&nbsp;Update</th>
   </tr>
 
 <% @entries.each do |entry| %>
   <tr class="list_row">
-    <td class="list_cell"><%=h entry.content %></td>
-    <td class="list_cell"><%= link_entry_tags entry %></td>
-    <td class="list_cell"><%= nbsp pretty_timedate(entry.updated_at) %></td>
-    <td class="list_cell"><%= link_to 'Show', entry %></td>
-    <td class="list_cell"><%= link_to 'Edit', edit_entry_path(entry) %></td>
-    <td class="list_cell"><%= link_to 'Destroy', entry, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+    <td class="list_cell">
+	    <%= link_to entry.content, entry, :class => :content_link %>
+    </td>
+
+    <td class="list_cell">
+			<%= link_entry_tags entry %>
+		</td>
+
+		<td class="list_cell">
+			<%= nbsp pretty_timedate(entry.updated_at) %>
+		</td>
 <% end %>
 
 	<tr class="list_footer_row">
 	  <th class="list_footer_cell">&nbsp;</th>
 	  <th class="list_footer_cell">&nbsp;</th>
 	  <th class="list_footer_cell">&nbsp;</th>
-	  <th class="list_footer_cell">&nbsp;</th>
-	  <th class="list_footer_cell">&nbsp;</th>
-	  <th class="list_footer_cell">&nbsp;</th>
 	</tr>
 
 </table>
-
-<%= separator %>
-
-<%= link_to 'All Entries', :action => :index %>
-<%= 3.spaces %>
-<%= link_to 'New entry', new_entry_path %>
