@@ -76,8 +76,22 @@ class Entry < ActiveRecord::Base
   end
 
   def set_tags_from_string(s)
-    new_tags = s.split(/\s+/).map {|t| t.downcase.strip}.find_all {|t| !t.blank?}
-    self.tags.delete_if {|t| !new_tags.include?(t.name.downcase)}
+    new_tags = s.downcase.
+                 gsub(/[^ a-z0-9\-]/, '').
+                 gsub(/\s+/, ' ').
+                 split(/\s+/).
+                 map {|t| t.strip}.
+                 find_all {|t| !t.blank?}
+
+    # Remove tags that were used, but are not anymore.
+    self.tags.each do |t|
+      next if new_tags.include? t.name.downcase
+      t.destroy
+    end
+
+    save && reload
+
+    # Do not re-create tags that already exist.
     new_tags.delete_if {|t| self.tags.map {|t1| t1.name}.include?(t)}
 
     new_tags.each do |name|
