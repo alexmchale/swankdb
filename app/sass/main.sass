@@ -1,5 +1,39 @@
+!page_size = 900px
+
+body
+  :padding 25px
+
+p
+  :padding-top 5px
+  :padding-bottom 5px
+
+div.main_container
+  :width = !page_size
+  :margin-left auto
+  :margin-right auto
+
+div.content_display
+  :font-size 1.5em
+  :padding 25px
+  :margin-left 0px
+  :margin-right 0px
+  :background-color #DDD
+
 .entry_edit
-  :width 100%
+  :width = !page_size - 20px
   :font-size 1em
   :font-weight bold
   :padding 10px
+
+div.content_edit
+  :width 100%
+
+div.tags_edit
+  :width 100%
+
+div.submit_line
+  :width 100%
+  :text-align right
+
+div.tags_list
+  :line-height 1.5em

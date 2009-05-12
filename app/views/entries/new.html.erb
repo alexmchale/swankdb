@@ -1,19 +1,25 @@
-<h1>New entry</h1>
-
 <% form_for(@entry) do |f| %>
   <%= f.error_messages %>
 
-  <p>
-    <%= f.label :content %><br />
+  <div class="content_edit">
+    <%= f.label 'New Entry Content' %>
+    <br />
     <%= f.text_area :content, :class => 'entry_edit' %>
-  </p>
-  <p>
-    <%= f.label :tags %><br />
+  </div>
+
+  <%= separator %>
+
+  <div class="tags_edit">
+    <%= f.label 'Tags' %>
+    <br />
     <%= f.text_field :tags, :class => 'entry_edit' %>
-  </p>
-  <p>
+  </div>
+
+  <%= separator %>
+
+  <div class="submit_line">
     <%= f.submit 'Create' %>
-  </p>
+  </div>
 <% end %>
 
 <%= link_to 'Back', entries_path %>
