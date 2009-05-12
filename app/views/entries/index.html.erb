@@ -1,8 +1,7 @@
 <table class="entry_list_table">
 
   <tr class="list_header_row">
-    <th class="list_header_cell list_content_header_cell">Content</th>
-    <th class="list_header_cell list_tags_header_cell">Tags</th>
+    <th class="list_header_cell list_content_header_cell"><%= @entries.length %> Entries</th>
     <th class="list_header_cell list_update_header_cell">Last&nbsp;Update</th>
   </tr>
 
@@ -10,21 +9,24 @@
   <tr class="list_row">
     <td class="list_cell">
 	    <%= link_to entry.content, entry, :class => :content_link %>
-    </td>
 
-    <td class="list_cell">
-			<%= link_entry_tags entry %>
-		</td>
+      <% tags = link_entry_tags(entry, :class => :list_tag) %>
+      <% unless tags.blank? %>
+        <br />
+        <br />
+        <%= tags %>
+      <% end %>
+    </td>
 
 		<td class="list_cell list_updated_at_cell">
 			<%= nbsp pretty_timedate(entry.updated_at) %>
 		</td>
+  </tr>
 <% end %>
 
 	<tr class="list_footer_row">
-	  <th class="list_footer_cell">&nbsp;</th>
-	  <th class="list_footer_cell">&nbsp;</th>
-	  <th class="list_footer_cell">&nbsp;</th>
+	  <td class="list_footer_cell">&nbsp;</th>
+	  <td class="list_footer_cell">&nbsp;</th>
 	</tr>
 
 </table>
