@@ -6,7 +6,7 @@ class EntriesController < ApplicationController
     @description << "tagged #{params[:tag].downcase}" unless params[:tag].blank?
     @description << "with #{params[:with]}" unless params[:with].blank?
     @description << "include \"#{params[:keywords]}\"" unless params[:keywords].blank?
-    @description = @description.join
+    @description = @description.join(', ')
 
     @entries = Entry.search :user_id => current_user_id,
                             :tag => params[:tag],
