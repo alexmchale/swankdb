@@ -10,7 +10,8 @@
 
   <div class="tags_edit">
     <%= h3 'Tags' %>
-    <%= f.text_field :tags, :class => 'entry_edit' %>
+    <% tags = @entry.tags.map {|t| t.name}.join(' ') %>
+    <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="entry_edit" />
   </div>
 
   <%= separator %>

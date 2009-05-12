@@ -1,9 +1,9 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   def link_entry_tags(entry, options = {})
-    entry.tags_list.map do |tag|
-      link_to tag,
-              { :controller => :entries, :action => :index, :tag => tag },
+    entry.tags.map do |tag|
+      link_to tag.name,
+              { :controller => :entries, :action => :index, :tag => tag.name },
               :class => options[:class].to_s
     end.join ' '
   end

@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   def tags
     Entry.find(:all, :conditions => { :user_id => id }).map do |entry|
-      entry.tags_list
+      entry.tags.map {|t| t.name}
     end.flatten.uniq.compact.sort
   end
 

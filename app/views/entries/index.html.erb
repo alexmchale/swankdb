@@ -1,8 +1,15 @@
 <table class="entry_list_table">
 
   <tr class="list_header_row">
-    <th class="list_header_cell list_content_header_cell"><%= @entries.length %> Entries</th>
-    <th class="list_header_cell list_update_header_cell">Last&nbsp;Update</th>
+    <th class="list_header_cell list_content_header_cell">
+      <%= @entries.length %>
+      <%= @entries.length != 1 ? 'entries' : 'entry' %>
+      <%= @description %>
+    </th>
+
+    <th class="list_header_cell list_update_header_cell">
+      Last&nbsp;Update
+    </th>
   </tr>
 
 <% @entries.each do |entry| %>

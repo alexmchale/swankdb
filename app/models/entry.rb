@@ -1,7 +1,7 @@
 class Entry < ActiveRecord::Base
   belongs_to :user
-
-  before_save :adjust_tags
+  has_many :tags
+  before_destroy :remove_tags
 
   FILTERS = {
     'url' => /((http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?)$/ix,
@@ -19,13 +19,15 @@ class Entry < ActiveRecord::Base
   def self.search(options = {})
     fields = []
     top_and = []
+    joins = []
 
-    top_and << 'user_id = ?'
+    top_and << 'entries.user_id = ?'
     fields << options[:user_id]
 
     if options[:tag]
-      top_and << 'tags LIKE ?'
-      fields << '% ' + options[:tag] + ' %'
+      top_and << 'tags.name LIKE ?'
+      fields << options[:tag].downcase
+      joins << :tags
     end
 
     if options[:keywords]
@@ -37,6 +39,7 @@ class Entry < ActiveRecord::Base
 
     entries = Entry.find(:all,
                          :conditions => [top_and.join(' AND '), fields].flatten,
+                         :joins => joins,
                          :order => options[:order])
 
     if options[:with]
@@ -44,10 +47,6 @@ class Entry < ActiveRecord::Base
     end
 
     entries
-  end
-
-  def tags_list
-    self.tags.to_s.split(/\s+/).find_all {|tag| !tag.blank?}
   end
 
   def each_filter_item(type = nil)
@@ -76,11 +75,26 @@ class Entry < ActiveRecord::Base
     (pattern % data.to_s) if pattern
   end
 
+  def set_tags_from_string(s)
+    new_tags = s.split(/\s+/).map {|t| t.downcase.strip}.find_all {|t| !t.blank?}
+    self.tags.delete_if {|t| !new_tags.include?(t.name.downcase)}
+    new_tags.delete_if {|t| self.tags.map {|t1| t1.name}.include?(t)}
+
+    new_tags.each do |name|
+      t = Tag.new
+      t.user_id = user_id
+      t.entry_id = id
+      t.name = name
+      self.tags << t
+    end
+
+    save && reload
+  end
+
 private
 
-  def adjust_tags
-    self.tags = tags_list unless tags.kind_of? Array
-    self.tags = tags.join(' ').gsub(/\s+/, ' ').strip
-    self.tags = ' ' + tags + ' ' # We always pad spaces to make searching by tag easier.
+  def remove_tags
+    self.tags = []
+    save && reload
   end
 end

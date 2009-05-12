@@ -47,6 +47,7 @@ class EntriesController < ApplicationController
   def create
     @entry = Entry.new(params[:entry])
     @entry.user_id = current_user_id
+    @entry.set_tags_from_string params[:entry_tags]
 
     respond_to do |format|
       if @entry.save
@@ -64,6 +65,7 @@ class EntriesController < ApplicationController
   # PUT /entries/1.xml
   def update
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
+    @entry.set_tags_from_string params[:entry_tags]
 
     respond_to do |format|
       if @entry.update_attributes(params[:entry])
