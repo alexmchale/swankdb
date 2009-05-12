@@ -36,4 +36,16 @@ module ApplicationHelper
   def separator
     '<div style="clear: both; margin: 0px; padding-top: 1em; padding-bottom: 1em"></div>'
   end
+
+  def h1(s)
+    "<h1>%s</h1>" % [ h s ]
+  end
+
+  def h2(s)
+    "<h2>%s</h2>" % [ h s ]
+  end
+
+  def h3(s)
+    "<h3>%s</h3>" % [ h s ]
+  end
 end
