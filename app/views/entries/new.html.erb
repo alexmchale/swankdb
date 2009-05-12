@@ -2,16 +2,14 @@
   <%= f.error_messages %>
 
   <div class="content_edit">
-    <%= f.label 'New Entry Content' %>
-    <br />
-    <%= f.text_area :content, :class => 'entry_edit' %>
+	  <%= h3 'New Content' %>
+    <%= f.text_area :content, :class => 'entry_edit', :rows => 10 %>
   </div>
 
   <%= separator %>
 
   <div class="tags_edit">
-    <%= f.label 'Tags' %>
-    <br />
+	  <%= h3 'Tags' %>
     <%= f.text_field :tags, :class => 'entry_edit' %>
   </div>
 
