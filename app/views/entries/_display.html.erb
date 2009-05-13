@@ -1,32 +1,32 @@
-<div class="submit_line">
-	<%= link_to 'Destroy', @entry, :confirm => 'Are you sure?', :method => :delete %>
-	<%= 3.spaces %>
-	<%= link_to 'Edit', edit_entry_path(@entry) %>
-</div>
-
-<%= separator %>
-
 <div class="content_display">
   <%= markdown @entry.content %>
 </div>
 
 <%= separator %>
 
+<div class="submit_line">
+  <%= link_to 'Destroy', @entry, :confirm => 'Are you sure?', :method => :delete %>
+  <%= 3.spaces %>
+  <%= link_to 'Edit', edit_entry_path(@entry) %>
+</div>
+
+<%= separator %>
+
 <p>
   <b>Tags:</b>
-	<%= link_entry_tags @entry %>
+  <%= link_entry_tags @entry %>
 </p>
 
 <%= separator %>
 
 <% @entry.each_filter_item do |type, item, url| %>
   <p>
-		<b><%=h type %>:</b>
+    <b><%=h type %>:</b>
 
-		<% if url %>
-			<%= link_to item, url %>
-		<% else %>
-		  <%=h item %>
-		<% end %>
-	</p>
+    <% if url %>
+      <%= link_to item, url %>
+    <% else %>
+      <%=h item %>
+    <% end %>
+  </p>
 <% end %>
