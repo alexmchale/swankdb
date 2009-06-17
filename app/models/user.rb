@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
 
   def self.authenticate(username, password)
     User.find :first,
-              :conditions => { :username => username,
+              :conditions => { :username => username.downcase,
                                :password => hash_password(username, password) }
   end
 

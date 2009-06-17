@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout ]
+
   # GET /users
   # GET /users.xml
   def index
@@ -40,17 +42,33 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.xml
   def create
-    @user = User.new(params[:user])
+    username = params[:username].to_s.downcase
+    password1 = params[:password1].to_s
+    password2 = params[:password2].to_s
+    email = params[:email].to_s
 
-    respond_to do |format|
-      if @user.save
-        flash[:notice] = 'User was successfully created.'
-        format.html { redirect_to(@user) }
-        format.xml  { render :xml => @user, :status => :created, :location => @user }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-      end
+    if User.find_by_username(username)
+      flash[:notice] = 'That username is not available.'
+      redirect_to :action => :new
+    elsif username.blank?
+      flash[:notice] = 'The username must not be blank.'
+      redirect_to :action => :new
+    elsif password1 != password2
+      flash[:notice] = 'Those passwords do not match.'
+      redirect_to :action => :new
+    elsif password1.length < 6
+      flash[:notice] = 'The password must be at least six characters.'
+      redirect_to :action => :new
+    else
+      user = User.new
+      user.username = username
+      user.password = password1
+      user.email = email
+      user.save
+
+      session[:user] = user
+      flash[:notice] = 'Your new user has been created.'
+      redirect_to :controller => :entries, :action => :index
     end
   end
 
@@ -81,5 +99,23 @@ class UsersController < ApplicationController
       format.html { redirect_to(users_url) }
       format.xml  { head :ok }
     end
+  end
+
+  def login
+    unless params[:username].blank? || params[:password].blank?
+      session[:user] = User.authenticate(params[:username], params[:password])
+
+      if session[:user]
+        flash[:notice] = "You have successfully logged in as #{session[:user].username}."
+        redirect_to :controller => :entries, :action => :index
+      else
+        flash[:error] = "The username or password you entered is incorrect"
+      end
+    end
+  end
+
+  def logout
+    session[:user] = nil
+    redirect_to :action => :login
   end
 end

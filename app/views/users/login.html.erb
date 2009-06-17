@@ -1,0 +1,25 @@
+<h2>User Account Login</h2>
+
+<% form_tag do %>
+  <p>
+    Username:<br />
+    <input type="text" id="username" name="username" class="full_width_edit" />
+  </p>
+
+  <p>
+    Password:<br />
+    <input type="password" id="password" name="password" class="full_width_edit" />
+  </p>
+
+    <%= separator %>
+
+    <div class="submit_line">
+      <%= link_to 'create a new account', :controller => :users, :action => :new %>
+      <%= 3.spaces %>
+      <input type="submit" value="Login" />
+    </div>
+<% end %>
+
+<script lang="JavaScript">
+  $('input#username').focus();
+</script>

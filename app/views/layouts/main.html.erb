@@ -16,50 +16,60 @@
 <body>
 
 <div class="main_container">
-	<div class="header_container">
-		<div style="float: left">
-			<h1>swankdb</h1>
-		</div>
+  <div class="header_container">
+    <div style="float: left">
+      <h1>swankdb</h1>
+    </div>
 
-		<div style="position: relative; text-align: right">
-			<p style="">
-				<%= link_to 'New entry', new_entry_path %>
-				<%= 3.spaces %>
-				<%= session[:user].andand.username %>
-			</p>
+    <% if session[:user] %>
+      <div style="position: relative; text-align: right">
+        <p style="">
+          <%= link_to 'new entry', new_entry_path %>
+          <%= 3.spaces %>
+          <%= session[:user].andand.username %>
+          <%= 3.spaces %>
+          <%= link_to 'logout', :controller => :users, :action => :logout %>
+        </p>
 
-			<p style="">
-			  <form method="get" action="/entries">
-					<input type="text" size="50" name="keywords" id="keywords" />
-					<%= 3.spaces %>
-					<input type="submit" value="Search" />
-			  </form>
-			</p>
-		</div>
-	</div>
+        <p style="">
+          <form method="get" action="/entries">
+            <input type="text" size="50" name="keywords" id="keywords" />
+            <%= 3.spaces %>
+            <input type="submit" value="Search" />
+          </form>
+        </p>
+      </div>
+    <% end %>
+  </div>
 
-	<%= separator %>
+  <%= separator %>
 
-	<div class="tags_list">
-		<% if session[:user] %>
-		  <%= link_to 'All', :controller => :entries, :action => :index %>
+  <div class="tags_list">
+    <% if session[:user] %>
+      <%= link_to 'All', :controller => :entries, :action => :index %>
 
-		  <% session[:user].tags.each do |tag| %>
-		    <%= 3.spaces %>
-				<%= link_to tag, :controller => :entries, :action => :index, :tag => tag %>
-		  <% end %>
-		<% end %>
-	</div>
+      <% session[:user].tags.each do |tag| %>
+        <%= 3.spaces %>
+        <%= link_to tag, :controller => :entries, :action => :index, :tag => tag %>
+      <% end %>
+    <% end %>
+  </div>
 
-	<%= separator %>
+  <%= separator %>
 
   <div style="">
-		<p style="color: green"><%= flash[:notice] %></p>
+    <% unless flash[:notice].blank? %>
+      <p style="color: green"><%= flash[:notice] %></p>
+    <% end %>
 
-		<%= yield %>
-	</div>
+    <% unless flash[:error].blank? %>
+      <p style="color: red"><%= flash[:error] %></p>
+    <% end %>
 
-	<%= separator %>
+    <%= yield %>
+  </div>
+
+  <%= separator %>
 </div>
 
 </body>

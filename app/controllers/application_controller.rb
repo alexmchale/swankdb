@@ -18,8 +18,6 @@ protected
 private
 
   def authenticate_user_account
-    authenticate_or_request_with_http_basic do |username, password|
-      session[:user] = User.authenticate(username, password)
-    end
+    redirect_to(:controller => :users, :action => :login) unless session[:user]
   end
 end

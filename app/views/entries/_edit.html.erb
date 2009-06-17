@@ -3,7 +3,7 @@
 
   <div class="content_edit">
     <%= h3 'Content' %>
-    <%= f.text_area :content, :class => 'entry_edit', :rows => 10 %>
+    <%= f.text_area :content, :class => 'full_width_edit', :rows => 10 %>
   </div>
 
   <%= separator %>
@@ -11,7 +11,7 @@
   <div class="tags_edit">
     <%= h3 'Tags' %>
     <% tags = @entry.tags.map {|t| t.name}.join(' ') %>
-    <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="entry_edit" />
+    <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="full_width_edit" />
   </div>
 
   <%= separator %>

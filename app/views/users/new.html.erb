@@ -1,19 +1,37 @@
-<h1>New user</h1>
+<h2>New User Account</h2>
 
 <% form_for(@user) do |f| %>
   <%= f.error_messages %>
 
   <p>
     <%= f.label :username %><br />
-    <%= f.text_field :username %>
+    <input type="text" id="username" name="username" class="full_width_edit" />
   </p>
+
   <p>
-    <%= f.label :password %><br />
-    <%= f.text_field :password %>
+    <%= f.label 'Password' %><br />
+    <input type="password" id="password1" name="password1" class="full_width_edit" />
   </p>
+
   <p>
+    <%= f.label 'Password (confirm)' %><br />
+    <input type="password" id="password1" name="password2" class="full_width_edit" />
+  </p>
+
+  <p>
+    <%= f.label 'Email Address' %><br />
+    <input type="text" id="email" name="email" class="full_width_edit" />
+  </p>
+
+  <%= separator %>
+
+  <div class="submit_line">
+    <%= link_to 'log in to an existing account', :controller => :users, :action => :login %>
+    <%= 3.spaces %>
     <%= f.submit 'Create' %>
-  </p>
+  </div>
 <% end %>
 
-<%= link_to 'Back', users_path %>
+<script lang="JavaScript">
+  $('#username').focus();
+</script>
