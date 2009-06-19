@@ -20,4 +20,12 @@ private
   def authenticate_user_account
     redirect_to(:controller => :users, :action => :login) unless session[:user]
   end
+
+  def render_data(data)
+    if params.has_key? :xml
+      render :xml => data
+    else
+      render :json => data
+    end
+  end
 end
