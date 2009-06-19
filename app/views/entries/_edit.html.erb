@@ -22,6 +22,17 @@
 <% end %>
 
 <script lang="JavaScript">
+  var auto_suggest_options = {
+    script: '/tags/suggest?',
+    varname: 'input',
+    json: true,
+    maxresults: 20,
+    timeout: 10000,
+    shownoresults: false,
+    minchars: 1
+  };
+  var auto_suggest = new bsn.AutoSuggest('entry_tags', auto_suggest_options);
+
   $('textarea#entry_content').autoResize({
     animate: false,
     animateDuration: 0,
@@ -29,5 +40,4 @@
   });
 
   $('textarea#entry_content').focus();
-  setCaretTo($('textarea#entry_content'), $('textarea#entry_content').value.length);
 </script>
