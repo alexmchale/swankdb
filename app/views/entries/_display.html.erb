@@ -12,12 +12,14 @@
 
 <%= separator %>
 
-<p>
-  <b>Tags:</b>
-  <%= link_entry_tags @entry %>
-</p>
+<% if @entry.tags.length > 0 %>
+  <p>
+    <b>Tags:</b>
+    <%= link_entry_tags @entry %>
+  </p>
 
-<%= separator %>
+  <%= separator %>
+<% end %>
 
 <% @entry.each_filter_item do |type, item, url| %>
   <p>
