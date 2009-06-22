@@ -15,7 +15,7 @@
 <% @entries.each do |entry| %>
   <tr class="list_row">
     <td class="list_cell">
-	    <%= link_to entry.content, entry, :class => :content_link %>
+      <%= link_to entry.content, entry, :class => :content_link %>
 
       <% tags = link_entry_tags(entry, :class => :list_tag) %>
       <% unless tags.blank? %>
@@ -25,15 +25,15 @@
       <% end %>
     </td>
 
-		<td class="list_cell list_updated_at_cell">
-			<%= nbsp pretty_timedate(entry.updated_at) %>
-		</td>
+    <td class="list_cell list_updated_at_cell">
+      <%= nbsp pretty_timedate(entry.updated_at) %>
+    </td>
   </tr>
 <% end %>
 
-	<tr class="list_footer_row">
-	  <td class="list_footer_cell">&nbsp;</th>
-	  <td class="list_footer_cell">&nbsp;</th>
-	</tr>
+  <tr class="list_footer_row">
+    <td class="list_footer_cell">&nbsp;</th>
+    <td class="list_footer_cell">&nbsp;</th>
+  </tr>
 
 </table>

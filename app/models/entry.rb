@@ -1,7 +1,6 @@
 class Entry < ActiveRecord::Base
   belongs_to :user
-  has_many :tags
-  before_destroy :remove_tags
+  before_save :fixup_tags
 
   FILTERS = {
     'url' => /((http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?)$/ix,
@@ -25,8 +24,8 @@ class Entry < ActiveRecord::Base
     fields << options[:user_id]
 
     if options[:tag]
-      top_and << 'tags.name LIKE ?'
-      fields << options[:tag].downcase
+      top_and << 'tags LIKE ?'
+      fields << '% ' + options[:tag].downcase + ' %'
       joins << :tags
     end
 
@@ -37,10 +36,11 @@ class Entry < ActiveRecord::Base
       end
     end
 
+    order = "entries." + options[:order] unless options[:order].blank?
+
     entries = Entry.find(:all,
                          :conditions => [top_and.join(' AND '), fields].flatten,
-                         :joins => joins,
-                         :order => options[:order])
+                         :order => order)
 
     if options[:with]
       entries = entries.find_all {|e| e.filter(options[:with]).andand.length > 0}
@@ -75,40 +75,14 @@ class Entry < ActiveRecord::Base
     (pattern % data.to_s) if pattern
   end
 
-  def set_tags_from_string(s)
-    new_tags = s.downcase.
-                 gsub(/[^ a-z0-9\-]/, '').
-                 gsub(/\s+/, ' ').
-                 split(/\s+/).
-                 map {|t| t.strip}.
-                 find_all {|t| !t.blank?}
-
-    # Remove tags that were used, but are not anymore.
-    self.tags.each do |t|
-      next if new_tags.include? t.name.downcase
-      t.destroy
-    end
-
-    save && reload
-
-    # Do not re-create tags that already exist.
-    new_tags.delete_if {|t| self.tags.map {|t1| t1.name}.include?(t)}
-
-    new_tags.each do |name|
-      t = Tag.new
-      t.user_id = user_id
-      t.entry_id = id
-      t.name = name
-      self.tags << t
-    end
-
-    save && reload
+  def tags_array
+    self.tags.to_s.downcase.split.uniq.sort
   end
 
 private
 
-  def remove_tags
-    self.tags = []
-    save && reload
+  def fixup_tags
+    self.tags = self.tags.to_s.downcase.split.uniq.join(' ')
+    self.tags = " " + self.tags + " " unless self.tags.blank?
   end
 end

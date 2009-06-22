@@ -8,9 +8,7 @@ class User < ActiveRecord::Base
   end
 
   def tags
-    Entry.find(:all, :conditions => { :user_id => id }).map do |entry|
-      entry.tags.map {|t| t.name}
-    end.flatten.uniq.compact.sort
+    Entry.find(:all, :conditions => { :user_id => id }).map {|e| e.tags.split}.flatten.uniq.sort
   end
 
 private
