@@ -1,8 +1,0 @@
---- 
-vendor/plugins/query_trace: 
-  squashed: true
-  url: git://github.com/ntalbott/query_trace.git
-  branch: master
-  type: git
-  revision: 9ce6f2e445762b6650fc7fe0bc69446bb87015b3
-  remote: braid/vendor/plugins/query-trace
