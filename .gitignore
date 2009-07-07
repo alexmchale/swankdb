@@ -1,4 +1,5 @@
 log
 db/production.sqlite3
 db/development.sqlite3
+db/test.sqlite3
 public/stylesheets
