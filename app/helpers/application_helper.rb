@@ -37,14 +37,14 @@ module ApplicationHelper
   end
 
   def h1(s)
-    "<h1>%s</h1>" % [ h s ]
+    "<h1>%s</h1>" % h(s)
   end
 
   def h2(s)
-    "<h2>%s</h2>" % [ h s ]
+    "<h2>%s</h2>" % h(s)
   end
 
   def h3(s)
-    "<h3>%s</h3>" % [ h s ]
+    "<h3>%s</h3>" % h(s)
   end
 end
