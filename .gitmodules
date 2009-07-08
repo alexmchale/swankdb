@@ -4,3 +4,6 @@
 [submodule "vendor/plugins/query_trace"]
 	path = vendor/plugins/query_trace
 	url = git://github.com/ntalbott/query_trace.git
+[submodule "vendor/plugins/haml"]
+	path = vendor/plugins/haml
+	url = git://github.com/nex3/haml.git
