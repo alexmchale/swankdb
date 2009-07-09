@@ -17,6 +17,10 @@
   <%= separator %>
 
   <div class="totheright">
+    <%= link_to 'Destroy', @entry, :confirm => 'Are you sure you want to destroy this entry?', :method => :delete %>
+    <%= 3.spaces %>
+    <%= link_to 'Cancel', @entry, :method => :get %>
+    <%= 3.spaces %>
     <%= f.submit 'Save' %>
   </div>
 <% end %>
