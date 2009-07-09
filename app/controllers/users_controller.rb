@@ -67,6 +67,14 @@ class UsersController < ApplicationController
       user.email = email
       user.save
 
+      entry = Entry.new
+      entry.user_id = user.id
+      entry.content = 'Hello, and welcome to SwankDB!'
+      entry.tags = 'hello swankdb'
+      entry.save
+
+      user.reload
+
       session[:user] = user
       flash[:notice] = 'Your new user has been created.'
       redirect_to :controller => :entries, :action => :index
