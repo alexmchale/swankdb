@@ -5,11 +5,13 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  before_filter :authenticate_user_account
-
   layout 'main'
 
 protected
+
+  def current_user
+    session[:user]
+  end
 
   def current_user_id
     session[:user].andand.id

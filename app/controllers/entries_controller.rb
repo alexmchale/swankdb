@@ -1,4 +1,5 @@
 class EntriesController < ApplicationController
+  before_filter :authenticate_user_account
   before_filter :strip_user_input
 
   def index

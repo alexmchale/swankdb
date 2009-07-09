@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :authenticate_user_account
   skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout ]
 
   # GET /users
