@@ -79,6 +79,10 @@ class Entry < ActiveRecord::Base
     self.tags.to_s.downcase.split.uniq.sort
   end
 
+  def pretty_tags
+    tags_array.join(' ')
+  end
+
 private
 
   def fixup_tags

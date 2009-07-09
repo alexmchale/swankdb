@@ -10,7 +10,7 @@
 
   <div class="tags_edit">
     <%= h3 'Tags' %>
-    <% tags = @entry.tags.map {|t| t.name}.join(' ') %>
+    <% tags = @entry.pretty_tags %>
     <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="full_width_edit" />
   </div>
 
