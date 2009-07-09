@@ -75,12 +75,20 @@ class Entry < ActiveRecord::Base
     (pattern % data.to_s) if pattern
   end
 
+  def self.split_tags(tags)
+    tags.to_s.downcase.split.uniq.sort
+  end
+
+  def self.pretty_tags(tags)
+    split_tags(tags).join(' ')
+  end
+
   def tags_array
-    self.tags.to_s.downcase.split.uniq.sort
+    Entry.split_tags(self.tags)
   end
 
   def pretty_tags
-    tags_array.join(' ')
+    Entry.pretty_tags(self.tags)
   end
 
 private
