@@ -32,7 +32,7 @@ class EntriesController < ApplicationController
   def create
     @entry = Entry.new(params[:entry])
     @entry.user_id = current_user_id
-    @entry.set_tags_from_string params[:entry_tags]
+    @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
     if @entry.save
       flash[:notice] = 'Entry was successfully created.'
@@ -44,7 +44,7 @@ class EntriesController < ApplicationController
 
   def update
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
-    @entry.set_tags_from_string params[:entry_tags]
+    @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
     if @entry.update_attributes(params[:entry])
       flash[:notice] = 'Entry was successfully updated.'
