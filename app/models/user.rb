@@ -8,7 +8,15 @@ class User < ActiveRecord::Base
   end
 
   def tags
-    Entry.find(:all, :conditions => { :user_id => id }).map {|e| e.tags.split}.flatten.uniq.sort
+    Entry.find(:all, :conditions => { :user_id => id }).map {|e| e.tags_array}.flatten.uniq.sort
+  end
+
+  def suggest_tags(base)
+    tags.find_all {|tag| tag =~ /#{base}/}
+  end
+
+  def count_tags(tag)
+    Entry.count(:conditions => [ 'tags LIKE ?', '% ' + tag + ' %' ])
   end
 
 private

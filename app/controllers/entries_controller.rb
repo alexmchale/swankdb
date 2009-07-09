@@ -61,6 +61,27 @@ class EntriesController < ApplicationController
     redirect_to(entries_url)
   end
 
+  def suggest_tags
+    if params[:input].to_s =~ / $/
+      suggestions = []
+    else
+      input = params[:input].to_s.split
+      all_but_last = input[0, input.length - 1] || []
+      last_word = input.last.to_s
+
+      suggestions = current_user.suggest_tags(last_word).map do |tag|
+        tag_count = current_user.count_tags(tag)
+        newtag = (all_but_last + [tag]).join(' ')
+
+        { :id => tag,
+          :value => newtag + ' ',
+          :info => "#{tag} (#{tag_count})" }
+      end
+    end
+
+    render_data :results => suggestions
+  end
+
 private
 
   def strip_user_input
