@@ -5,7 +5,7 @@
 
   <p>
     <%= f.label :username %><br />
-    <input type="text" id="username" name="username" class="full_width_edit" />
+    <input type="text" id="username" name="username" class="full_width_edit" value="<%= @user.username %>" />
   </p>
 
   <p>
@@ -20,7 +20,7 @@
 
   <p>
     <%= f.label 'Email Address' %><br />
-    <input type="text" id="email" name="email" class="full_width_edit" />
+    <input type="text" id="email" name="email" class="full_width_edit" value="<%= @user.email %>" />
   </p>
 
   <%= separator %>

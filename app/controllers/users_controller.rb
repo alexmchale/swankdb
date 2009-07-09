@@ -2,63 +2,46 @@ class UsersController < ApplicationController
   before_filter :authenticate_user_account
   skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout ]
 
-  # GET /users
-  # GET /users.xml
   def index
     @users = User.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @users }
-    end
   end
 
-  # GET /users/1
-  # GET /users/1.xml
   def show
     @user = User.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @user }
-    end
   end
 
-  # GET /users/new
-  # GET /users/new.xml
   def new
     @user = User.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @user }
+    if session[:newuser]
+      @user.username = session[:newuser][:username]
+      @user.email = session[:newuser][:email]
     end
   end
 
-  # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
   end
 
-  # POST /users
-  # POST /users.xml
   def create
-    username = params[:username].to_s.downcase
-    password1 = params[:password1].to_s
-    password2 = params[:password2].to_s
-    email = params[:email].to_s
+    session[:newuser] = {
+      :username => username = params[:username].to_s.downcase.gsub(/[^a-z0-9\.\-]/, ''),
+      :password1 => password1 = params[:password1].to_s,
+      :password2 => password2 = params[:password2].to_s,
+      :email => email = params[:email].to_s
+    }
 
     if User.find_by_username(username)
-      flash[:notice] = 'That username is not available.'
+      flash[:error] = 'That username is not available.'
       redirect_to :action => :new
     elsif username.blank?
-      flash[:notice] = 'The username must not be blank.'
+      flash[:error] = 'The username must not be blank.'
       redirect_to :action => :new
     elsif password1 != password2
-      flash[:notice] = 'Those passwords do not match.'
+      flash[:error] = 'Those passwords do not match.'
       redirect_to :action => :new
     elsif password1.length < 6
-      flash[:notice] = 'The password must be at least six characters.'
+      flash[:error] = 'The password must be at least six characters.'
       redirect_to :action => :new
     else
       user = User.new
@@ -81,8 +64,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # PUT /users/1
-  # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
 
@@ -98,8 +79,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.xml
   def destroy
     @user = User.find(params[:id])
     @user.destroy
