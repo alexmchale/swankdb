@@ -1,4 +1,6 @@
 class EntriesController < ApplicationController
+  ENTRIES_PER_LOAD = 50
+
   before_filter :authenticate_user_account
   before_filter :strip_user_input
 
@@ -9,11 +11,21 @@ class EntriesController < ApplicationController
     @description << "include \"#{params[:keywords]}\"" unless params[:keywords].blank?
     @description = @description.join(', ')
 
-    @entries = Entry.search :user_id => current_user_id,
-                            :tag => params[:tag],
-                            :with => params[:with],
-                            :keywords => params[:keywords],
-                            :order => 'updated_at DESC'
+    @conditions = Entry.build_search_conditions :user_id => current_user_id,
+                                                :tag => params[:tag],
+                                                :with => params[:with],
+                                                :keywords => params[:keywords]
+
+    @entries_count = Entry.count(:conditions => @conditions)
+
+    @results_only = true if params[:offset]
+    @params = params.to_url
+
+    order = 'entries.updated_at DESC'
+
+    @entries = Entry.find(:all, :conditions => @conditions, :order => order, :limit => ENTRIES_PER_LOAD, :offset => params[:offset].to_i)
+
+    render :layout => false if @results_only
   end
 
   def show

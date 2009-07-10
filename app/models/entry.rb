@@ -15,7 +15,7 @@ class Entry < ActiveRecord::Base
     'fedex' => "http://www.fedex.com/Tracking?language=english&cntry_code=us&tracknumbers=%s"
   }
 
-  def self.search(options = {})
+  def self.build_search_conditions(options = {})
     fields = []
     top_and = []
     joins = []
@@ -36,17 +36,7 @@ class Entry < ActiveRecord::Base
       end
     end
 
-    order = "entries." + options[:order] unless options[:order].blank?
-
-    entries = Entry.find(:all,
-                         :conditions => [top_and.join(' AND '), fields].flatten,
-                         :order => order)
-
-    if options[:with]
-      entries = entries.find_all {|e| e.filter(options[:with]).andand.length > 0}
-    end
-
-    entries
+    [top_and.join(' AND '), fields].flatten
   end
 
   def each_filter_item(type = nil)

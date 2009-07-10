@@ -1,9 +1,11 @@
+<% unless @results_only %>
+
 <table class="entry_list_table">
 
   <tr class="list_header_row">
     <th class="list_header_cell list_content_header_cell">
-      <%= @entries.length %>
-      <%= @entries.length != 1 ? 'entries' : 'entry' %>
+      <%= @entries_count %>
+      <%= @entries_count != 1 ? 'entries' : 'entry' %>
       <%= @description %>
     </th>
 
@@ -12,28 +14,80 @@
     </th>
   </tr>
 
-<% @entries.each do |entry| %>
-  <tr class="list_row">
-    <td class="list_cell">
-      <%= link_to entry.content, entry, :class => :content_link %>
+  <tbody id="entry_list_table_body">
 
-      <% tags = link_entry_tags(entry, :class => :list_tag) %>
-      <% unless tags.blank? %>
-        <br />
-        <br />
-        <%= tags %>
-      <% end %>
-    </td>
-
-    <td class="list_cell list_updated_at_cell">
-      <%= nbsp pretty_timedate(entry.updated_at) %>
-    </td>
-  </tr>
 <% end %>
 
+    <% @entries.each do |entry| %>
+      <tr class="list_row">
+        <td class="list_cell">
+
+          <%= link_to entry.content, entry, :class => :content_link %>
+
+          <% tags = link_entry_tags(entry, :class => :list_tag) %>
+
+          <% unless tags.blank? %>
+            <br />
+            <br />
+            <%= tags %>
+          <% end %>
+        </td>
+
+        <td class="list_cell list_updated_at_cell">
+          <%= nbsp pretty_timedate(entry.updated_at) %>
+        </td>
+      </tr>
+    <% end %>
+
+<% unless @results_only %>
+
+  </tbody>
+
   <tr class="list_footer_row">
-    <td class="list_footer_cell">&nbsp;</th>
-    <td class="list_footer_cell">&nbsp;</th>
+    <td class="list_footer_cell" colspan="2" style="text-align: right">
+      <img id="loading_spinner" src="images/spinner.gif" style="display: none" />
+
+      <% if @entries.length < @entries_count %>
+        <a href="#" id="get_more_results">Get more results</a>
+      <% end %>
+    </td>
   </tr>
 
 </table>
+
+<script lang="javascript">
+
+  $(document).ready(function() {
+    var next_offset = 0;
+
+    $('#get_more_results').click(function() {
+      next_offset += <%= EntriesController::ENTRIES_PER_LOAD %>;
+      $('#loading_spinner').show();
+      $('#get_more_results').hide();
+
+      $.ajax({
+        type: 'GET',
+        url: '/entries?<%= @params %>&offset=' + next_offset,
+
+        success: function(html) {
+          if (/^[\s\r\n]*$/.test(html)) {
+            $('#get_more_results').remove();
+          } else {
+            $('#entry_list_table_body').append(html);
+          }
+        },
+
+        complete: function() {
+          $('#loading_spinner').hide();
+          $('#get_more_results').show();
+        }
+      });
+      $.get('/entries?<%= @params %>', function(html) {
+      });
+      return false;
+    });
+  });
+
+</script>
+
+<% end %>
