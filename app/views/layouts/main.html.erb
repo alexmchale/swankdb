@@ -23,9 +23,9 @@
       <h1>swankdb</h1>
     </div>
 
-    <% if session[:user] %>
-      <div style="position: relative; text-align: right">
-        <p style="">
+    <div style="position: relative; text-align: right">
+      <% if session[:user] %>
+        <p>
           <%= link_to 'new entry', new_entry_path %>
           <%= 3.spaces %>
           <%= link_to session[:user].username, :controller => :users, :action => :edit, :id => session[:user].id %>
@@ -33,15 +33,19 @@
           <%= link_to 'logout', :controller => :users, :action => :logout %>
         </p>
 
-        <p style="">
+        <p>
           <form method="get" action="/entries">
             <input type="text" size="50" name="keywords" id="keywords" />
             <%= 3.spaces %>
             <input type="submit" value="Search" />
           </form>
         </p>
-      </div>
-    <% end %>
+      <% else %>
+        <p>
+          <%= link_to 'log in', :controller => :users, :action => :login %>
+        </p>
+      <% end %>
+    </div>
   </div>
 
   <%= separator %>
