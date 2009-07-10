@@ -28,7 +28,7 @@
         <p style="">
           <%= link_to 'new entry', new_entry_path %>
           <%= 3.spaces %>
-          <%= session[:user].andand.username %>
+          <%= link_to session[:user].username, :controller => :users, :action => :edit, :id => session[:user].id %>
           <%= 3.spaces %>
           <%= link_to 'logout', :controller => :users, :action => :logout %>
         </p>

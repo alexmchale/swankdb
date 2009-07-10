@@ -66,17 +66,22 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    password1 = params[:password1].to_s
+    password2 = params[:password2].to_s
+    email = params[:email].to_s
 
-    respond_to do |format|
-      if @user.update_attributes(params[:user])
-        flash[:notice] = 'User was successfully updated.'
-        format.html { redirect_to(@user) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-      end
+    if password1 != password2
+      flash[:error] = 'Those passwords do not match.'
+    elsif password1.length < 6
+      flash[:error] = 'The password must be at least six characters.'
+    else
+      flash[:notice] = 'Your profile settings have been updated.'
+      @user.password = password1
+      @user.email = email
+      @user.save
     end
+
+    redirect_to edit_user_path(@user)
   end
 
   def destroy
