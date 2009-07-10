@@ -52,7 +52,7 @@ class UsersController < ApplicationController
 
       entry = Entry.new
       entry.user_id = user.id
-      entry.content = 'Hello, and welcome to SwankDB!'
+      entry.content = 'Hello, and welcome to swankdb!'
       entry.tags = 'hello swankdb'
       entry.save
 
