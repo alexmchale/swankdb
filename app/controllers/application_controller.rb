@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
+  before_filter :reload_user
 
   layout 'main'
 
@@ -18,6 +19,10 @@ protected
   end
 
 private
+
+  def reload_user
+    session[:user].andand.reload
+  end
 
   def authenticate_user_account
     redirect_to(:controller => :users, :action => :login) unless session[:user]
