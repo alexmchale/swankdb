@@ -26,11 +26,11 @@
     <div style="position: relative; text-align: right">
       <% if session[:user] %>
         <p>
-          <%= link_to 'new entry', new_entry_path %>
+          <%= link_to 'new entry', new_entry_path, :class => :nav %>
           <%= 3.spaces %>
-          <%= link_to session[:user].username, :controller => :users, :action => :edit, :id => session[:user].id %>
+          <%= link_to session[:user].username, { :controller => :users, :action => :edit, :id => session[:user].id }, :class => :nav %>
           <%= 3.spaces %>
-          <%= link_to 'logout', :controller => :users, :action => :logout %>
+          <%= link_to 'logout', { :controller => :users, :action => :logout }, :class => :nav %>
         </p>
 
         <p>
@@ -56,11 +56,11 @@
 
   <div class="tags_list">
     <% if session[:user] %>
-      <%= link_to 'All', :controller => :entries, :action => :index %>
+      <%= link_to 'All', { :controller => :entries, :action => :index }, :class => 'tagcloud' %>
 
       <% session[:user].tags.each do |tag| %>
         <%= 3.spaces %>
-        <%= link_to tag, :controller => :entries, :action => :index, :tag => tag %>
+        <%= link_to tag, { :controller => :entries, :action => :index, :tag => tag }, :class => 'tagcloud' %>
       <% end %>
     <% end %>
   </div>
