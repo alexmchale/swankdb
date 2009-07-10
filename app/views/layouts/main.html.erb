@@ -20,7 +20,7 @@
 <div class="main_container">
   <div class="header_container">
     <div style="float: left">
-      <h1>swankdb</h1>
+      <h1><a href="http://swankdb.com" class="logo">swankdb</a></h1>
     </div>
 
     <div style="position: relative; text-align: right">
@@ -42,7 +42,11 @@
         </p>
       <% else %>
         <p>
-          <%= link_to 'log in', :controller => :users, :action => :login %>
+          <%= link_to 'log in', { :controller => :users, :action => :login }, :class => 'lookatme' %>
+          <%= 3.spaces %>
+          or
+          <%= 3.spaces %>
+          <%= link_to 'create a new account', { :controller => :users, :action => :new }, :class => 'lookatme' %>
         </p>
       <% end %>
     </div>

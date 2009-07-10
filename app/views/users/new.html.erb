@@ -8,6 +8,8 @@
     <input type="text" id="username" name="username" class="full_width_edit" value="<%= @user.username %>" />
   </p>
 
+  <%= separator %>
+
   <p>
     <%= f.label 'Password' %><br />
     <input type="password" id="password1" name="password1" class="full_width_edit" />
@@ -18,6 +20,8 @@
     <input type="password" id="password1" name="password2" class="full_width_edit" />
   </p>
 
+  <%= separator %>
+
   <p>
     <%= f.label 'Email Address' %><br />
     <input type="text" id="email" name="email" class="full_width_edit" value="<%= @user.email %>" />
@@ -26,8 +30,6 @@
   <%= separator %>
 
   <div class="totheright">
-    <%= link_to 'log in to an existing account', :controller => :users, :action => :login %>
-    <%= 3.spaces %>
     <%= f.submit 'Create' %>
   </div>
 <% end %>
