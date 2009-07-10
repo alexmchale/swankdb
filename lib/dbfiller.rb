@@ -179,7 +179,9 @@ def self.loremof(length)
   end
 end
 
-user = User.first
+user = User.find_by_username('test-scale')
+
+raise 'could not find user test-scale' unless user
 
 puts "Filling database for user: #{user.username}"
 
