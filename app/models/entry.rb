@@ -1,6 +1,8 @@
 class Entry < ActiveRecord::Base
   belongs_to :user
   before_save :fixup_tags
+  after_save :assign_user_tags
+  after_destroy :reset_user_tags
 
   FILTERS = {
     'url' => /((http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?)$/ix,
@@ -86,5 +88,21 @@ private
   def fixup_tags
     self.tags = self.tags.to_s.downcase.split.uniq.join(' ')
     self.tags = " " + self.tags + " " unless self.tags.blank?
+  end
+
+  def assign_user_tags
+    user_tags = Entry.split_tags(user.all_tags)
+    entry_tags = Entry.split_tags(self.tags)
+    all_tags = (user_tags + entry_tags).uniq.sort.join(' ').downcase
+
+    unless user.all_tags == all_tags
+      user.all_tags = all_tags
+      user.save
+    end
+  end
+
+  def reset_user_tags
+    user.reset_tags
+    user.save
   end
 end

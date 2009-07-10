@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   end
 
   def tags
-    Entry.find(:all, :conditions => { :user_id => id }).map {|e| e.tags_array}.flatten.uniq.sort
+    Entry.split_tags(self.all_tags)
   end
 
   def suggest_tags(base)
@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
 
   def count_tags(tag)
     Entry.count(:conditions => [ 'tags LIKE ?', '% ' + tag + ' %' ])
+  end
+
+  def reset_tags
+    self.all_tags = Entry.find(:all, :conditions => { :user_id => id }).map {|e| e.tags.split}.flatten.uniq.sort.join(' ')
   end
 
 private
