@@ -10,7 +10,7 @@
     </th>
 
     <th class="list_header_cell list_update_header_cell">
-      Last&nbsp;Update
+      <%= toggle_entries_sort_link %>
     </th>
   </tr>
 
@@ -34,7 +34,7 @@
         </td>
 
         <td class="list_cell list_updated_at_cell">
-          <%= nbsp pretty_timedate(entry.updated_at) %>
+          <%= nbsp entries_time_show(entry) %>
         </td>
       </tr>
     <% end %>

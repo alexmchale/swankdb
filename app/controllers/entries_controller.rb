@@ -21,7 +21,7 @@ class EntriesController < ApplicationController
     @results_only = true if params[:offset]
     @params = params.to_url
 
-    order = 'entries.updated_at DESC'
+    order = 'entries.%s_at DESC' % (params[:order] == 'created' ? 'created' : 'updated')
 
     @entries = Entry.find(:all, :conditions => @conditions, :order => order, :limit => ENTRIES_PER_LOAD, :offset => params[:offset].to_i)
 
