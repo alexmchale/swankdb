@@ -2,6 +2,14 @@
   <%= markdown @entry.content %>
 </div>
 
+<div class="content_timestamp" style="float: left">
+  updated <%= pretty_datetime(@entry.updated_at) %>
+</div>
+
+<div class="content_timestamp" style="float: right">
+  created <%= pretty_datetime(@entry.created_at) %>
+</div>
+
 <%= separator %>
 
 <div class="totheright">

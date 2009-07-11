@@ -32,6 +32,11 @@ module ApplicationHelper
     result
   end
 
+  def pretty_datetime(time)
+    local = ActiveSupport::TimeZone['Central Time (US & Canada)'].utc_to_local(time)
+    local.strftime("%B %d, %Y at %H:%M%p").gsub(/ 0/, ' ')
+  end
+
   def separator
     '<div style="clear: both; margin: 0px; padding-top: 1em; padding-bottom: 1em"></div>'
   end
