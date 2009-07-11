@@ -34,7 +34,7 @@ module ApplicationHelper
 
   def pretty_datetime(time)
     local = ActiveSupport::TimeZone['Central Time (US & Canada)'].utc_to_local(time)
-    local.strftime("%B %d, %Y at %H:%M%p").gsub(/ 0/, ' ')
+    local.strftime("%B %d, %Y at %I:%M%p").gsub(/ 0/, ' ')
   end
 
   def separator
