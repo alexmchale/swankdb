@@ -22,22 +22,26 @@
       <tr class="list_row">
         <td class="list_cell">
 
-          <%= entry.content %>
+          <p class="entry_index_content">
+            <%=
+              maxlen = 500
+              stripped = markdown(entry.content).striphtml
 
-          <% unless entry.tags.blank? %>
-            <br />
-            <br />
-            <%= link_entry_tags(entry, :class => :list_tag) %>
-          <% end %>
+              if stripped.length > maxlen
+                stripped[0, maxlen] + '&hellip;'
+              else
+                stripped
+              end
+            %>
+          </p>
 
-          <div id="hidden_entry_links" style="float: right">
-            <br />
-            <br />
+          <p class="entry_index_tags"><%= link_entry_tags(entry, :class => :list_tag) %></p>
 
+          <p class="entry_index_hidden_links">
             <%= link_to 'View', entry, :class => 'hidden_entry_link view_link' %>
             <%= link_to 'Edit', edit_entry_path(entry), :class => 'hidden_entry_link edit_link' %>
             <%= link_to 'Destroy', entry, :method => :delete, :class => 'hidden_entry_link destroy_link', :confirm => Entry::DESTROY_TEXT %>
-          </div>
+          </p>
         </td>
 
         <td class="list_cell list_updated_at_cell">
@@ -71,9 +75,9 @@
     rows.unbind('mouseleave');
 
     rows.mouseenter(function(evt) {
-      $(this).find('#hidden_entry_links').show();
+      $(this).find('.entry_index_hidden_links').show();
     }).mouseleave(function(evt) {
-      $(this).find('#hidden_entry_links').hide();
+      $(this).find('.entry_index_hidden_links').hide();
     });
   }
 

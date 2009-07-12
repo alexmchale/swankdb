@@ -12,6 +12,7 @@ Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"
   config.gem "andand"
   config.gem "bluecloth"
+  config.gem "hpricot"
 
   config.time_zone = 'UTC'
 end

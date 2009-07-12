@@ -10,3 +10,9 @@ class Hash
   end
 end
 
+class String
+  def striphtml
+    Hpricot(self).to_plain_text
+  end
+end
+
