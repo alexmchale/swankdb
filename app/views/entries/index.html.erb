@@ -38,9 +38,9 @@
           <p class="entry_index_tags"><%= link_entry_tags(entry, :class => :list_tag) %></p>
 
           <p class="entry_index_hidden_links">
-            <%= link_to 'View', entry, :class => 'hidden_entry_link view_link' %>
-            <%= link_to 'Edit', edit_entry_path(entry), :class => 'hidden_entry_link edit_link' %>
-            <%= link_to 'Destroy', entry, :method => :delete, :class => 'hidden_entry_link destroy_link', :confirm => Entry::DESTROY_TEXT %>
+            <%= view_entry_link entry %>
+            <%= edit_entry_link entry %>
+            <%= destroy_entry_link entry %>
           </p>
         </td>
 

@@ -52,4 +52,26 @@ module ApplicationHelper
   def h3(s)
     "<h3>%s</h3>" % h(s)
   end
+
+  def destroy_entry_link(entry, htmloptions = {})
+    htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'destroy_link'
+    htmloptions[:method] = :delete
+    htmloptions[:confirm] = 'Are you sure you want to destroy this entry?'
+    link_to 'Destroy', entry, htmloptions
+  end
+
+  def edit_entry_link(entry, htmloptions = {})
+    htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'edit_link'
+    link_to '&nbsp;Edit&nbsp;', edit_entry_path(entry), htmloptions
+  end
+
+  def view_entry_link(entry, htmloptions = {})
+    htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'view_link'
+    link_to '&nbsp;View&nbsp;', entry, htmloptions
+  end
+
+  def cancel_link(htmloptions = {})
+    htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'cancel_link'
+    link_to 'Cancel', request.referrer, htmloptions
+  end
 end

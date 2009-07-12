@@ -13,9 +13,9 @@
 <%= separator %>
 
 <div class="totheright">
-  <%= link_to 'Destroy', @entry, :confirm => 'Are you sure you want to destroy this entry?', :method => :delete %>
+  <%= edit_entry_link(@entry) %>
   <%= 3.spaces %>
-  <%= link_to 'Edit', edit_entry_path(@entry) %>
+  <%= destroy_entry_link(@entry) %>
 </div>
 
 <%= separator %>

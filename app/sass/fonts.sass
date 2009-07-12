@@ -52,26 +52,37 @@ a.lookatme
   :display none
   :float right
 
-a.hidden_entry_link
+=entry_link
   :padding 0.5em
   :margin 0.5em
   :line-height 2em
+  :text-decoration none
 
 a.view_link
+  +entry_link
   :background-color #CFC
   &:hover
     :background-color #090
     :color #FFF
 a.edit_link
+  +entry_link
   :background-color #FFC
   &:hover
     :background-color #990
     :color #FFF
 a.destroy_link
+  +entry_link
   :background-color #FCC
   &:hover
     :background-color #900
     :color #FFF
+a.cancel_link
+  +entry_link
+  :background-color #FCF
+  &:hover
+    :background-color #909
+    :color #FFF
+
 
 p.entry_index_content
 
