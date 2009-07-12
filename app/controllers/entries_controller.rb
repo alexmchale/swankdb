@@ -25,11 +25,17 @@ class EntriesController < ApplicationController
 
     @entries = Entry.find(:all, :conditions => @conditions, :order => order, :limit => ENTRIES_PER_LOAD, :offset => params[:offset].to_i)
 
+    # Store the current URI if this was an original request.  This is for redirects from edit pages.
+    session[:last_view] = request.request_uri unless @results_only
+
     render :layout => false if @results_only
   end
 
   def show
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
+
+    # Store the current URI.  This is for redirects from edit pages.
+    session[:last_view] = request.request_uri unless @results_only
   end
 
   def new
@@ -60,7 +66,12 @@ class EntriesController < ApplicationController
 
     if @entry.update_attributes(params[:entry])
       flash[:notice] = 'Entry was successfully updated.'
-      redirect_to(@entry)
+
+      if session[:last_view]
+        redirect_to session[:last_view]
+      else
+        redirect_to(@entry)
+      end
     else
       render :action => "edit"
     end
