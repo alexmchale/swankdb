@@ -1,4 +1,6 @@
 class Entry < ActiveRecord::Base
+  DESTROY_TEXT = 'Are you sure you want to destroy this entry?'
+
   belongs_to :user
   before_save :fixup_tags
   after_save :assign_user_tags

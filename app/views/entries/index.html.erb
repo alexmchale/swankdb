@@ -22,15 +22,22 @@
       <tr class="list_row">
         <td class="list_cell">
 
-          <%= link_to entry.content, entry, :class => :content_link %>
+          <%= entry.content %>
 
-          <% tags = link_entry_tags(entry, :class => :list_tag) %>
-
-          <% unless tags.blank? %>
+          <% unless entry.tags.blank? %>
             <br />
             <br />
-            <%= tags %>
+            <%= link_entry_tags(entry, :class => :list_tag) %>
           <% end %>
+
+          <div id="hidden_entry_links" style="float: right">
+            <br />
+            <br />
+
+            <%= link_to 'View', entry, :class => 'hidden_entry_link view_link' %>
+            <%= link_to 'Edit', edit_entry_path(entry), :class => 'hidden_entry_link edit_link' %>
+            <%= link_to 'Destroy', entry, :method => :delete, :class => 'hidden_entry_link destroy_link', :confirm => Entry::DESTROY_TEXT %>
+          </div>
         </td>
 
         <td class="list_cell list_updated_at_cell">
@@ -57,6 +64,19 @@
 
 <script lang="javascript">
 
+  function assign_entry_mouseovers() {
+    var rows = $('tr.list_row');
+
+    rows.unbind('mouseenter');
+    rows.unbind('mouseleave');
+
+    rows.mouseenter(function(evt) {
+      $(this).find('#hidden_entry_links').show();
+    }).mouseleave(function(evt) {
+      $(this).find('#hidden_entry_links').hide();
+    });
+  }
+
   $(document).ready(function() {
     var next_offset = 0;
 
@@ -74,6 +94,7 @@
             $('#get_more_results').remove();
           } else {
             $('#entry_list_table_body').append(html);
+            assign_entry_mouseovers();
           }
         },
 
@@ -86,6 +107,8 @@
       });
       return false;
     });
+
+    assign_entry_mouseovers();
   });
 
 </script>
