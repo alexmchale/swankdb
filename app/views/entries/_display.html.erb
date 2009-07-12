@@ -1,5 +1,13 @@
 <div class="content_display">
   <%= markdown @entry.content %>
+
+  <% unless @entry.tags.blank? %>
+    <%= separator %>
+
+    <p style="text-align: right; font-style: italic; font-size: 0.75em">
+      <%= link_entry_tags @entry, :class => 'entrytags' %>
+    </p>
+  <% end %>
 </div>
 
 <div class="content_timestamp" style="float: left">
@@ -19,15 +27,6 @@
 </div>
 
 <%= separator %>
-
-<% if @entry.tags.length > 0 %>
-  <p>
-    <b>Tags:</b>
-    <%= link_entry_tags @entry %>
-  </p>
-
-  <%= separator %>
-<% end %>
 
 <% @entry.each_filter_item do |type, item, url| %>
   <p>
