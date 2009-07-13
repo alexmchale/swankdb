@@ -17,9 +17,9 @@
   <%= separator %>
 
   <div class="totheright">
-    <%= destroy_entry_link @entry %>
+    <%= destroy_entry_link(@entry) unless @entry.new_record? %>
     <%= cancel_link %>
-    <%= f.submit 'Save' %>
+    <%= save_link(@entry.new_record? ? "new_entry" : "edit_entry_#{@entry.id}") %>
   </div>
 <% end %>
 
