@@ -1,9 +1,14 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  username: MyString
-  password: MyString
+bob:
+  id:       1
+  username: bob
+  password: ========
+  all_tags:
 
-two:
-  username: MyString
-  password: MyString
+alice:
+  id:       2
+  username: alice
+  password: ========
+  all_tags:
+

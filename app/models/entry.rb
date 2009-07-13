@@ -88,8 +88,7 @@ class Entry < ActiveRecord::Base
 private
 
   def fixup_tags
-    self.tags = self.tags.to_s.downcase.split.uniq.join(' ')
-    self.tags = " " + self.tags + " " unless self.tags.blank?
+    self.tags = self.tags.blank? ? '' : " #{pretty_tags} "
   end
 
   def assign_user_tags
