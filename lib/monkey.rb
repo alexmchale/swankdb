@@ -1,5 +1,6 @@
 class Fixnum
   def spaces
+    return '' if self < 0
     '&nbsp;' * self
   end
 end
