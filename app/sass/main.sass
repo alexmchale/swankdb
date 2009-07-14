@@ -1,5 +1,18 @@
 !page_size = 900px
 
+!cyan = #CFF
+!darkcyan = #099
+!purple = #FCF
+!darkpurple = #909
+!yellow = #FFC
+!darkyellow = #990
+!red = #FCC
+!darkred = #900
+!green = #CFC
+!darkgreen = #090
+!blue = #CCF
+!darkblue = #009
+
 body
   :padding 25px
 
@@ -26,6 +39,7 @@ div.content_display
   :margin-left 0px
   :margin-right 0px
   :background-color #DDD
+  :color #666
 
   h1
     :padding 0px 0px 25px 10px
@@ -35,6 +49,13 @@ div.content_display
     :padding 0px 0px 25px 10px
   p
     :padding 0px 0px 20px 0px
+  a
+    :color #666
+    :font-family sans-serif
+    :text-decoration none
+    &:hover
+      :color black
+      :background-color white
 
 div.content_timestamp
   :font-size 0.75em
