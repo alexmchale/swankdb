@@ -65,7 +65,7 @@ class EntriesController < ApplicationController
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
     if @entry.update_attributes(params[:entry])
-      flash[:notice] = 'Entry was successfully updated.'
+      # flash[:notice] = 'Entry was successfully updated.'
 
       if session[:last_view]
         redirect_to session[:last_view]
