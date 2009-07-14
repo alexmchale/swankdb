@@ -84,4 +84,16 @@ class EntryTest < ActiveSupport::TestCase
     assert e.reload
     assert_equal '', e.tags
   end
+
+  test "content should have links correctly embedded when calling linkup" do
+    e = Entry.new(:content => '1ZX799330100198551', :user => @bob)
+
+    ups = '1ZX799330100198551'
+    ups_linked = '<a href="http://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&tracknums_displayed=1&TypeOfInquiryNumber=T&loc=en_US&InquiryNumber1=1ZX799330100198551&track.x=0&track.y=0" class="urlified">1ZX799330100198551</a>'
+    assert_equal ups_linked, Entry.new(:content => ups, :user => @bob).linkup
+
+    fedex = '732812804843'
+    fedex_linked = '<a href="http://www.fedex.com/Tracking?language=english&cntry_code=us&tracknumbers=732812804843" class="urlified">732812804843</a>'
+    assert_equal fedex_linked, Entry.new(:content => fedex, :user => @bob).linkup
+  end
 end

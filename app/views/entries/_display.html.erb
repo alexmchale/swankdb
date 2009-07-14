@@ -1,5 +1,5 @@
 <div class="content_display">
-  <%= markdown @entry.content %>
+  <%= markdown @entry.linkup %>
 
   <% unless @entry.tags.blank? %>
     <%= separator %>
@@ -25,16 +25,3 @@
   <%= destroy_entry_link(@entry) %>
 </div>
 
-<%= separator %>
-
-<% @entry.each_filter_item do |type, item, url| %>
-  <p>
-    <b><%=h type %>:</b>
-
-    <% if url %>
-      <%= link_to item, url %>
-    <% else %>
-      <%=h item %>
-    <% end %>
-  </p>
-<% end %>
