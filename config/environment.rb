@@ -15,6 +15,7 @@ Rails::Initializer.run do |config|
   config.gem "bluecloth"
   config.gem "hpricot"
   config.gem "redgreen"
+  config.gem "htmlentities"
 
   config.time_zone = 'UTC'
 end
