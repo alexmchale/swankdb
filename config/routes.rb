@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.connect 'entries/suggest_tags', :controller => 'entries', :action => 'suggest_tags'
+  map.connect 'entries/preview', :controller => 'entries', :action => 'preview'
   map.connect 'users/login', :controller => 'users', :action => 'login'
   map.connect 'users/logout', :controller => 'users', :action => 'logout'
   map.resources :entries

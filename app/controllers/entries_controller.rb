@@ -38,6 +38,13 @@ class EntriesController < ApplicationController
     session[:last_view] = request.request_uri unless @results_only
   end
 
+  def preview
+    @entry = Entry.new
+    @entry.content = params[:content].to_s
+    @entry.tags = params[:tags].to_s
+    render :partial => 'display'
+  end
+
   def new
     @entry = Entry.new
     @entry.user_id = current_user_id

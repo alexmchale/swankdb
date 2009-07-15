@@ -1,3 +1,19 @@
 <div id="content_pane">
   <%= render :partial => 'display' %>
 </div>
+
+<div class="content_timestamp" style="float: left">
+  updated <%= pretty_datetime(@entry.updated_at) %>
+</div>
+
+<div class="content_timestamp" style="float: right">
+  created <%= pretty_datetime(@entry.created_at) %>
+</div>
+
+<%= separator %>
+
+<div class="totheright">
+  <%= edit_entry_link(@entry) %>
+  <%= destroy_entry_link(@entry) %>
+</div>
+

@@ -1,22 +1,29 @@
 <% form_for(@entry) do |f| %>
   <%= f.error_messages %>
 
-  <div class="content_edit">
-    <h3>Content (<a href="http://daringfireball.net/projects/markdown/basics">Markdown</a>)</h3>
-    <%= f.text_area :content, :class => 'full_width_edit', :rows => 10 %>
+  <div id="content_preview" style="display: none">
   </div>
 
-  <%= separator %>
+  <div id="content_edit_section">
+    <div id="content_edit" class="content_edit">
+      <h3>Content (<a href="http://daringfireball.net/projects/markdown/basics">Markdown</a>)</h3>
+      <%= f.text_area :content, :class => 'full_width_edit', :rows => 15 %>
+    </div>
 
-  <div class="tags_edit">
-    <%= h3 'Tags' %>
-    <% tags = @entry.pretty_tags %>
-    <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="full_width_edit" />
+    <%= separator %>
+
+    <div class="tags_edit">
+      <%= h3 'Tags' %>
+      <% tags = @entry.pretty_tags %>
+      <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="full_width_edit" />
+    </div>
   </div>
 
   <%= separator %>
 
   <div class="totheright">
+    <img id="loading_spinner" src="/images/spinner.gif" style="display: none" />
+    <a href="#" id="preview_link" class="view_link">Preview</a>
     <%= destroy_entry_link(@entry) unless @entry.new_record? %>
     <%= cancel_link %>
     <%= save_link(@entry.new_record? ? "new_entry" : "edit_entry_#{@entry.id}") %>
@@ -35,11 +42,47 @@
   };
   var auto_suggest = new bsn.AutoSuggest('entry_tags', auto_suggest_options);
 
-  $('textarea#entry_content').autoResize({
-    animate: false,
-    animateDuration: 0,
-    extraSpace: 0
-  });
-
   $('textarea#entry_content').focus();
+
+  $('#preview_link').click(function() {
+    var preview = $('#content_preview');
+    var edit = $('#content_edit_section');
+    var link = $('#preview_link');
+    var spinner = $('#loading_spinner');
+    var editor = $('#entry_content');
+    var tags = $('#entry_tags');
+
+    if (preview.css('display') == 'none') {
+      link.hide();
+      spinner.show();
+
+      $.ajax({
+        type: 'GET',
+        url: '/entries/preview',
+        data: $.param({content: editor.val(), tags: tags.val()}),
+
+        error: function() {
+          alert('Failed to download the preview from SwankDB :-(');
+        },
+
+        success: function(data) {
+          edit.hide();
+          preview.html(data);
+          preview.show();
+          link.text('Edit');
+        },
+
+        complete: function() {
+          link.show();
+          spinner.hide();
+        }
+      });
+    } else {
+      preview.hide();
+      edit.show();
+      link.text('Preview');
+    }
+
+    return false;
+  });
 </script>
