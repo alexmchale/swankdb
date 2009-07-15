@@ -19,8 +19,6 @@ ActiveRecord::Schema.define(:version => 20090710222233) do
     t.string   "tags"
   end
 
-  add_index "entries", ["tags"], :name => "entry_tags_index"
-
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "password"

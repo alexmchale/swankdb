@@ -21,7 +21,12 @@ protected
 private
 
   def reload_user
-    session[:user].andand.reload
+    begin
+      session[:user].andand.reload
+    rescue
+      session[:user] = nil
+      redirect_to(:controller => :users, :action => :login)
+    end
   end
 
   def authenticate_user_account
