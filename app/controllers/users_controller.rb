@@ -36,7 +36,20 @@ class UsersController < ApplicationController
 
       entry = Entry.new
       entry.user_id = user.id
-      entry.content = 'Hello, and welcome to swankdb!'
+      entry.content = <<WELCOME
+## Welcome to SwankDB! ##
+* SwankDB is a personal database for all your random bits of information.
+
+## What makes SwankDB special ##
+* SwankDB uses [Markdown](http://daringfireball.net/projects/markdown/),
+  a readable, easy to use syntax for formatting your text.
+* It sorts your information by when it was edited and by when it was created.
+* Assign tags to your entries to help find them.
+
+## Tips & Tricks ##
+* FedEx and UPS tracking codes will automatically link to their tracking pages.
+* Assign every tag you can think of to an entry to help you find it later.
+WELCOME
       entry.tags = 'hello swankdb'
       entry.save
 
