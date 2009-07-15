@@ -6,14 +6,14 @@
 
   <div id="content_edit_section">
     <div id="content_edit" class="content_edit">
-      <h3>Content (<a href="http://daringfireball.net/projects/markdown/basics">Markdown</a>)</h3>
+      <label>Content (<a href="http://daringfireball.net/projects/markdown/basics">Markdown</a>)</label>
       <%= f.text_area :content, :class => 'full_width_edit', :rows => 15 %>
     </div>
 
     <%= separator %>
 
     <div class="tags_edit">
-      <%= h3 'Tags' %>
+      <label>Tags</label>
       <% tags = @entry.pretty_tags %>
       <input type="text" id="entry_tags" name="entry_tags" value="<%=h tags %>" class="full_width_edit" />
     </div>
