@@ -17,6 +17,7 @@ Rails::Initializer.run do |config|
   config.gem "redgreen"
   config.gem "htmlentities"
   config.gem "cldwalker-hirb", :lib => "hirb"
+  config.gem "alexmchale-gmail-client", :lib => "gmail"
 
   config.time_zone = 'UTC'
 end
