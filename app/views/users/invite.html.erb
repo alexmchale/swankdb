@@ -10,7 +10,7 @@
   <p>
     <label>Custom message</label>
     <br>
-    <textarea id="message" name="message" class="full_width_edit" rows="10"></textarea>
+    <textarea id="message" name="message" class="full_width_edit" rows="10"><%= File.read('config/invitation.txt') %></textarea>
   </p>
 
   <%= separator %>

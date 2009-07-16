@@ -1,0 +1,3 @@
+SwankDB is an online, personal database.  Please come check us out at:
+http://swankdb.com
+
