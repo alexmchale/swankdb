@@ -104,8 +104,8 @@ WELCOME
       email = Email.new
       email.user = session[:user]
       email.destination = params[:email].strip
-      email.subject = "You're invited to try SwankDB!"
-      email.body = "Here is where my text goes :-)"
+      email.subject = "#{session[:user].username.capitalize} invites you to try SwankDB!"
+      email.body = File.read('config/invitation.txt')
       email.body = params[:message] + "\n\n" + email.body unless params[:message].blank?
       email.save
       flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
