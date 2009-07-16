@@ -8,10 +8,12 @@
   </p>
 
   <p>
-    <label>Custom message</label>
+    <label>Message</label>
     <br>
     <textarea id="message" name="message" class="full_width_edit" rows="10"><%= File.read('config/invitation.txt') %></textarea>
   </p>
+
+  <label>Your username and email address will be appended to this message.</label>
 
   <%= separator %>
 

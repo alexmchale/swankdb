@@ -104,8 +104,8 @@ WELCOME
       email = Email.new
       email.user = session[:user]
       email.destination = params[:email].strip
-      email.subject = "#{session[:user].username.capitalize} invites you to try SwankDB"
-      email.body = params[:message] + "\r\n\r\n-- \r\n" + File.read('config/signature.txt')
+      email.subject = "#{session[:user].username} invites you to try SwankDB"
+      email.body = params[:message].strip + "\r\n\r\n#{session[:user].username} (#{session[:user].email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
       email.save
       flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
       redirect_to :controller => :users, :action => :invite
