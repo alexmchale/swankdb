@@ -109,6 +109,7 @@ WELCOME
       email.body = params[:message] + "\n\n" + email.body unless params[:message].blank?
       email.save
       flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
+      redirect_to :controller => :users, :action => :invite
     end
   end
 
