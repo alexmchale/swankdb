@@ -36,24 +36,13 @@ class UsersController < ApplicationController
 
       entry = Entry.new
       entry.user_id = user.id
-      entry.content = <<WELCOME
-## Welcome to SwankDB! ##
-* SwankDB is a personal database for all your random bits of information.
-
-## What makes SwankDB special ##
-* SwankDB uses [Markdown](http://daringfireball.net/projects/markdown/),
-  a readable, easy to use syntax for formatting your text.
-* It sorts your information by when it was edited and by when it was created.
-* Assign tags to your entries to help find them.
-
-## Tips & Tricks ##
-* FedEx and UPS tracking codes will automatically link to their tracking pages.
-* Assign every tag you can think of to an entry to help you find it later.
-WELCOME
+      entry.content = File.read('config/welcome.txt')
       entry.tags = 'hello swankdb'
       entry.save
 
       user.reload
+
+      SwankLog.log 'USER-CREATED', user.to_yaml
 
       session[:user] = user
       flash[:notice] = 'Your new user has been created.'
@@ -107,6 +96,9 @@ WELCOME
       email.subject = "#{session[:user].username} invites you to try SwankDB"
       email.body = params[:message].strip + "\r\n\r\n#{session[:user].username} (#{session[:user].email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
       email.save
+
+      SwankLog.log 'INVITATION-CREATED', email.to_yaml
+
       flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
       redirect_to :controller => :users, :action => :invite
     end
