@@ -16,10 +16,13 @@ Rails::Initializer.run do |config|
   config.gem "hpricot"
   config.gem "redgreen"
   config.gem "htmlentities"
+  config.gem "cldwalker-hirb", :lib => "hirb"
 
   config.time_zone = 'UTC'
 end
 
 Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/sass')
 Sass::Plugin.options[:css_location] = File.join(RAILS_ROOT, 'public/stylesheets')
+
+Hirb.enable
 
