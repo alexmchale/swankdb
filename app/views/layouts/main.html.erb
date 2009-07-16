@@ -11,16 +11,16 @@
   <%= stylesheet_link_tag 'main' %>
   <%= stylesheet_link_tag 'autosuggest_inquisitor' %>
 
-  <%= javascript_include_tag 'application.js' %>
   <%= javascript_include_tag 'jquery-1.3.2.min.js' %>
   <%= javascript_include_tag 'bsn.AutoSuggest_2.1.3.js' %>
+  <%= javascript_include_tag 'application.js' %>
 </head>
 <body>
 
 <div class="main_container">
   <div class="header_container">
     <div style="float: left">
-      <h1><a href="http://swankdb.com" class="logo">SwankDB</a></h1>
+      <h1><a href="/" class="logo">SwankDB</a></h1>
     </div>
 
     <div style="float: right; text-align: right">
@@ -30,10 +30,12 @@
           |
           <%= link_to 'my account', { :controller => :users, :action => :edit, :id => session[:user].id }, :class => :nav %>
           |
+          <%= link_to 'invite a friend', { :controller => :users, :action => :invite }, :class => :nav %>
+          |
           <%= link_to 'logout', { :controller => :users, :action => :logout }, :class => :nav %>
         </p>
         <p>
-          <form method="get" action="/entries">
+          <form id="searchbox" method="get" action="/entries">
             <input type="text" name="keywords" id="keywords" class="search_box" size="30" />
             <%= 3.spaces %>
             <input type="submit" value="Search" />
@@ -93,6 +95,10 @@
 
   <%= separator * 3 %>
 </div>
+
+<script lang="javascript">
+  $('#searchbox #keywords').highlightWhenFocused();
+</script>
 
 </body>
 </html>

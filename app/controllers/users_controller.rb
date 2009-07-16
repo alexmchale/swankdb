@@ -99,6 +99,19 @@ WELCOME
     redirect_to :action => :login
   end
 
+  def invite
+    unless params[:email].blank?
+      email = Email.new
+      email.user = session[:user]
+      email.destination = params[:email].strip
+      email.subject = "You're invited to try SwankDB!"
+      email.body = "Here is where my text goes :-)"
+      email.body = params[:message] + "\n\n" + email.body unless params[:message].blank?
+      email.save
+      flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
+    end
+  end
+
 private
 
   def check_password(password1, password2)

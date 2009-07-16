@@ -3,6 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'entries/preview', :controller => 'entries', :action => 'preview'
   map.connect 'users/login', :controller => 'users', :action => 'login'
   map.connect 'users/logout', :controller => 'users', :action => 'logout'
+  map.connect 'users/invite', :controller => 'users', :action => 'invite'
   map.resources :entries
   map.resources :users
   map.resources :about

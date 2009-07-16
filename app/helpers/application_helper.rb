@@ -75,8 +75,8 @@ module ApplicationHelper
     link_to 'Cancel', request.referrer, htmloptions
   end
 
-  def save_link(form, htmloptions = {})
+  def save_link(verb, form, htmloptions = {})
     htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'save_link'
-    link_to 'Save', "javascript:$('##{form}').submit()", htmloptions
+    link_to verb, "javascript:$('##{form}').submit()", htmloptions
   end
 end

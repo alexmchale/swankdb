@@ -1,0 +1,26 @@
+<% form_tag('/users/invite', :name => 'invite_form', :id => 'invite_form') do %>
+  <%= h2 'Invite a friend to try SwankDB' %>
+
+  <p>
+    <label>Friend's email address</label>
+    <br>
+    <input type="text" id="email" name="email" class="full_width_edit">
+  </p>
+
+  <p>
+    <label>Custom message</label>
+    <br>
+    <textarea id="message" name="message" class="full_width_edit" rows="10"></textarea>
+  </p>
+
+  <%= separator %>
+
+  <p class="totheright">
+    <%= link_to 'Invite', "javascript:$('#invite_form').submit()", :class => 'save_link' %>
+  </p>
+<% end %>
+
+<script lang="javascript">
+  $('#email,#message').highlightWhenFocused();
+  $('#email').focus();
+</script>

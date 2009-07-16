@@ -26,7 +26,8 @@
     <a href="#" id="preview_link" class="view_link">Preview</a>
     <%= destroy_entry_link(@entry) unless @entry.new_record? %>
     <%= cancel_link %>
-    <%= save_link(@entry.new_record? ? "new_entry" : "edit_entry_#{@entry.id}") %>
+    <%= save_link((@entry.new_record? ? "Create" : "Save"),
+                  (@entry.new_record? ? "new_entry" : "edit_entry_#{@entry.id}")) %>
   </div>
 <% end %>
 
@@ -41,8 +42,6 @@
     minchars: 1
   };
   var auto_suggest = new bsn.AutoSuggest('entry_tags', auto_suggest_options);
-
-  $('textarea#entry_content').focus();
 
   $('#preview_link').click(function() {
     var preview = $('#content_preview');
@@ -85,4 +84,7 @@
 
     return false;
   });
+
+  $('#entry_content,#entry_tags').highlightWhenFocused();
+  $('#entry_content').focus();
 </script>

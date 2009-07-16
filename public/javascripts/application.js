@@ -28,3 +28,13 @@ function documentSize() {
 
   return dimensions;
 }
+
+(function($) {
+  $.fn.highlightWhenFocused = function() {
+    $(this).focus(function() {
+      $(this).addClass('focus_highlight');
+    }).blur(function() {
+      $(this).removeClass('focus_highlight');
+    });
+  };
+})(jQuery);
