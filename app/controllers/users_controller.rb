@@ -16,11 +16,14 @@ class UsersController < ApplicationController
       :username => username = params[:username].to_s.downcase.gsub(/[^a-z0-9\.\-]/, ''),
       :password1 => password1 = params[:password1].to_s,
       :password2 => password2 = params[:password2].to_s,
-      :email => email = params[:email].to_s
+      :email => email = params[:email].to_s.strip
     }
 
     if User.find_by_username(username)
       flash[:error] = 'That username is not available.'
+      redirect_to :action => :new
+    elsif User.find_by_email(email)
+      flash[:error] = 'An account with that email address already exists.'
       redirect_to :action => :new
     elsif username.blank?
       flash[:error] = 'The username must not be blank.'
@@ -125,7 +128,6 @@ class UsersController < ApplicationController
         session[:user] = @user
         redirect_to :controller => :entries, :action => :index
       else
-        flash[:error] = 'wrong!'
         redirect_to request.request_uri
       end
     elsif @code && @user
