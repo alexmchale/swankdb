@@ -9,6 +9,7 @@ require File.join(File.dirname(__FILE__), 'boot')
 require 'digest/sha1'
 require 'monkey'
 require 'detector'
+require 'email_verifier'
 
 Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"

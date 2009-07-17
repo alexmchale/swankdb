@@ -25,8 +25,11 @@ class UsersController < ApplicationController
     elsif User.find_by_email(email)
       flash[:error] = 'An account with that email address already exists.'
       redirect_to :action => :new
+    elsif !email.email?
+      flash[:error] = 'Please enter a valid email address.'
+      redirect_to :action => :new
     elsif username.blank?
-      flash[:error] = 'The username must not be blank.'
+      flash[:error] = 'Please enter a username.'
       redirect_to :action => :new
     elsif !check_password(password1, password2)
       redirect_to :action => :new
