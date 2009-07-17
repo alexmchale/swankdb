@@ -10,7 +10,7 @@
 
   <p>
     <%= f.label 'Password (confirm)' %><br />
-    <input type="password" id="password1" name="password2" class="full_width_edit" />
+    <input type="password" id="password2" name="password2" class="full_width_edit" />
   </p>
 
   <%= separator %>
@@ -28,5 +28,6 @@
 <% end %>
 
 <script lang="JavaScript">
+  $('#password1,#password2,#email').highlightWhenFocused();
   $('#username').focus();
 </script>
