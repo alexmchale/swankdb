@@ -127,6 +127,9 @@ class UsersController < ApplicationController
         @user.password = password1
         @user.save
 
+        @code.destroy
+        @user.reload
+
         flash[:notice] = 'Your password has been updated.'
         session[:user] = @user
         redirect_to :controller => :entries, :action => :index

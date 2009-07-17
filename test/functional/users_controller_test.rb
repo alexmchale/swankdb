@@ -45,5 +45,9 @@ class UsersControllerTest < ActionController::TestCase
     authenticated = User.authenticate(@bob.username, '123456')
     assert_not_nil authenticated
     assert_equal @bob.id, authenticated.id
+
+    # Verify that bob no longer has a reset code.
+    assert @bob.reload
+    assert_nil @bob.active_code('reset-code')
   end
 end
