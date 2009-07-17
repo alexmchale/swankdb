@@ -13,13 +13,19 @@
     <input type="password" id="password" name="password" class="full_width_edit" />
   </p>
 
-    <%= separator %>
+  <p>
+    Are you having trouble logging in?
+    <%= link_to 'Reset your password', :controller => :users, :action => :reset_password %>.
+  </p>
 
-    <div class="totheright">
-      <input type="submit" value="Login" />
-    </div>
+  <%= separator %>
+
+  <div class="totheright">
+    <input type="submit" value="Login" />
+  </div>
 <% end %>
 
 <script lang="JavaScript">
-  $('input#username').focus();
+  $('#username,#password').highlightWhenFocused();
+  $('#username').focus();
 </script>

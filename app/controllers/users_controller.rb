@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user_account
-  skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout ]
+  skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout, :reset_password ]
 
   def new
     @user = User.new
@@ -101,6 +101,69 @@ class UsersController < ApplicationController
 
       flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
       redirect_to :controller => :users, :action => :invite
+    end
+  end
+
+  def reset_password
+    username = params[:username]
+    email = params[:email]
+
+    password1 = params[:password1]
+    password2 = params[:password2]
+
+    @code = ActiveCode.find(:first, :conditions => { :code => params[:reset_code] })
+    @user = @code.andand.user
+
+    if @code && @user && password1 && password2
+      # User has presented a valid reset code and entered new passwords.
+
+      if check_password(password1, password2)
+        @user.password = password1
+        @user.save
+
+        flash[:notice] = 'Your password has been updated.'
+        session[:user] = @user
+        redirect_to :controller => :entries, :action => :index
+      else
+        flash[:error] = 'wrong!'
+        redirect_to request.request_uri
+      end
+    elsif @code && @user
+      # User has hit us from the emailed link.
+
+      render 'confirmed_set_password'
+    elsif username || email
+      # User has filled out the "request a new password" form.
+      # Verify that we have a user that exists for one of the two provided credentials.
+      # Create a new reset code for this user and email it to them.
+
+      @user = User.find_by_username(username)
+      @user ||= User.find_by_email(email)
+
+      if @user
+        reset_code = @user.new_active_code('reset-password').code
+
+        email = Email.new
+        email.user = @user
+        email.destination = @user.email
+        email.subject = 'Password reset requested on SwankDB'
+        email.body = "Please click this link to reset your password:\r\n" +
+                     "http://#{request.env['HTTP_HOST']}/users/reset_password?reset_code=#{reset_code}"
+        email.save
+
+        flash[:notice] = "We have sent a password reset request to the email address on file."
+
+        redirect_to '/'
+      else
+        flash[:error] = "We can't find a user with those credentials.  Please try again."
+
+        redirect_to :action => :reset_password
+      end
+    else
+      # User has hit us from any other source.
+      # Send a page to request a new password based on your email address or username.
+
+      render 'request_new_password'
     end
   end
 

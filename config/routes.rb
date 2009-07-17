@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'users/login', :controller => 'users', :action => 'login'
   map.connect 'users/logout', :controller => 'users', :action => 'logout'
   map.connect 'users/invite', :controller => 'users', :action => 'invite'
+  map.connect 'users/reset_password', :controller => 'users', :action => 'reset_password'
   map.resources :entries
   map.resources :users
   map.resources :about
