@@ -75,8 +75,8 @@ module ApplicationHelper
     link_to 'Cancel', request.referrer, htmloptions
   end
 
-  def save_link(verb, form, htmloptions = {})
-    htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'save_link'
-    link_to verb, "javascript:$('##{form}').submit()", htmloptions
+  def submit_link(verb)
+    '<input type="submit" style="display: none">' +
+    link_to(verb, "javascript:$('div.page_content form').submit()", :class => 'save_link')
   end
 end
