@@ -4,15 +4,33 @@
 
   <tr class="list_header_row">
     <th class="list_header_cell list_content_header_cell">
-      <%= @entries_count %>
-      <%= @entries_count != 1 ? 'entries' : 'entry' %>
-      <%= @description %>
+      <span id="description"><%= @description %></span>
+      |
+      <a href="#" id="quick_add_start">quick add</a>
     </th>
 
     <th class="list_header_cell list_update_header_cell">
       <%= toggle_entries_sort_link %>
     </th>
   </tr>
+
+  <% form_tag(url_for(:action => :create, :redirect => :index), :id => 'quick_add_form') do %>
+    <tr id="quick_add_row" class="" style="display: none">
+      <td class="list_cell quick_add_row" colspan="2">
+        <label>Content</label><br>
+        <input type="text" id="quick_add_content" name="entry[content]" class="full_width_edit" style="width: 100%"><br>
+        <br>
+        <label>Tags</label><br>
+        <input type="text" id="quick_add_tags" name="entry_tags" class="full_width_edit" style="width: 100%" value="<%= @default_tags %>"><br>
+        <br>
+
+        <div class="totheright">
+          <input type="submit" style="display: none">
+          <a href="#" id="quick_add_submit" class="save_link">Add</a>
+        </div>
+      </td>
+    </tr>
+  <% end %>
 
   <tbody id="entry_list_table_body">
 
@@ -68,24 +86,10 @@
 
 <script lang="javascript">
 
-  function assign_entry_mouseovers() {
-    var rows = $('tr.list_row');
+  var next_offset = <%= EntriesController::ENTRIES_PER_LOAD %>;
 
-    rows.unbind('mouseenter');
-    rows.unbind('mouseleave');
-
-    rows.mouseenter(function(evt) {
-      $(this).find('.entry_index_hidden_links').show();
-    }).mouseleave(function(evt) {
-      $(this).find('.entry_index_hidden_links').hide();
-    });
-  }
-
-  $(document).ready(function() {
-    var next_offset = 0;
-
+  function assign_pager() {
     $('#get_more_results').click(function() {
-      next_offset += <%= EntriesController::ENTRIES_PER_LOAD %>;
       $('#loading_spinner').show();
       $('#get_more_results').hide();
 
@@ -95,8 +99,10 @@
 
         success: function(html) {
           if (/^[\s\r\n]*$/.test(html)) {
+            // Remove the get more results button if there's nothing left to fetch.
             $('#get_more_results').remove();
           } else {
+            next_offset += <%= EntriesController::ENTRIES_PER_LOAD %>;
             $('#entry_list_table_body').append(html);
             assign_entry_mouseovers();
           }
@@ -111,10 +117,87 @@
       });
       return false;
     });
+  }
 
+  function reset_count() {
+    $.getJSON('/entries?<%= @params %>&query', function(json) {
+      $('.list_header_row #description').html(json.description);
+    });
+  }
+
+  function clear_pager() {
+    next_offset = 0;
+    $('#entry_list_table_body').empty();
+  }
+
+  function reset_pager() {
+    clear_pager();
+    $('#get_more_results').click();
+    reset_count();
+  }
+
+  function assign_entry_mouseovers() {
+    var rows = $('tr.list_row');
+
+    rows.unbind('mouseenter');
+    rows.unbind('mouseleave');
+
+    rows.mouseenter(function(evt) {
+      $(this).find('.entry_index_hidden_links').show();
+    }).mouseleave(function(evt) {
+      $(this).find('.entry_index_hidden_links').hide();
+    });
+  }
+
+  function assign_quick_add() {
+    $('#quick_add_start').click(function() {
+      if ($('#quick_add_row').toggleAndCheck()) {
+        $('#quick_add_content').focus();
+        $('#quick_add_start').text('hide quick add');
+      } else {
+        $('#quick_add_start').text('quick add');
+      }
+    });
+
+    $('#quick_add_submit').click(function() {
+      $('#quick_add_form').submit();
+    });
+
+    $('#quick_add_form').submit(function() {
+      clear_pager();
+      $('#loading_spinner').show();
+      $('#get_more_results').hide();
+      $('#quick_add_row').hide();
+
+      $.post('/entries', $('#quick_add_form').serialize(), function() {
+        reset_pager();
+      });
+
+      $('#quick_add_content').val('');
+      $('#quick_add_content').focus();
+
+      return false;
+    });
+
+    $(document).bind('keyup', {combi:'n', disableInInput: true}, function() {
+      $('#quick_add_start').click();
+    });
+
+    $(document).bind('keyup', 'esc', function() {
+      $('#quick_add_start').click();
+
+      if (!$('#quick_add_row').visible()) {
+        $('#quick_add_start').focus();
+      }
+    });
+
+    $('#quick_add_content,#quick_add_tags').highlightWhenFocused();
+  }
+
+  $(document).ready(function() {
+    assign_pager();
     assign_entry_mouseovers();
-
-    $('#keywords').focus();
+    assign_quick_add();
   });
 
 </script>

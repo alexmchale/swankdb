@@ -5,23 +5,28 @@ class EntriesController < ApplicationController
   before_filter :strip_user_input
 
   def index
-    @description = []
-    @description << "tagged #{params[:tag].downcase}" unless params[:tag].blank?
-    @description << "with #{params[:with]}" unless params[:with].blank?
-    @description << "include &#147;#{HTMLEntities.encode_entities params[:keywords]}&#148;" unless params[:keywords].blank?
-    @description = @description.join(', ')
-
     @conditions = Entry.build_search_conditions :user_id => current_user_id,
                                                 :tag => params[:tag],
                                                 :with => params[:with],
                                                 :keywords => params[:keywords]
 
+    @default_tags = params[:tag].to_s.strip
+    @default_tags += ' ' unless @default_tags.blank?
+
     @entries_count = Entry.count(:conditions => @conditions)
+
+    @description = []
+    @description << "tagged #{params[:tag].downcase}" unless params[:tag].blank?
+    @description << "with #{params[:with]}" unless params[:with].blank?
+    @description << "include &#147;#{HTMLEntities.encode_entities params[:keywords]}&#148;" unless params[:keywords].blank?
+    @description = @entries_count.to_s + ' ' + (@entries_count != 1 ? 'entries' : 'entry') + ' ' + @description.join(', ')
 
     @results_only = true if params[:offset]
     @params = params.to_url
 
     order = 'entries.%s_at DESC' % (params[:order] == 'created' ? 'created' : 'updated')
+
+    return render_data(:count => @entries_count, :description => @description) if params.has_key?(:query)
 
     @entries = Entry.find(:all, :conditions => @conditions, :order => order, :limit => ENTRIES_PER_LOAD, :offset => params[:offset].to_i)
 
@@ -61,7 +66,12 @@ class EntriesController < ApplicationController
 
     if @entry.save
       flash[:notice] = 'Entry was successfully created.'
-      redirect_to(@entry)
+
+      if params[:redirect] == 'index'
+        redirect_to(:action => :index)
+      else
+        redirect_to(@entry)
+      end
     else
       render :action => "new"
     end

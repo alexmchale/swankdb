@@ -37,4 +37,19 @@ function documentSize() {
       $(this).removeClass('focus_highlight');
     });
   };
+
+  $.fn.selectAllWhenFocused = function() {
+    $(this).focus(function() {
+      $(this).select();
+    });
+  };
+
+  $.fn.visible = function() {
+    return $(this).css('display') != 'none';
+  }
+
+  $.fn.toggleAndCheck = function() {
+    $(this).toggle();
+    return $(this).visible();
+  }
 })(jQuery);
