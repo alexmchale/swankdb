@@ -61,7 +61,8 @@
 
       <% session[:user].tags.each do |tag| %>
         <%= 3.spaces %>
-        <%= link_to tag, { :controller => :entries, :action => :index, :tag => tag }, :class => 'tagcloud' %>
+        <% clazz = (tag == params[:tag]) ? 'tagcloud_highlight' : 'tagcloud' %>
+        <%= link_to tag, { :controller => :entries, :action => :index, :tag => tag }, :class => clazz %>
       <% end %>
     <% end %>
   </div>
