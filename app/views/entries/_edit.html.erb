@@ -26,7 +26,7 @@
     <a href="#" id="preview_link" class="view_link">Preview</a>
     <%= destroy_entry_link(@entry) unless @entry.new_record? %>
     <%= cancel_link %>
-    <%= submit_link(@entry.new_record? ? "Create" : "Save") %>
+    <%= submit_link(@entry.new_record? ? "Add" : "Save") %>
   </div>
 <% end %>
 
