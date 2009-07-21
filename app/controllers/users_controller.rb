@@ -66,9 +66,9 @@ class UsersController < ApplicationController
     password2 = params[:password2].to_s
     email = params[:email].to_s
 
-    if check_password(password1, password2)
+    if (password1.blank? && password2.blank?) || check_password(password1, password2)
       flash[:notice] = 'Your profile settings have been updated.'
-      @user.password = password1
+      @user.password = password1 unless password1.blank?
       @user.email = email
       @user.save
     end
