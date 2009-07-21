@@ -85,6 +85,7 @@ class UsersController < ApplicationController
         redirect_to :controller => :entries, :action => :index
       else
         flash[:error] = "The username or password you entered is incorrect"
+        redirect_to :controller => :users, :action => :login
       end
     end
   end
