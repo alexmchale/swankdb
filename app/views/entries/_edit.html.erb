@@ -7,7 +7,7 @@
   <div id="content_edit_section">
     <div id="content_edit" class="content_edit">
       <label>Content (<a href="http://daringfireball.net/projects/markdown/basics">Markdown</a>)</label>
-      <%= f.text_area :content, :class => 'full_width_edit', :rows => 15 %>
+      <textarea id="entry_content" name="entry_content" class="full_width_edit" rows="15"><%= @entry.content %></textarea>
     </div>
 
     <%= separator %>

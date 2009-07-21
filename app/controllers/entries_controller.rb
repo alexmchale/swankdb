@@ -60,8 +60,9 @@ class EntriesController < ApplicationController
   end
 
   def create
-    @entry = Entry.new(params[:entry])
+    @entry = Entry.new
     @entry.user_id = current_user_id
+    @entry.content = params[:entry_content].strip
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
     if @entry.save
@@ -79,9 +80,10 @@ class EntriesController < ApplicationController
 
   def update
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
+    @entry.content = params[:entry_content].strip
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
-    if @entry.update_attributes(params[:entry])
+    if @entry.save
       # flash[:notice] = 'Entry was successfully updated.'
 
       if session[:last_view]
