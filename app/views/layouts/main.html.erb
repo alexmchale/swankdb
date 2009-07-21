@@ -57,7 +57,7 @@
 
   <div class="tags_list">
     <% if session[:user] %>
-      <% clazz = params[:tag].blank? ? 'tagcloud_highlight' : 'tagcloud' %>
+      <% clazz = (controller.controller_name == 'entries' && controller.action_name == 'index' && params[:tag].blank?) ? 'tagcloud_highlight' : 'tagcloud' %>
       <%= link_to 'All', { :controller => :entries, :action => :index }, :class => clazz %>
 
       <% session[:user].tags.each do |tag| %>
