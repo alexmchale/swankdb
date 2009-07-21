@@ -81,7 +81,7 @@ class UsersController < ApplicationController
       session[:user] = User.authenticate(params[:username], params[:password])
 
       if session[:user]
-        flash[:notice] = "You have successfully logged in as #{session[:user].username}."
+        # flash[:notice] = "You have successfully logged in as #{session[:user].username}."
         redirect_to :controller => :entries, :action => :index
       else
         flash[:error] = "The username or password you entered is incorrect"
