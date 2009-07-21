@@ -153,6 +153,7 @@
     $('#quick_add_start').click(function() {
       if ($('#quick_add_row').toggleAndCheck()) {
         $('#quick_add_content').focus();
+        $('#quick_add_content').select();
         $('#quick_add_start').text('hide quick add');
       } else {
         $('#quick_add_start').text('quick add');
