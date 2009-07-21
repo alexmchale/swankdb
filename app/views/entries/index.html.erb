@@ -75,10 +75,7 @@
   <tr class="list_footer_row">
     <td class="list_footer_cell" colspan="2" style="text-align: right">
       <img id="loading_spinner" src="images/spinner.gif" style="display: none" />
-
-      <% if @entries.length < @entries_count %>
-        <a href="#" id="get_more_results">Get more results</a>
-      <% end %>
+      <a href="#" id="get_more_results" style="<%= 'display: none' if @entries.length >= @entries_count %>">Get more results</a>
     </td>
   </tr>
 
@@ -87,6 +84,7 @@
 <script lang="javascript">
 
   var next_offset = <%= EntriesController::ENTRIES_PER_LOAD %>;
+  var paging_complete = false;
 
   function assign_pager() {
     $('#get_more_results').click(function() {
@@ -99,8 +97,7 @@
 
         success: function(html) {
           if (/^[\s\r\n]*$/.test(html)) {
-            // Remove the get more results button if there's nothing left to fetch.
-            $('#get_more_results').remove();
+            paging_complete = true;
           } else {
             next_offset += <%= EntriesController::ENTRIES_PER_LOAD %>;
             $('#entry_list_table_body').append(html);
@@ -110,7 +107,10 @@
 
         complete: function() {
           $('#loading_spinner').hide();
-          $('#get_more_results').show();
+
+          if (!paging_complete) {
+            $('#get_more_results').show();
+          }
         }
       });
 
@@ -126,6 +126,7 @@
 
   function clear_pager() {
     next_offset = 0;
+    paging_complete = false;
     $('#entry_list_table_body').empty();
   }
 
@@ -165,16 +166,24 @@
 
     $('#quick_add_form').submit(function() {
       clear_pager();
+
       $('#loading_spinner').show();
       $('#get_more_results').hide();
       $('#quick_add_row').hide();
 
-      $.post('/entries', $('#quick_add_form').serialize(), function() {
-        reset_pager();
-      });
+      $.ajax({
+        type: 'POST',
+        url: '/entries?redirect=none',
+        data: $('#quick_add_form').serialize(),
 
-      $('#quick_add_content').val('');
-      $('#quick_add_content').focus();
+        success: function() {
+          $('#quick_add_content').val('');
+        },
+
+        complete: function() {
+          reset_pager();
+        }
+      });
 
       return false;
     });

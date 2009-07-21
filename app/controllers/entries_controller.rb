@@ -70,6 +70,8 @@ class EntriesController < ApplicationController
 
       if params[:redirect] == 'index'
         redirect_to(:action => :index)
+      elsif params[:redirect] == 'none'
+        render_data :id => @entry.id
       else
         redirect_to(@entry)
       end
