@@ -1,0 +1,357 @@
+// RESET CSS
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td
+  :margin 0
+  :padding 0
+  :border 0
+  :outline 0
+  :font-weight inherit
+  :font-style inherit
+  :font-size 100%
+  :font-family inherit
+  :vertical-align baseline
+
+*:focus
+  :outline 10
+
+body
+  :line-height 1
+  :color black
+  :background white
+
+ol, ul
+  :list-style none
+
+table
+  :border-collapse separate
+  :border-spacing 0
+
+caption, th, td
+  :text-align left
+  :font-weight normal
+
+blockquote:before, blockquote:after, q:before, q:after
+  :content ""
+
+blockquote, q
+  :quotes "" ""
+
+// END RESET CSS
+
+!page_size = 900px
+
+!cyan = #CFF
+!darkcyan = #099
+!purple = #FCF
+!darkpurple = #909
+!yellow = #FFC
+!darkyellow = #990
+!red = #FCC
+!darkred = #900
+!green = #CFC
+!darkgreen = #090
+!blue = #CCF
+!darkblue = #009
+
+body
+  :padding 25px
+
+p
+  :padding-top 5px
+  :padding-bottom 5px
+
+div.main_container
+  :width = !page_size
+  :margin-left auto
+  :margin-right auto
+
+div.content_display
+  :font-size 1.5em
+  :padding 25px
+  :margin-left 0px
+  :margin-right 0px
+  :background-color #DDD
+  :color #333
+
+  h1
+    :padding 30px 0px 25px 10px
+  h2
+    :padding 30px 0px 25px 10px
+  h3
+    :padding 30px 0px 25px 10px
+  p
+    :padding 0px 0px 20px 0px
+  a
+    :color #666
+    :font-family sans-serif
+    :text-decoration none
+    &:hover
+      :color black
+      :background-color white
+  ul, ol
+    :padding-left 2em
+    :list-style-type square
+    :line-height 1.8em
+  li
+    :line-height 1.8em
+  code
+    :font-family consolas, monospace
+    :font-size 0.75em
+
+div.content_timestamp
+  :font-size 0.75em
+  :padding 0.5em
+
+.big_edit
+  :font-size 1.25em
+  :font-weight bold
+  :padding 5px
+
+.full_width_edit
+  :width = !page_size - 20px
+  :font-size 1.25em
+  :font-weight bold
+  :padding 10px
+
+#quick_add_row
+  input
+    :width = !page_size - 220px
+  td.quick_add_row
+    :padding 1em
+
+div.content_edit
+  :width 100%
+
+div.tags_edit
+  :width 100%
+
+.totheright
+  :width 100%
+  :text-align right
+
+div.tags_list
+  :line-height 1.5em
+
+.entry_list_table
+  :width 100%
+
+div.header_container
+  :padding 10px
+
+.list_header_row
+
+.list_header_cell
+  :border-bottom 1px solid #BBB
+  :padding 5px
+  :font-weight bold
+  :font-size 1em
+
+.list_content_header_cell
+
+.list_tags_header_cell
+  :width 200px
+
+.list_update_header_cell
+  :width 100px
+  :text-align right
+
+.list_row
+  &:hover
+    :background-color #DDD
+
+.list_cell
+  :padding-left 5px
+  :padding-right 5px
+  :padding-top 10px
+  :padding-bottom 10px
+  :border-bottom 1px solid #DDD
+
+.list_updated_at_cell
+  :text-align right
+
+.list_footer_row
+
+.list_footer_cell
+  :border-top 1px solid #BBB
+  :padding 5px
+  :font-weight bold
+  :font-size 1em
+
+a.content_link
+  :text-decoration none
+
+.search_box
+
+.focus_highlight
+  :background-color #FFC
+
+h1
+  :font-size 3em
+  :padding 10px
+  :font-weight bold
+
+h2
+  :font-size 2em
+  :padding 10px
+  :font-weight bold
+
+h3
+  :font-size 1.25em
+  :padding 10px
+  :font-weight bold
+
+a
+  :color #000
+  &:visited
+    :color #000
+  &:hover
+    :color #fff
+    :background-color #333
+
+a.list_tag
+  :font-style italic
+  :font-size 0.75em
+
+input, textarea
+  :font-family consolas, monospace
+
+body
+  :font-family georgia, serif
+
+div.about
+  p
+    :font-size 1.05em
+  .node
+    :background-color #FF9
+    :padding 1em
+  .nodebox
+    :padding 5px
+    :border 1px solid #CCC
+    :margin-top 2em
+  hr
+    :color #999
+    :background-color #CC6
+    :height 5px
+    :border 0px
+  a
+    :font-weight bold
+    :font-size 1.10em
+
+#page_footer
+  :font-size 0.8em
+  :text-align center
+
+=lookatme
+  :background-color #CFC
+  :padding 0.5em
+  :line-height 3em
+  :text-decoration none
+  &:hover
+    :background-color #090
+    :color #FFF
+
+a.lookatme
+  +lookatme
+
+.entry_index_hidden_links
+  :display none
+  :float right
+
+=entry_link
+  :padding 0.5em
+  :margin 0.5em
+  :line-height 2em
+  :text-decoration none
+
+a.view_link
+  +entry_link
+  :background-color #CFC
+  &:hover
+    :background-color #090
+    :color #FFF
+a.edit_link
+  +entry_link
+  :background-color #FFC
+  &:hover
+    :background-color #990
+    :color #FFF
+a.destroy_link
+  +entry_link
+  :background-color #FCC
+  &:hover
+    :background-color #900
+    :color #FFF
+a.cancel_link
+  +entry_link
+  :background-color #FCF
+  &:hover
+    :background-color #909
+    :color #FFF
+a.save_link
+  +entry_link
+  :background-color #CCF
+  &:hover
+    :background-color #009
+    :color #FFF
+
+=tag_link
+  :line-height 2.5em
+  :padding 0.25em
+  :text-decoration none
+a.tag_link0
+  +tag_link
+  :background-color #CFF
+  &:hover
+    :background-color #099
+    :color #FFF
+a.tag_link1
+  +tag_link
+  :background-color #FCF
+  &:hover
+    :background-color #909
+    :color #FFF
+a.tag_link2
+  +tag_link
+  :background-color #FFC
+  &:hover
+    :background-color #990
+    :color #FFF
+a.tag_link3
+  +tag_link
+  :background-color #FCC
+  &:hover
+    :background-color #900
+    :color #FFF
+a.tag_link4
+  +tag_link
+  :background-color #CFC
+  &:hover
+    :background-color #090
+    :color #FFF
+a.tag_link5
+  +tag_link
+  :background-color #CCF
+  &:hover
+    :background-color #009
+    :color #FFF
+
+p.entry_index_content
+
+a.tagcloud
+  :text-decoration none
+
+a.tagcloud_highlight
+  :text-decoration none
+  :background-color black
+  :color white
+  :padding 1px
+
+a.nav
+
+a.logo
+  :text-decoration none
+
+.entrytags
+  :line-height 1.5em
+  :font-style italic
+
