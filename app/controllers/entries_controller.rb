@@ -66,13 +66,13 @@ class EntriesController < ApplicationController
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
     if @entry.save
-      flash[:notice] = 'Entry was successfully created.'
-
       if params[:redirect] == 'index'
+        flash[:notice] = 'Entry was successfully created.'
         redirect_to(:action => :index)
       elsif params[:redirect] == 'none'
         render_data :id => @entry.id
       else
+        flash[:notice] = 'Entry was successfully created.'
         redirect_to(@entry)
       end
     else
