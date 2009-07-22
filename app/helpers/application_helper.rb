@@ -20,10 +20,12 @@ module ApplicationHelper
     now = Time.now
     delta = now - time
 
-    [ :second, :minute, :hour, :day, :month, :year ].inject('') do |str, scale|
+    [ :second, :minute, :hour, :day, :week, :month, :year ].inject('') do |str, scale|
       scale_seconds = 1.send(scale)
-      break str if delta < 2*scale_seconds
-      "%d&nbsp;%ss" % [ (delta / scale_seconds).to_i, scale ]
+      break str if delta < scale_seconds
+      delta_in_scale = (delta / scale_seconds).to_i
+      plural = ('s' unless delta_in_scale == 1).to_s
+      "%d&nbsp;%s%s" % [ delta_in_scale, scale, plural ]
     end
   end
 
