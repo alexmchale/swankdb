@@ -19,17 +19,12 @@ module ApplicationHelper
   def pretty_timedate(time)
     now = Time.now
     delta = now - time
-    result = ""
 
-    [ :second, :minute, :hour, :day, :month, :year ].each do |scale|
+    [ :second, :minute, :hour, :day, :month, :year ].inject('') do |str, scale|
       scale_seconds = 1.send(scale)
-      break if delta < scale_seconds
-      count = (delta / scale_seconds).to_i
-      s = count != 1 ? 's' : ''
-      result = "%d&nbsp;%s%s" % [ count, scale, s ]
+      break str if delta < 2*scale_seconds
+      "%d&nbsp;%ss" % [ (delta / scale_seconds).to_i, scale ]
     end
-
-    result
   end
 
   def pretty_datetime(time)
