@@ -41,16 +41,7 @@
         <td class="list_cell">
 
           <p class="entry_index_content">
-            <%=
-              maxlen = 500
-              stripped = markdown(entry.content).striphtml
-
-              if stripped.length > maxlen
-                stripped[0, maxlen] + '&hellip;'
-              else
-                stripped
-              end
-            %>
+            <%= summarize_entry_content entry %>
           </p>
 
           <p class="entry_index_tags"><%= link_entry_tags(entry, :class => :list_tag) %></p>

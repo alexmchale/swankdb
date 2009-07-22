@@ -14,7 +14,7 @@ require 'email_verifier'
 Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"
   config.gem "andand"
-  config.gem "bluecloth"
+  config.gem "rdiscount"
   config.gem "hpricot"
   config.gem "redgreen"
   config.gem "htmlentities"
