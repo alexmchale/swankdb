@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   def self.authenticate(username, password)
     User.find :first,
-              :conditions => { :username => username.downcase,
+              :conditions => { :username => username.to_s.downcase,
                                :password => hash_password(username, password) }
   end
 
@@ -60,6 +60,6 @@ private
   end
 
   def self.hash_password(username, password)
-    Digest::MD5.hexdigest("!!! %s WITH MY SALT %s !!!" % [ username, password ])
+    Digest::MD5.hexdigest("!!! %s WITH MY SALT %s !!!" % [ username.to_s, password.to_s ])
   end
 end
