@@ -13,19 +13,23 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "creating a user account" do
-    # Verify that no user exists with the name testuser1 or email test@user.com
-    assert_nil User.find_by_username('testuser')
-    assert_nil User.find_by_email('test@user.com')
+    username = 'testuser'
+    password = 'abc123'
+    email = 'test@user.com'
+
+    # Verify that no user exists with this username or email.
+    assert_nil User.find_by_username(username)
+    assert_nil User.find_by_email(email)
 
     # Create the new user.
-    post :create, :username => 'testuser', :password1 => 'abc123', :password2 => 'abc123', :email => 'test@user.com'
+    post :create, :username => username, :password1 => password, :password2 => password, :email => email
     assert_response :redirect
     assert_redirected_to :controller => :entries, :action => :index
 
     # Verify the new user exists.
-    new_user = User.authenticate('testuser', 'abc123')
+    new_user = User.authenticate(username, password)
     assert new_user
-    assert_equal 'test@user.com', new_user.email
+    assert_equal email, new_user.email
   end
 
   test "creating a user with invalid fields" do
