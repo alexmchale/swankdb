@@ -35,7 +35,7 @@ class Entry < ActiveRecord::Base
   end
 
   def self.split_tags(tags)
-    tags.to_s.downcase.split.uniq.sort
+    tags.to_s.downcase.gsub(',', ' ').split.uniq.sort
   end
 
   def self.pretty_tags(tags)
