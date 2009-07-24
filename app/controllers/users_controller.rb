@@ -96,18 +96,22 @@ class UsersController < ApplicationController
   end
 
   def invite
-    unless params[:email].blank?
-      email = Email.new
-      email.user = session[:user]
-      email.destination = params[:email].strip
-      email.subject = "#{session[:user].username} invites you to try SwankDB"
-      email.body = params[:message].strip + "\r\n\r\n#{session[:user].username} (#{session[:user].email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
-      email.save
+    if request.method == :post
+      if params[:email].email?
+        email = Email.new
+        email.user = session[:user]
+        email.destination = params[:email].strip
+        email.subject = "#{session[:user].username} invites you to try SwankDB"
+        email.body = params[:message].strip + "\r\n\r\n#{session[:user].username} (#{session[:user].email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
+        email.save
 
-      SwankLog.log 'INVITATION-CREATED', email.to_yaml
+        SwankLog.log 'INVITATION-CREATED', email.to_yaml
 
-      flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
-      redirect_to :controller => :users, :action => :invite
+        flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
+        redirect_to :controller => :users, :action => :invite
+      else
+        flash[:error] = 'Please enter a valid email address.'
+      end
     end
   end
 
