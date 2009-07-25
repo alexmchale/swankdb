@@ -40,6 +40,3 @@ ActionMailer::Base.smtp_settings = {
   :password => "bt60M32FWfJHOX7O1yaY"
 }
 
-ExceptionNotifier.exception_recipients = %w(alexmchale@gmail.com)
-ExceptionNotifier.sender_address = %("Application Error" <swank@swankdb.com>)
-
