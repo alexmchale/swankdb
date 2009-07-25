@@ -28,7 +28,7 @@ end
 Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/sass')
 Sass::Plugin.options[:css_location] = File.join(RAILS_ROOT, 'public/stylesheets')
 
-Hirb.enable
+Hirb.enable if RAILS_ENV == 'test'
 
 ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
