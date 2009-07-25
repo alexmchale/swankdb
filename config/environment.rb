@@ -16,7 +16,7 @@ Rails::Initializer.run do |config|
   config.gem "andand"
   config.gem "rdiscount"
   config.gem "hpricot"
-  config.gem "redgreen"
+  config.gem "redgreen" if RAILS_ENV == 'test'
   config.gem "htmlentities"
   config.gem "smtp_tls"
   config.gem "cldwalker-hirb", :lib => "hirb"
