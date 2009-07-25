@@ -77,7 +77,7 @@ class UsersController < ApplicationController
   end
 
   def login
-    if request.method == :post
+    if request.post?
       session[:user] = User.authenticate(params[:username], params[:password])
 
       if session[:user]
