@@ -18,6 +18,7 @@ Rails::Initializer.run do |config|
   config.gem "hpricot"
   config.gem "redgreen"
   config.gem "htmlentities"
+  config.gem "smtp_tls"
   config.gem "cldwalker-hirb", :lib => "hirb"
   config.gem "alexmchale-gmail-client", :lib => "gmail"
 
@@ -28,4 +29,17 @@ Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/sass')
 Sass::Plugin.options[:css_location] = File.join(RAILS_ROOT, 'public/stylesheets')
 
 Hirb.enable
+
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :address => "smtp.gmail.com",
+  :port => "587",
+  :domain => "gmail.com",
+  :authentication => :plain,
+  :user_name => "swank@swankdb.com",
+  :password => "bt60M32FWfJHOX7O1yaY"
+}
+
+ExceptionNotifier.exception_recipients = %w(alexmchale@gmail.com)
+ExceptionNotifier.sender_address = %("Application Error" <swank@swankdb.com>)
 
