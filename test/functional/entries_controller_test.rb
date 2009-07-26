@@ -1,9 +1,11 @@
 require 'test_helper'
 
 class EntriesControllerTest < ActionController::TestCase
-  test "entry creating and editing" do
+  def setup
     session[:user] = @bob
+  end
 
+  test "entry creating and editing" do
     get :new
     assert_select 'textarea#entry_content'
     assert_select 'input#entry_tags'
@@ -30,5 +32,20 @@ class EntriesControllerTest < ActionController::TestCase
 
     assert_equal entry.content, 'New Text'
     assert_equal entry.tags, ' 7 8 9 '
+  end
+
+  test "destroying an entry" do
+    entry = Entry.new
+    entry.user = @bob
+    entry.save
+    id = entry.id
+
+    assert_not_nil id
+    assert_not_nil Entry.find(id)
+
+    delete :destroy, :id => id
+
+    assert_redirected_to :controller => :entries, :action => :index
+    assert_nil Entry.find_by_id(id)
   end
 end
