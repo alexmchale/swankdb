@@ -3,7 +3,7 @@ class ErrorMailer < ActionMailer::Base
     content_type "text/html"
     recipients ['alexmchale@gmail.com']
     from 'swank@swankdb.com'
-    subject "[Error] exception in #{env['REQUEST_URI']}"
+    subject "[SwankDB Error] #{env['REQUEST_URI']}"
 
     @body["exception"] = exception
     @body["trace"]  = trace
