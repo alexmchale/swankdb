@@ -184,4 +184,20 @@ class UsersControllerTest < ActionController::TestCase
     assert @bob.reload
     assert_nil @bob.active_code('reset-code')
   end
+
+  test "invite a friend" do
+    @controller.set_current_user @bob
+    email = 'test@foo.com'
+    message = 'Hey bud!'
+
+    get :invite
+    assert_select 'input#email'
+    assert_select 'textarea#message'
+
+    assert_difference 'Email.count' do
+      post :invite, :email => email, :message => message
+      assert_equal 'Your invitation has been saved and will be sent shortly.  Thank you! :-)', flash[:notice]
+      assert_redirected_to :action => :invite
+    end
+  end
 end

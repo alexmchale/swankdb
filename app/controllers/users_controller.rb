@@ -101,10 +101,10 @@ class UsersController < ApplicationController
     if request.method == :post
       if params[:email].email?
         email = Email.new
-        email.user = @user
+        email.user = current_user
         email.destination = params[:email].strip
-        email.subject = "#{@user.username} invites you to try SwankDB"
-        email.body = params[:message].strip + "\r\n\r\n#{@user.username} (#{@user.email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
+        email.subject = "#{current_user.username} invites you to try SwankDB"
+        email.body = params[:message].strip + "\r\n\r\n#{current_user.username} (#{current_user.email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
         email.save
 
         SwankLog.log 'INVITATION-CREATED', email.to_yaml
