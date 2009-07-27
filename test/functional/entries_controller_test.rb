@@ -2,7 +2,7 @@ require 'test_helper'
 
 class EntriesControllerTest < ActionController::TestCase
   def setup
-    session[:user] = @bob
+    @controller.set_current_user @bob
   end
 
   test "entry creating and editing" do

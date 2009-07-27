@@ -5,7 +5,7 @@
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
 ActionController::Base.session = {
-  :key         => '_swankdb_session',
+  :key         => '_swankdb_session_' + RAILS_ENV,
   :secret      => '4cd77a511ea8fc2e65fdb3935271fa80f03f7054e8dc938ac4082a03f4b4a9ac83c3f84edfa076414ecb53b8361050c8b79de32a0f0860d55c9042e5f1db3c9a'
 }
 

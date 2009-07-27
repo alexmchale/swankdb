@@ -10,11 +10,11 @@
 <tr><td>SSL</td><td><%= @env['SERVER_PORT'].to_i == 443 ? "true" : "false" %></td></tr>
 <tr><td>Agent</td><td><%= @env['HTTP_USER_AGENT'] %></td></tr>
 
-<% if @session.andand['user'] %>
-<tr><td>User id</td><td><%= @session['user'].id %></td></tr>
-<tr><td>User name</td><td><%= @session['user'].username %></td></tr>
-<tr><td>User email</td><td><%= @session['user'].email %></td></tr>
-<tr><td>Registered</td><td><%= @session['user'].created_at %></td></tr>
+<% if @user %>
+<tr><td>User id</td><td><%= @user.id %></td></tr>
+<tr><td>User name</td><td><%= @user.username %></td></tr>
+<tr><td>User email</td><td><%= @user.email %></td></tr>
+<tr><td>Registered</td><td><%= @user.created_at %></td></tr>
 <% end %>
 
 </table>

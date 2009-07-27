@@ -90,6 +90,7 @@ class EntriesController < ApplicationController
 
       if session[:last_view]
         redirect_to session[:last_view]
+        session.delete :last_view
       else
         redirect_to(@entry)
       end

@@ -34,6 +34,8 @@ class UsersController < ApplicationController
     elsif !check_password(password1, password2)
       redirect_to :action => :new
     else
+      session.delete :newuser
+
       user = User.new
       user.username = username
       user.password = password1
@@ -50,7 +52,7 @@ class UsersController < ApplicationController
 
       SwankLog.log 'USER-CREATED', user.to_yaml
 
-      session[:user] = user
+      set_current_user user
       flash[:notice] = 'Your new user has been created.'
       redirect_to :controller => :entries, :action => :index
     end
@@ -78,10 +80,10 @@ class UsersController < ApplicationController
 
   def login
     if request.post?
-      session[:user] = User.authenticate(params[:username], params[:password])
+      set_current_user User.authenticate(params[:username], params[:password])
 
-      if session[:user]
-        # flash[:notice] = "You have successfully logged in as #{session[:user].username}."
+      if current_user
+        # flash[:notice] = "You have successfully logged in as #{current_user.username}."
         redirect_to :controller => :entries, :action => :index
       else
         flash[:error] = "The username or password you entered is incorrect."
@@ -91,7 +93,7 @@ class UsersController < ApplicationController
   end
 
   def logout
-    session[:user] = nil
+    set_current_user nil
     redirect_to :action => :login
   end
 
@@ -99,10 +101,10 @@ class UsersController < ApplicationController
     if request.method == :post
       if params[:email].email?
         email = Email.new
-        email.user = session[:user]
+        email.user = @user
         email.destination = params[:email].strip
-        email.subject = "#{session[:user].username} invites you to try SwankDB"
-        email.body = params[:message].strip + "\r\n\r\n#{session[:user].username} (#{session[:user].email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
+        email.subject = "#{@user.username} invites you to try SwankDB"
+        email.body = params[:message].strip + "\r\n\r\n#{@user.username} (#{@user.email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
         email.save
 
         SwankLog.log 'INVITATION-CREATED', email.to_yaml
@@ -136,7 +138,7 @@ class UsersController < ApplicationController
         @user.reload
 
         flash[:notice] = 'Your password has been updated.'
-        session[:user] = @user
+        set_current_user @user
         redirect_to :controller => :entries, :action => :index
       else
         redirect_to request.request_uri

@@ -23,11 +23,11 @@
     </div>
 
     <div style="float: right; text-align: right">
-      <% if session[:user] %>
+      <% if controller.current_user %>
         <p>
           <%= link_to 'new entry', new_entry_path, :class => :nav %>
           |
-          <%= link_to 'my account', { :controller => :users, :action => :edit, :id => session[:user].id }, :class => :nav %>
+          <%= link_to 'my account', { :controller => :users, :action => :edit, :id => controller.current_user_id }, :class => :nav %>
           |
           <%= link_to 'invite a friend', { :controller => :users, :action => :invite }, :class => :nav %>
           |
@@ -56,11 +56,11 @@
   <%= separator %>
 
   <div class="tags_list">
-    <% if session[:user] %>
+    <% if controller.current_user %>
       <% clazz = (controller.controller_name == 'entries' && controller.action_name == 'index' && params[:tag].blank?) ? 'tagcloud_highlight' : 'tagcloud' %>
       <%= link_to 2.spaces + 'All' + 2.spaces, { :controller => :entries, :action => :index }, :class => clazz %>
 
-      <% session[:user].tags.each do |tag| %>
+      <% controller.current_user.tags.each do |tag| %>
         <% clazz = (tag == params[:tag]) ? 'tagcloud_highlight' : 'tagcloud' %>
         <%= link_to 2.spaces + tag + 2.spaces, { :controller => :entries, :action => :index, :tag => tag }, :class => clazz %>
       <% end %>

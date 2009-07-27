@@ -30,34 +30,31 @@ class UsersControllerTest < ActionController::TestCase
     new_user = User.authenticate(username, password)
     assert new_user
     assert_equal email, new_user.email
+    assert_equal new_user.id, @controller.current_user_id
   end
 
   test "creating a user with invalid fields" do
-    # Delete all users before starting.
-    User.delete_all
+    assert_difference 'User.count', 0 do
+      # Post to the account create page with no username.
+      post :create, :username => '', :password1 => 'abc123', :password2 => 'abc123', :email => 'test@user.com'
+      assert_response :redirect
+      assert_redirected_to :action => :new
 
-    # Post to the account create page with no username.
-    post :create, :username => '', :password1 => 'abc123', :password2 => 'abc123', :email => 'test@user.com'
-    assert_response :redirect
-    assert_redirected_to :action => :new
+      # Post to the account create page with no password.
+      post :create, :username => 'testuser', :password1 => '', :password2 => '', :email => 'test@user.com'
+      assert_response :redirect
+      assert_redirected_to :action => :new
 
-    # Post to the account create page with no password.
-    post :create, :username => 'testuser', :password1 => '', :password2 => '', :email => 'test@user.com'
-    assert_response :redirect
-    assert_redirected_to :action => :new
-
-    # Post to the account create page with mismatching passwords.
-    post :create, :username => 'testuser', :password1 => 'abc123', :password2 => 'xyz123', :email => 'test@user.com'
-    assert_response :redirect
-    assert_redirected_to :action => :new
-
-    # Make sure no users were created in this process.
-    assert_equal 0, User.count
+      # Post to the account create page with mismatching passwords.
+      post :create, :username => 'testuser', :password1 => 'abc123', :password2 => 'xyz123', :email => 'test@user.com'
+      assert_response :redirect
+      assert_redirected_to :action => :new
+    end
   end
 
   test "account settings page exists" do
     # Act like we're logged in as bob.
-    session[:user] = @bob
+    @controller.set_current_user @bob
 
     get :edit, :id => @bob.id
     assert_select "form#edit_user_#{@bob.id}"
@@ -82,35 +79,35 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to :controller => :entries, :action => :index
 
     # Make sure we successfully logged in.
-    assert session[:user]
-    assert_equal @bob.id, session[:user].id
+    assert @controller.current_user
+    assert_equal @bob.id, @controller.current_user_id
   end
 
   test "an invalid login attempt" do
     post :login, :username => 'dummy', :password => 'badpass'
     assert_redirected_to :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
-    assert_nil session[:user]
+    assert_nil @controller.current_user
 
     post :login, :username => '', :password => 'badpass'
     assert_redirected_to :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
-    assert_nil session[:user]
+    assert_nil @controller.current_user
 
     post :login, :username => 'dummy', :password => ''
     assert_redirected_to :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
-    assert_nil session[:user]
+    assert_nil @controller.current_user
 
     post :login
     assert_redirected_to :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
-    assert_nil session[:user]
+    assert_nil @controller.current_user
   end
 
   test "setting a new user password" do
     # Act like we're logged in as bob.
-    session[:user] = @bob
+    @controller.set_current_user @bob
 
     # Set bob to have a known password.
     @bob.password = 'abc123'

@@ -18,29 +18,33 @@ class ApplicationController < ActionController::Base
     end
   end
 
-protected
+  def set_current_user(user)
+    @_user = if user.kind_of? User
+               User.find_by_id(user.id)
+             elsif user
+               User.find_by_id(user)
+             end
+
+    session[:user_id] = @_user ? @_user.id : nil
+    @_user
+  end
 
   def current_user
-    session[:user]
+    @_user ||= User.find_by_id(session[:user_id])
   end
 
   def current_user_id
-    session[:user].andand.id
+    session[:user_id]
   end
 
 private
 
   def reload_user
-    begin
-      session[:user].andand.reload
-    rescue
-      session[:user] = nil
-      redirect_to(:controller => :users, :action => :login)
-    end
+    set_current_user session[:user_id]
   end
 
   def authenticate_user_account
-    redirect_to(:controller => :users, :action => :login) unless session[:user]
+    redirect_to(:controller => :users, :action => :login) unless current_user
   end
 
   def render_data(data)
