@@ -33,7 +33,11 @@ class EntriesController < ApplicationController
     # Store the current URI if this was an original request.  This is for redirects from edit pages.
     session[:last_view] = request.request_uri unless @results_only
 
-    render :layout => false if @results_only
+    if params.has_key? :json
+      render_data @entries
+    else
+      render :layout => false if @results_only
+    end
   end
 
   def show
@@ -41,6 +45,8 @@ class EntriesController < ApplicationController
 
     # Store the current URI.  This is for redirects from edit pages.
     session[:last_view] = request.request_uri unless @results_only
+
+    render_data(@entry) if params[:json]
   end
 
   def preview
@@ -62,11 +68,13 @@ class EntriesController < ApplicationController
   def create
     @entry = Entry.new
     @entry.user_id = current_user_id
-    @entry.content = params[:entry_content].strip
+    @entry.content = params[:entry_content].to_s.strip
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
     if @entry.save
-      if params[:redirect] == 'index'
+      if params.has_key? :json
+        render_data @entry
+      elsif params[:redirect] == 'index'
         flash[:notice] = 'Entry was successfully created.'
         redirect_to(:action => :index)
       elsif params[:redirect] == 'none'
@@ -85,10 +93,12 @@ class EntriesController < ApplicationController
     @entry.content = params[:entry_content].strip
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
-    if @entry.save
+    if @entry.save && @entry.reload
       # flash[:notice] = 'Entry was successfully updated.'
 
-      if session[:last_view]
+      if params[:json]
+        render_data @entry
+      elsif session[:last_view]
         redirect_to session[:last_view]
         session.delete :last_view
       else
@@ -103,7 +113,11 @@ class EntriesController < ApplicationController
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
     @entry.destroy
 
-    redirect_to(entries_url)
+    if params.has_key? :json
+      render_data true
+    else
+      redirect_to(entries_url)
+    end
   end
 
   def suggest_tags

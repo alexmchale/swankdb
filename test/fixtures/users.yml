@@ -1,14 +1,12 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 bob:
-  id:       1
   username: bob
-  password: ========
+  password: "7365f8a7a25dab3a509e254cb0ccda2a" # 123456
   all_tags:
 
 alice:
-  id:       2
   username: alice
-  password: ========
+  password: "4348fac434048c432bd2e7b6a87a3c35" # abcdef
   all_tags:
 

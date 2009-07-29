@@ -96,4 +96,13 @@ class EntryTest < ActiveSupport::TestCase
     fedex_linked = '<a href="http://www.fedex.com/Tracking?language=english&cntry_code=us&tracknumbers=732812804843" class="urlified">732812804843</a>'
     assert_equal fedex_linked, Entry.new(:content => fedex, :user => @bob).linkup
   end
+
+  test "setting an entry's tags as a list" do
+    e = Entry.new(:user => @bob)
+    e.tags = ['xyz', 'abc', 'def']
+    assert e.save
+
+    assert_equal ' abc def xyz ', e.tags
+    assert_equal ['abc', 'def', 'xyz'], e.tags_array
+  end
 end

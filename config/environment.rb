@@ -40,3 +40,5 @@ ActionMailer::Base.smtp_settings = {
   :password => "bt60M32FWfJHOX7O1yaY"
 }
 
+ActiveRecord::Base.include_root_in_json = false
+

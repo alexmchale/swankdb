@@ -168,15 +168,15 @@ class UsersControllerTest < ActionController::TestCase
     assert_select 'input#password1'
     assert_select 'input#password2'
 
-    # Verify that 123456 is not bob's password.
-    assert_nil User.authenticate(@bob.username, '123456')
+    # Verify that xxxxxx is not bob's password.
+    assert_nil User.authenticate(@bob.username, 'xxxxxx')
 
     # Post a new password for bob using the password reset page.
-    post :reset_password, :reset_code => code.code, :password1 => '123456', :password2 => '123456'
+    post :reset_password, :reset_code => code.code, :password1 => 'xxxxxx', :password2 => 'xxxxxx'
     assert_equal 'Your password has been updated.', flash[:notice]
 
-    # Verify that 123456 is now bob's password.
-    authenticated = User.authenticate(@bob.username, '123456')
+    # Verify that xxxxxx is now bob's password.
+    authenticated = User.authenticate(@bob.username, 'xxxxxx')
     assert_not_nil authenticated
     assert_equal @bob.id, authenticated.id
 

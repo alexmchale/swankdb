@@ -2,10 +2,11 @@ require 'test_helper'
 
 class EntriesControllerTest < ActionController::TestCase
   def setup
-    @controller.set_current_user @bob
   end
 
-  test "entry creating and editing" do
+  test "creating and editing an entry with session based authentication" do
+    @controller.set_current_user @bob
+
     get :new
     assert_select 'textarea#entry_content'
     assert_select 'input#entry_tags'
@@ -34,18 +35,70 @@ class EntriesControllerTest < ActionController::TestCase
     assert_equal entry.tags, ' 7 8 9 '
   end
 
-  test "destroying an entry" do
-    entry = Entry.new
-    entry.user = @bob
-    entry.save
-    id = entry.id
+  test "destroying an entry with session based authentication" do
+    @controller.set_current_user @bob
 
-    assert_not_nil id
-    assert_not_nil Entry.find(id)
+    assert_not_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
 
-    delete :destroy, :id => id
+    delete :destroy, :id => @entry1.id
 
-    assert_redirected_to :controller => :entries, :action => :index
-    assert_nil Entry.find_by_id(id)
+    assert_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+  end
+
+  test "destroying an entry with restful authentication" do
+    assert_not_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+
+    delete :destroy, :id => @entry1.id, :username => @bob.username, :password => '123456'
+
+    assert_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+  end
+
+  test "creating an entry with the api" do
+    @controller.set_current_user nil
+
+    assert_difference('Entry.count') do
+      post :create, :username => @bob.username,
+                    :password => '123456',
+                    :entry_content => 'My Content',
+                    :json => true
+      assert_response :success
+    end
+
+    response = JSON.parse(@response.body)
+
+    assert response
+    assert response['id']
+
+    newentry = Entry.find_by_id(response['id'])
+
+    assert newentry
+    assert_equal @bob.id, newentry.user_id
+    assert_equal 'My Content', newentry.content
+    assert_equal '', newentry.tags
+  end
+
+  test "updating an existing entry with restful authentication" do
+    assert_difference('Entry.count', 0) do
+      put :update, :username => @alice.username,
+                   :password => 'abcdef',
+                   :id => @entry3.id,
+                   :entry_content => '-Updated Content-',
+                   :entry_tags => 'one',
+                   :json => true
+      assert_response :success
+    end
+
+    response = JSON.parse(@response.body)
+
+    assert response
+    assert response['id']
+
+    entry = Entry.find_by_id(response['id'])
+
+    assert entry
+    assert_equal @entry3.id, entry.id
+    assert_equal @alice.id, entry.user_id
+    assert_equal '-Updated Content-', entry.content
+    assert_equal ['one'], entry.tags_array
   end
 end

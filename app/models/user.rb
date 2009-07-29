@@ -21,7 +21,9 @@ class User < ActiveRecord::Base
   end
 
   def reset_tags
-    self.all_tags = Entry.find(:all, :conditions => { :user_id => id }).map {|e| e.tags.split}.flatten.uniq.sort.join(' ')
+    self.all_tags = Entry.find(:all, :conditions => { :user_id => id }).map do |e|
+      e.tags.to_s.split
+    end.flatten.uniq.sort.join(' ')
   end
 
   def active_code(section)
@@ -54,12 +56,12 @@ class User < ActiveRecord::Base
 private
 
   def rehash_password
-    if username_changed? || password_changed?
+    if password_changed?
       self.password = User.hash_password(username, password)
     end
   end
 
   def self.hash_password(username, password)
-    Digest::MD5.hexdigest("!!! %s WITH MY SALT %s !!!" % [ username.to_s, password.to_s ])
+    Digest::MD5.hexdigest("!!! %s WITH MY SALT %s !!!" % [ username.to_s.strip, password.to_s.strip ])
   end
 end

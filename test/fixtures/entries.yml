@@ -1,11 +1,17 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  user: 
-  content: MyText
-  tags: MyString
+entry1:
+  user:    bob
+  content: A good test entry.
+  tags:
 
-two:
-  user: 
-  content: MyText
-  tags: MyString
+entry2:
+  user:    bob
+  content: One more test entry.
+  tags:
+
+entry3:
+  user:    alice
+  content: This is an Alice entry.
+  tags:
+

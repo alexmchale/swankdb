@@ -53,6 +53,7 @@ class Entry < ActiveRecord::Base
 private
 
   def fixup_tags
+    self.tags = self.tags.flatten.join(' ') if self.tags.kind_of? Array
     self.tags = self.tags.blank? ? '' : " #{pretty_tags} "
   end
 
