@@ -5,34 +5,47 @@ class EntriesController < ApplicationController
   before_filter :strip_user_input
 
   def index
+    # Build the array of SQL conditions for our filter.
     @conditions = Entry.build_search_conditions :user_id => current_user_id,
                                                 :tag => params[:tag],
-                                                :with => params[:with],
                                                 :keywords => params[:keywords]
 
+    # Assign a default tag for the quick-entry field.
     @default_tags = params[:tag].to_s.strip
     @default_tags += ' ' unless @default_tags.blank?
 
+    # Retrieve the total number of entries that match our filter.
     @entries_count = Entry.count(:conditions => @conditions)
 
-    @description = []
-    @description << "tagged #{params[:tag].downcase}" unless params[:tag].blank?
-    @description << "with #{params[:with]}" unless params[:with].blank?
-    @description << "include &#147;#{HTMLEntities.encode_entities params[:keywords]}&#148;" unless params[:keywords].blank?
-    @description = @entries_count.to_s + ' ' + (@entries_count != 1 ? 'entries' : 'entry') + ' ' + @description.join(', ')
+    # Generate a text description of our filter.
+    clauses = []
+    clauses << "tagged #{params[:tag].downcase}" unless params[:tag].blank?
+    clauses << "include &#147;#{HTMLEntities.encode_entities params[:keywords]}&#148;" unless params[:keywords].blank?
+    @description = "%d %s %s" % [
+      @entries_count,
+      (@entries_count != 1 ? 'entries' : 'entry'),
+      clauses.to_sentence
+    ]
 
+    # Check if we're only interested in the results (if an offset is specified).
     @results_only = true if params[:offset]
+
+    # The current request parameters are used to generate AJAX links in this page.
     @params = params.to_url
 
+    # Default to ordering by the update timestamp, unless requested otherwise.
     order = 'entries.%s_at DESC' % (params[:order] == 'created' ? 'created' : 'updated')
 
+    # The query parameter indicates we're only interested in the count and description.
     return render_data(:count => @entries_count, :description => @description) if params.has_key?(:query)
 
+    # Retrieve the requested entries from the database.
     @entries = Entry.find(:all, :conditions => @conditions, :order => order, :limit => ENTRIES_PER_LOAD, :offset => params[:offset].to_i)
 
     # Store the current URI if this was an original request.  This is for redirects from edit pages.
     session[:last_view] = request.request_uri unless @results_only
 
+    # Dispatch what we've found to the client.
     if params.has_key? :json
       render_data @entries
     else
