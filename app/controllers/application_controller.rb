@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
                User.find_by_id(user)
              end
 
-    session[:user_id] = @_user ? @_user.id : nil
+    session[:user_id] = @_user.andand.id
     @_user
   end
 

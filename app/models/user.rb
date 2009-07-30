@@ -53,6 +53,20 @@ class User < ActiveRecord::Base
     active_code(section)
   end
 
+  def add_default_entry
+    entry = Entry.new
+    entry.user = self
+    entry.content = File.read('config/welcome.txt')
+    entry.tags = 'hello swankdb'
+    entry.save
+
+    reload
+  end
+
+  def temporary
+    username.blank?
+  end
+
 private
 
   def rehash_password

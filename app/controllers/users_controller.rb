@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user_account
-  skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout, :reset_password ]
+  skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout, :reset_password, :instant ]
 
   def new
     @user = User.new
@@ -42,40 +42,51 @@ class UsersController < ApplicationController
       user.email = email
       user.save
 
-      entry = Entry.new
-      entry.user_id = user.id
-      entry.content = File.read('config/welcome.txt')
-      entry.tags = 'hello swankdb'
-      entry.save
-
-      user.reload
+      user.add_default_entry
 
       SwankLog.log 'USER-CREATED', user.to_yaml
 
       set_current_user user
-      flash[:notice] = 'Your new user has been created.'
+      flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
       redirect_to :controller => :entries, :action => :index
     end
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = User.find(current_user_id)
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = User.find(current_user_id)
+    username = params[:username].to_s
     password1 = params[:password1].to_s
     password2 = params[:password2].to_s
     email = params[:email].to_s
 
-    if (password1.blank? && password2.blank?) || check_password(password1, password2)
-      flash[:notice] = 'Your profile settings have been updated.'
-      @user.password = password1 unless password1.blank?
-      @user.email = email
-      @user.save
+    if current_user.temporary
+      if check_username(username) && check_password(password1, password2)
+        flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
+
+        @user.username = username
+        @user.password = password1
+        @user.email = email
+        @user.save
+
+        return redirect_to :controller => :entries, :action => :index
+      end
+    else
+      if (password1.blank? && password2.blank?) || check_password(password1, password2)
+        flash[:notice] = 'Your account settings have been updated.'
+
+        @user.password = password1 unless password1.blank?
+        @user.email = email
+        @user.save
+
+        return redirect_to :controller => :entries, :action => :index
+      end
     end
 
-    redirect_to edit_user_path(@user)
+    redirect_to edit_user_path(current_user)
   end
 
   def login
@@ -98,8 +109,8 @@ class UsersController < ApplicationController
   end
 
   def invite
-    if request.method == :post
-      if params[:email].email?
+    if request.post?
+      if params[:email].andand.email?
         email = Email.new
         email.user = current_user
         email.destination = params[:email].strip
@@ -182,14 +193,31 @@ class UsersController < ApplicationController
     end
   end
 
-private
+  def instant
+    set_current_user User.create
+    current_user.andand.add_default_entry
+    flash[:error] = "You're using a cookie-based, temporary account.  Click " +
+                    '<a href="/users/edit">my account</a>' +
+                    " to set up your account permanantly."
+
+    redirect_to :controller => :entries, :action => :index
+  end
+
+  def check_username(username)
+    not
+    if username.blank?
+      flash[:error] = 'Please enter a username for your new account.'
+    elsif User.find_by_username(username)
+      flash[:error] = "I'm sorry, that username is already in use."
+    end
+  end
 
   def check_password(password1, password2)
     if password1 != password2
       flash[:error] = 'Those passwords do not match.'
       return false
-    elsif password1.length < 6
-      flash[:error] = 'The password must be at least six characters.'
+    elsif password1.length < 3
+      flash[:error] = 'Your password must be at least three characters.'
       return false
     end
 

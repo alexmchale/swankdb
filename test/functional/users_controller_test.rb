@@ -120,7 +120,7 @@ class UsersControllerTest < ActionController::TestCase
     # Use the account settings page to set a new password.
     post :update, :id => @bob.id, :password1 => 'xyz123', :password2 => 'xyz123', :email => @bob.email
     assert_response :redirect
-    assert_redirected_to :action => :edit
+    assert_redirected_to :controller => :entries, :action => :index
 
     # Assert the password we just set now works.
     assert User.authenticate(@bob.username, 'xyz123')
@@ -128,7 +128,7 @@ class UsersControllerTest < ActionController::TestCase
     # Use the account settings page to set a new email.
     post :update, :id => @bob.id, :password1 => '', :password2 => '', :email => 'bobbyjoe@user.com'
     assert_response :redirect
-    assert_redirected_to :action => :edit
+    assert_redirected_to :controller => :entries, :action => :index
 
     # Assert the new email is correct, and the password hasn't changed.
     assert User.authenticate(@bob.username, 'xyz123')
@@ -199,5 +199,51 @@ class UsersControllerTest < ActionController::TestCase
       assert_equal 'Your invitation has been saved and will be sent shortly.  Thank you! :-)', flash[:notice]
       assert_redirected_to :action => :invite
     end
+  end
+
+  test "create a temporary account and convert it to a real account" do
+    get :instant
+    assert_redirected_to :controller => :entries, :action => :index
+    assert_not_nil @controller.current_user
+    assert_nil @controller.current_user.username
+
+    post :update, :id => @controller.current_user_id,
+                  :username => 'newuser',
+                  :password1 => 'abc123',
+                  :password2 => 'abc123',
+                  :email => 'me@foo.com'
+
+    newuser = User.authenticate('newuser', 'abc123')
+
+    assert_not_nil User.find_by_username('newuser')
+    assert_not_nil newuser
+    assert_equal @controller.current_user_id, newuser.id
+    assert_equal 'newuser', newuser.username
+    assert_equal 'me@foo.com', newuser.email
+  end
+
+  test "make sure you can't change a non-temporary username" do
+    assert_not_nil User.authenticate('bob', '123456')
+
+    @controller.set_current_user @bob
+
+    post :update, :id => @controller.current_user_id,
+                  :username => 'newuser',
+                  :password1 => 'abc123',
+                  :password2 => 'abc123',
+                  :email => 'me@foo.com'
+
+    assert_nil User.find_by_username('newuser')
+    assert_not_nil User.authenticate('bob', 'abc123')
+    assert_nil User.authenticate('bob', '123456')
+  end
+
+  test "check if a username is valid" do
+    assert_nil flash[:error]
+    assert !@controller.check_username(nil)
+    assert !@controller.check_username('')
+    assert !@controller.check_username('    ')
+    assert !@controller.check_username('bob')
+    assert @controller.check_username('newdude')
   end
 end

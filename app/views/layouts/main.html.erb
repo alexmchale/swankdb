@@ -48,15 +48,19 @@
           or
           <%= 3.spaces %>
           <%= link_to 'create a new account', { :controller => :users, :action => :new }, :class => 'lookatme' %>
+          <%= 3.spaces %>
+          or
+          <%= 3.spaces %>
+          <%= link_to 'start immediately', { :controller => :users, :action => :instant }, :class => 'lookatme' %>
         </p>
       <% end %>
     </div>
   </div>
 
-  <%= separator %>
+  <% if controller.current_user %>
+    <%= separator %>
 
-  <div class="tags_list">
-    <% if controller.current_user %>
+    <div class="tags_list">
       <% clazz = (controller.controller_name == 'entries' && controller.action_name == 'index' && params[:tag].blank?) ? 'tagcloud_highlight' : 'tagcloud' %>
       <%= link_to 2.spaces + 'All' + 2.spaces, { :controller => :entries, :action => :index }, :class => clazz %>
 
@@ -64,22 +68,22 @@
         <% clazz = (tag == params[:tag]) ? 'tagcloud_highlight' : 'tagcloud' %>
         <%= link_to 2.spaces + tag + 2.spaces, { :controller => :entries, :action => :index, :tag => tag }, :class => clazz %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
+
+  <% unless flash[:error].blank? %>
+    <%= separator %>
+    <div class="page_error"><%= flash[:error] %></div>
+  <% end %>
+
+  <% unless flash[:notice].blank? %>
+    <%= separator %>
+    <div class="page_notice"><%= flash[:notice] %></div>
+  <% end %>
 
   <%= separator %>
 
-  <div class="page_content" style="">
-    <% unless flash[:notice].blank? %>
-      <p style="color: green"><%= flash[:notice] %></p>
-    <% end %>
-
-    <% unless flash[:error].blank? %>
-      <p style="color: red"><%= flash[:error] %></p>
-    <% end %>
-
-    <%= yield %>
-  </div>
+  <div class="page_content" style=""><%= yield %></div>
 
   <%= separator * 3 %>
 

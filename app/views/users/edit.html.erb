@@ -1,10 +1,23 @@
-<h2>Profile Settings</h2>
+<% if @user.temporary %>
+  <h2>New User Account</h2>
+<% else %>
+  <h2>Profile Settings</h2>
+<% end %>
 
 <% form_for(@user) do |f| %>
   <%= f.error_messages %>
 
+  <% if @user.temporary %>
+    <p>
+      <label>Username</label><br />
+      <input type="text" id="username" name="username" class="full_width_edit" />
+    </p>
+
+    <%= separator %>
+  <% end %>
+
   <p>
-    <label>Password (leave blank to not change)</label><br />
+    <label>Password<%= " (leave blank to not change)" unless @user.temporary %></label><br />
     <input type="password" id="password1" name="password1" class="full_width_edit" />
   </p>
 
@@ -28,5 +41,6 @@
 <% end %>
 
 <script lang="JavaScript">
-  $('#password1,#password2,#email').highlightWhenFocused();
+  $('#username,#password1,#password2,#email').highlightWhenFocused();
+  $('#username').focus();
 </script>
