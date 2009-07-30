@@ -246,4 +246,14 @@ class UsersControllerTest < ActionController::TestCase
     assert !@controller.check_username('bob')
     assert @controller.check_username('newdude')
   end
+
+  test "new user page logs-out the current user" do
+    @controller.set_current_user @bob
+
+    assert_not_nil @controller.current_user
+
+    get :new
+
+    assert_nil @controller.current_user
+  end
 end

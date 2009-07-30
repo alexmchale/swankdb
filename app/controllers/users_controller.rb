@@ -3,6 +3,8 @@ class UsersController < ApplicationController
   skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout, :reset_password, :instant ]
 
   def new
+    set_current_user nil
+
     @user = User.new
 
     if session[:newuser]
