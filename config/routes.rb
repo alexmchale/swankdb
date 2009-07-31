@@ -1,7 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
   map.connect 'entries/suggest_tags', :controller => 'entries', :action => 'suggest_tags'
   map.connect 'entries/preview', :controller => 'entries', :action => 'preview'
-  map.connect 'users/:action', :controller => 'users', :requirements => { :action => /[a-z]+/ }
+
+  map.connect 'users/login', :controller => 'users', :action => 'login'
+  map.connect 'users/logout', :controller => 'users', :action => 'logout'
+  map.connect 'users/invite', :controller => 'users', :action => 'invite'
+  map.connect 'users/reset_password', :controller => 'users', :action => 'reset_password'
+  map.connect 'users/instant', :controller => 'users', :action => 'instant'
+
   map.resources :entries
   map.resources :users
   map.resources :about
