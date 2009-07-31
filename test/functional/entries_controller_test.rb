@@ -6,6 +6,7 @@ class EntriesControllerTest < ActionController::TestCase
 
   test "creating and editing an entry with session based authentication" do
     @controller.set_current_user @bob
+    Entry.destroy_all
 
     get :new
     assert_select 'textarea#entry_content'
