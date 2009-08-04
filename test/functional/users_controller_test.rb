@@ -256,4 +256,19 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_nil @controller.current_user
   end
+
+  test "cannot create two users in a row" do
+    assert_difference 'User.count', 1 do
+      assert @controller.ip_eligible_for_new_user?
+      get :instant
+    end
+
+    assert_difference 'User.count', 0 do
+      assert !@controller.ip_eligible_for_new_user?
+      get :instant
+      assert !@controller.ip_eligible_for_new_user?
+      post :create, :username => 'newman1', :password1 => 'abc123', :password2 => 'abc123', :email => 'newman@test.com'
+      assert !@controller.ip_eligible_for_new_user?
+    end
+  end
 end

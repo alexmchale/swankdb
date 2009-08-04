@@ -11,4 +11,15 @@ class SwankLogTest < ActiveSupport::TestCase
 
     assert_equal ['ABC', 'DEF', 'XYZ'], SwankLog.codes
   end
+
+  test "can load and read complex objects" do
+    complex = { :user => @bob, :array => [ 1, 2, [ 3, 4 ] ] }
+
+    SwankLog.log 'COMPLEX', complex
+
+    log = SwankLog.last
+    assert log
+    assert_equal 'COMPLEX', log.code
+    assert_equal complex, log.parsed
+  end
 end

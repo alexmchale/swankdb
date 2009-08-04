@@ -21,7 +21,9 @@ class UsersController < ApplicationController
       :email => email = params[:email].to_s.strip
     }
 
-    if User.find_by_username(username)
+    if !ip_eligible_for_new_user?
+      redirect_to :action => :new
+    elsif User.find_by_username(username)
       flash[:error] = 'That username is not available.'
       redirect_to :action => :new
     elsif User.find_by_email(email)
@@ -46,7 +48,7 @@ class UsersController < ApplicationController
 
       user.add_default_entry
 
-      SwankLog.log 'USER-CREATED', user.to_yaml
+      SwankLog.log('USER-CREATED', { :user => user, :source => request.remote_ip }.to_yaml)
 
       set_current_user user
       flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
@@ -196,13 +198,17 @@ class UsersController < ApplicationController
   end
 
   def instant
-    set_current_user User.create
-    current_user.andand.add_default_entry
-    flash[:error] = "You're using a cookie-based, temporary account.  Click " +
-                    '<a href="/users/edit">my account</a>' +
-                    " to set up your account permanantly."
-
-    redirect_to :controller => :entries, :action => :index
+    if ip_eligible_for_new_user?
+      set_current_user User.create
+      SwankLog.log('USER-CREATED', { :user => current_user, :source => request.remote_ip }.to_yaml)
+      current_user.andand.add_default_entry
+      flash[:error] = "You're using a cookie-based, temporary account.  Click " +
+                      '<a href="/users/edit">my account</a>' +
+                      " to set up your account permanantly."
+      redirect_to :controller => :entries, :action => :index
+    else
+      redirect_to :action => :new
+    end
   end
 
   def check_username(username)
@@ -224,5 +230,20 @@ class UsersController < ApplicationController
     end
 
     return true
+  end
+
+  def ip_eligible_for_new_user?
+    conditions = [ 'message LIKE ? AND updated_at>?', "%#{request.remote_ip}%", Time.now - 2.minutes ]
+
+    SwankLog.find(:all, :conditions => conditions, :order => 'updated_at DESC').each do |log|
+      if (parsed = log.parsed).kind_of? Hash
+        if parsed[:source] == request.remote_ip
+          flash[:error] = 'A user has recently been created by your ip address.'
+          return false
+        end
+      end
+    end
+
+    true
   end
 end
