@@ -26,10 +26,18 @@ class User < ActiveRecord::Base
     end.flatten.uniq.sort.join(' ')
   end
 
+  def frob
+    frobs.first || new_active_code('frob').code
+  end
+
+  def frobs
+    active_codes.find_all {|c| c.section == 'frob'}.map {|c| c.code}
+  end
+
   def active_code(section)
     code = self.active_codes.find_all {|c| c.section == section.downcase}.andand.first
 
-    if code && code.created_at < (Time.now - 2.days)
+    if code.andand.expires_at && code.expires_at < Time.now
       code.destroy
       self.reload
       code = nil
@@ -38,14 +46,12 @@ class User < ActiveRecord::Base
     code
   end
 
-  def new_active_code(section)
-    current = active_code(section)
-    current.andand.destroy
-
+  def new_active_code(section, expires_at = nil)
     new_code = ActiveCode.new
     new_code.user = self
     new_code.section = section.downcase
     new_code.code = Digest::SHA1.hexdigest(rand(2**256).to_s)
+    new_code.expires_at = expires_at
     new_code.save
 
     self.reload

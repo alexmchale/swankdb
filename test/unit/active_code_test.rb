@@ -17,23 +17,14 @@ class ActiveCodeTest < ActiveSupport::TestCase
     assert_equal code1.code, @bob.active_code('password-reset').code
   end
 
-  test "codes older than 2 days aren't returned" do
-    code = @bob.new_active_code('test')
+  test "codes expire properly" do
+    @bob.new_active_code('test0')
+    assert_not_nil @bob.active_code('test0')
 
-    assert_not_nil code
+    @bob.new_active_code('test1', Time.now + 2.days)
+    assert_not_nil @bob.active_code('test1')
 
-    code.created_at = Time.now - 2.days + 10.seconds
-    code.save
-
-    code = @bob.active_code('test')
-
-    assert_not_nil code
-
-    code.created_at = Time.now - 2.days - 10.seconds
-    code.save
-
-    code = @bob.active_code('test')
-
-    assert_nil code
+    @bob.new_active_code('test2', Time.now - 2.days)
+    assert_nil @bob.active_code('test2')
   end
 end

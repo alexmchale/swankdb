@@ -171,7 +171,8 @@ class UsersController < ApplicationController
       @user ||= User.find_by_email(email)
 
       if @user
-        reset_code = @user.new_active_code('reset-password').code
+        @user.active_code('reset-password').andand.destroy
+        reset_code = @user.new_active_code('reset-password', Time.now + 2.days).code
 
         email = Email.new
         email.user = @user

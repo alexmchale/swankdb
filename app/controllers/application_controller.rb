@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
+    @_user ||= ActiveCode.find_by_code(params[:frob]).andand.user
     @_user ||= User.authenticate(params[:username], params[:password])
     @_user ||= User.find_by_id(session[:user_id])
   end
