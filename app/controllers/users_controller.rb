@@ -105,6 +105,9 @@ class UsersController < ApplicationController
         flash[:error] = "The username or password you entered is incorrect."
         redirect_to :controller => :users, :action => :login
       end
+    elsif params[:frob] && current_user
+      set_current_user current_user
+      redirect_to :controller => :entries, :action => :index
     end
   end
 

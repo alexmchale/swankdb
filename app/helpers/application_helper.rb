@@ -76,4 +76,11 @@ module ApplicationHelper
     '<input type="submit" style="display: none">' +
     link_to(verb, "javascript:$('div.page_content form').submit()", :class => 'save_link')
   end
+
+  def build_host_prefix(protocol, host, port)
+    default_port = (protocol == 'https://') ? 443 : 80
+    port = (port == default_port) ? '' : ":#{port}"
+
+    "%s%s%s" % [ protocol, host, port ]
+  end
 end
