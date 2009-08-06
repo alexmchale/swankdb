@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
-  has_many :active_codes
+  has_many :active_codes, :dependent => :destroy
+  has_many :entries, :dependent => :destroy
+
   before_save :rehash_password
 
   def self.authenticate(username, password)

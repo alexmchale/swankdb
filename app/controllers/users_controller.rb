@@ -57,11 +57,12 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(current_user_id)
+    @user = current_user
   end
 
   def update
-    @user = User.find(current_user_id)
+    @user = current_user
+
     username = params[:username].to_s
     password1 = params[:password1].to_s
     password2 = params[:password2].to_s
