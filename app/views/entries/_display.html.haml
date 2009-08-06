@@ -1,0 +1,7 @@
+.content_display
+  %div= RDiscount.new(@entry.linkup).to_html
+
+  - unless @entry.tags.blank?
+    = separator
+    %p{:style => "text-align: right; font-style: italic; font-size: 0.75em"}= link_entry_tags(@entry, :class => 'entrytags')
+

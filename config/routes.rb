@@ -8,6 +8,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'users/reset_password', :controller => 'users', :action => 'reset_password'
   map.connect 'users/instant', :controller => 'users', :action => 'instant'
 
+  map.connect 'ical/created', :controller => 'ical', :action => 'created'
+  map.connect 'ical/updated', :controller => 'ical', :action => 'updated'
+
   map.resources :entries
   map.resources :users
   map.resources :about
@@ -53,4 +56,5 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing the them or commenting them out if you're using named routes and resources.
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
+  map.connect ':controller/:action.:format'
 end
