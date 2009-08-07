@@ -84,7 +84,7 @@ class UsersController < ApplicationController
         flash[:notice] = 'Your account settings have been updated.'
 
         @user.password = password1 unless password1.blank?
-        @user.email = email
+        @user.email = email unless email.blank?
         @user.save
 
         return redirect_to :controller => :entries, :action => :index
