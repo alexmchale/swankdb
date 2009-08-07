@@ -242,18 +242,6 @@ div.about
   :font-size 0.8em
   :text-align center
 
-=lookatme
-  :background-color #CFC
-  :padding 0.5em
-  :line-height 3em
-  :text-decoration none
-  &:hover
-    :background-color #090
-    :color #FFF
-
-a.lookatme
-  +lookatme
-
 .entry_index_hidden_links
   :display none
   :float right
@@ -264,6 +252,12 @@ a.lookatme
   :line-height 2em
   :text-decoration none
 
+a.lookatme
+  +entry_link
+  :background-color #CFC
+  &:hover
+    :background-color #090
+    :color #FFF
 a.view_link
   +entry_link
   :background-color #CFC
