@@ -1,6 +1,11 @@
-.user_synchronization
+.totheright
+  %a#show_settings{:href => "#"} settings
+  |
+  %a#show_sync{:href => "#"} syndication
 
-  %h2 Synchronization
+#user_synchronization.user_synchronization.hidden
+
+  %h2 Syndication
 
   - host = build_host_prefix(request.protocol, request.host, request.port)
   - login_url = host + url_for(:controller => :users, :action => :login, :frob => @user.frob)
@@ -23,50 +28,60 @@
     %br
     %a{:href => created_url}= created_url
 
-  = separator
-
-
-
-- if @user.temporary
-  %h2 New User Account
-- else
-  %h2 Profile Settings
-
-- form_for(@user) do |f|
-
-  = f.error_messages
-
+#user_settings.user_settings
 
   - if @user.temporary
+    %h2 New User Account
+  - else
+    %h2 Profile Settings
+
+  - form_for(@user) do |f|
+
+    = f.error_messages
+
+    - if @user.temporary
+      %p
+        %label Username
+        %br
+        %input#username.full_width_edit{:type => "text", :name => "username"}
+      = separator
+
     %p
-      %label Username
+      %label
+        Password
+        = "(leave blank to not change)" unless @user.temporary
       %br
-      %input#username.full_width_edit{:type => "text", :name => "username"}
+      %input#password1.full_width_edit{:type => "password", :name => "password1"}
+
+    %p
+      %label Password (confirm)
+      %br
+      %input#password2.full_width_edit{:type => "password", :name => "password2"}
+
     = separator
 
-  %p
-    %label
-      Password
-      = "(leave blank to not change)" unless @user.temporary
-    %br
-    %input#password1.full_width_edit{:type => "password", :name => "password1"}
+    %p
+      %label Email Address
+      %br
+      %input#email.full_width_edit{:type => "text", :name => "email", :value => @user.email}
 
-  %p
-    %label Password (confirm)
-    %br
-    %input#password2.full_width_edit{:type => "password", :name => "password2"}
+    = separator
 
-  = separator
-
-  %p
-    %label Email Address
-    %br
-    %input#email.full_width_edit{:type => "text", :name => "email", :value => @user.email}
-
-  = separator
-
-  .totheright= submit_link('Update')
+    .totheright= submit_link('Update')
 
 :javascript
+
   $('#username,#password1,#password2,#email').highlightWhenFocused();
   $('#username').focus();
+
+  $('#show_sync').click(function() {
+    $('#user_settings').hide();
+    $('#user_synchronization').show();
+    return false;
+  });
+
+  $('#show_settings').click(function() {
+    $('#user_settings').show();
+    $('#user_synchronization').hide();
+    return false;
+  });
