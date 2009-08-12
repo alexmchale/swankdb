@@ -1,0 +1,6 @@
+%h2 Download Your Data
+
+- for mode in EntriesController::DOWNLOAD_MODES do
+  %p
+    = link_to mode['description'], :controller => 'entries', :action => 'download', :mode => mode['type'], :frob => @user.frob
+

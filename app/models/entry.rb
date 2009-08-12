@@ -50,6 +50,21 @@ class Entry < ActiveRecord::Base
     Entry.pretty_tags(self.tags)
   end
 
+  def plaintext
+    "Updated: #{updated_at}\r\n" +
+    "Created: #{created_at}\r\n" +
+    "Tags: #{pretty_tags}\r\n" +
+    content.to_s +
+    "\r\n--\r\n"
+  end
+
+  comma do
+    updated_at
+    created_at
+    pretty_tags
+    content.to_s
+  end
+
 private
 
   def fixup_tags

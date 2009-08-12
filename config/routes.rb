@@ -1,12 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
   map.connect 'entries/suggest_tags', :controller => 'entries', :action => 'suggest_tags'
   map.connect 'entries/preview', :controller => 'entries', :action => 'preview'
+  map.connect 'entries/download', :controller => 'entries', :action => 'download'
 
   map.connect 'users/login', :controller => 'users', :action => 'login'
   map.connect 'users/logout', :controller => 'users', :action => 'logout'
   map.connect 'users/invite', :controller => 'users', :action => 'invite'
   map.connect 'users/reset_password', :controller => 'users', :action => 'reset_password'
   map.connect 'users/instant', :controller => 'users', :action => 'instant'
+  map.connect 'users/syndication', :controller => 'users', :action => 'syndication'
 
   map.connect 'ical/created', :controller => 'ical', :action => 'created'
   map.connect 'ical/updated', :controller => 'ical', :action => 'updated'

@@ -1,88 +1,45 @@
-.totheright
-  %a#show_settings{:href => "#"} settings
-  |
-  %a#show_sync{:href => "#"} syndication
+- if @user.temporary
+  %h2 New User Account
+  %h3 Your existing entries will be saved to your new account.
+- else
+  %h2 Profile Settings
 
-#user_synchronization.user_synchronization.hidden
+- form_for(@user) do |f|
 
-  %h2 Syndication
-
-  - host = build_host_prefix(request.protocol, request.host, request.port)
-  - login_url = host + url_for(:controller => :users, :action => :login, :frob => @user.frob)
-  - updated_url = host + url_for(:controller => :ical, :action => :updated, :format => :ics, :frob => @user.frob)
-  - created_url = host + url_for(:controller => :ical, :action => :created, :format => :ics, :frob => @user.frob)
+  = f.error_messages
 
   - if @user.temporary
     %p
-      %label Log into this cookie-based account with the following link:
+      %label Username
       %br
-      %a{:href => login_url}= login_url
-
-  %p
-    %label Private iCal feed for your latest 50 entries, organized by when they were updated:
-    %br
-    %a{:href => updated_url}= updated_url
-
-  %p
-    %label Private iCal feed for your latest 50 entries, organized by when they were created:
-    %br
-    %a{:href => created_url}= created_url
-
-#user_settings.user_settings
-
-  - if @user.temporary
-    %h2 New User Account
-    %h3 Your existing entries will be saved to your new account.
-  - else
-    %h2 Profile Settings
-
-  - form_for(@user) do |f|
-
-    = f.error_messages
-
-    - if @user.temporary
-      %p
-        %label Username
-        %br
-        %input#username.full_width_edit{:type => "text", :name => "username"}
-      = separator
-
-    %p
-      %label
-        Password
-        = "(leave blank to not change)" unless @user.temporary
-      %br
-      %input#password1.full_width_edit{:type => "password", :name => "password1"}
-
-    %p
-      %label Password (confirm)
-      %br
-      %input#password2.full_width_edit{:type => "password", :name => "password2"}
-
+      %input#username.full_width_edit{:type => "text", :name => "username"}
     = separator
 
-    %p
-      %label Email Address
-      %br
-      %input#email.full_width_edit{:type => "text", :name => "email", :value => @user.email}
+  %p
+    %label
+      Password
+      = "(leave blank to not change)" unless @user.temporary
+    %br
+    %input#password1.full_width_edit{:type => "password", :name => "password1"}
 
-    = separator
+  %p
+    %label Password (confirm)
+    %br
+    %input#password2.full_width_edit{:type => "password", :name => "password2"}
 
-    .totheright= submit_link('Update')
+  = separator
+
+  %p
+    %label Email Address
+    %br
+    %input#email.full_width_edit{:type => "text", :name => "email", :value => @user.email}
+
+  = separator
+
+  .totheright= submit_link('Update')
 
 :javascript
 
   $('#username,#password1,#password2,#email').highlightWhenFocused();
   $('#username').focus();
 
-  $('#show_sync').click(function() {
-    $('#user_settings').hide();
-    $('#user_synchronization').show();
-    return false;
-  });
-
-  $('#show_settings').click(function() {
-    $('#user_settings').show();
-    $('#user_synchronization').hide();
-    return false;
-  });

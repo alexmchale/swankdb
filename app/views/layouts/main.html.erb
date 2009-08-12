@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>Entries: <%= controller.action_name %></title>
+  <title>SwankDB</title>
 
   <%= stylesheet_link_tag 'style' %>
   <%= stylesheet_link_tag 'autosuggest_inquisitor' %>
@@ -82,6 +82,20 @@
   <% end %>
 
   <%= separator %>
+
+  <% if @show_user_menu && @user %>
+
+    <div class="totheright">
+
+      <%= link_to 'settings', :controller => 'users', :action => 'edit', :id => @user.id %>
+      |
+      <%= link_to 'syndication', :controller => 'users', :action => 'syndication' %>
+      |
+      <%= link_to 'downloads', :controller => 'entries', :action => 'download' %>
+
+    </div>
+
+  <% end %>
 
   <div class="page_content" style=""><%= yield %></div>
 

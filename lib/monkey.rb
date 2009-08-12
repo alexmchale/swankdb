@@ -17,3 +17,9 @@ class String
   end
 end
 
+module ActionView
+  class TextTemplate
+    def identifier() "TEXT DATA" end
+  end
+end
+

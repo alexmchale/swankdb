@@ -1,0 +1,22 @@
+%h2 Syndication
+
+- host = build_host_prefix(request.protocol, request.host, request.port)
+- login_url = host + url_for(:controller => :users, :action => :login, :frob => @user.frob)
+- updated_url = host + url_for(:controller => :ical, :action => :updated, :format => :ics, :frob => @user.frob)
+- created_url = host + url_for(:controller => :ical, :action => :created, :format => :ics, :frob => @user.frob)
+
+- if @user.temporary
+  %p
+    %label Log into this cookie-based account with the following link:
+    %br
+    %a{:href => login_url}= login_url
+
+%p
+  %label Private iCal feed for your latest 50 entries, organized by when they were updated:
+  %br
+  %a{:href => updated_url}= updated_url
+
+%p
+  %label Private iCal feed for your latest 50 entries, organized by when they were created:
+  %br
+  %a{:href => created_url}= created_url

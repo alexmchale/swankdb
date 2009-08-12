@@ -1,6 +1,36 @@
 class EntriesController < ApplicationController
   ENTRIES_PER_LOAD = 50
 
+  DOWNLOAD_MODES = [
+    {
+      'type'        => 'txt',
+      'mime-type'   => 'text/plain',
+      'description' => 'Plain Text',
+      'describe'    => Proc.new {|list| list.map {|e| e.plaintext}.join("\r\n")}
+    },
+
+    {
+      'type'        => 'csv',
+      'mime-type'   => 'text/csv',
+      'description' => 'Comma Separated Values (CSV)',
+      'describe'    => Proc.new {|list| list.to_comma}
+    },
+
+    {
+      'type'        => 'json',
+      'mime-type'   => 'text/json',
+      'description' => 'JavaScript Object Notation (JSON)',
+      'describe'    => Proc.new {|list| list.to_json}
+    },
+
+    {
+      'type'        => 'xml',
+      'mime-type'   => 'text/xml',
+      'description' => 'Extensible Markup Language (XML)',
+      'describe'    => Proc.new {|list| list.to_xml}
+    }
+  ]
+
   before_filter :authenticate_user_account
   before_filter :strip_user_input
 
@@ -152,6 +182,17 @@ class EntriesController < ApplicationController
     end
 
     render_data :results => suggestions
+  end
+
+  def download
+    @show_user_menu = true
+    @user = current_user
+    mode = DOWNLOAD_MODES.find {|m| m['type'] == params[:mode]}
+
+    if current_user && mode
+      data = mode['describe'].call(current_user.entries)
+      send_data data, :type => mode['mime-type'], :disposition => 'attachment', :filename => "swankdb.#{mode['type']}"
+    end
   end
 
 private

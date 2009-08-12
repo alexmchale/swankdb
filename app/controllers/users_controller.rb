@@ -57,6 +57,7 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @show_user_menu = true
     @user = current_user
   end
 
@@ -214,6 +215,11 @@ class UsersController < ApplicationController
     else
       redirect_to :action => :new
     end
+  end
+
+  def syndication
+    @show_user_menu = true
+    @user = current_user
   end
 
   def check_username(username)
