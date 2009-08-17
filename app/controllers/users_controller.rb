@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 
       user.add_default_entry
 
-      SwankLog.log('USER-CREATED', { :user => user, :source => request.remote_ip }.to_yaml)
+      SwankLog.log 'USER-CREATED', :user => user, :source => request.remote_ip
 
       set_current_user user
       flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
@@ -127,7 +127,7 @@ class UsersController < ApplicationController
         email.body = params[:message].strip + "\r\n\r\n#{current_user.username} (#{current_user.email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
         email.save
 
-        SwankLog.log 'INVITATION-CREATED', email.to_yaml
+        SwankLog.log 'INVITATION-CREATED', :user => current_user, :text => email
 
         flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
         redirect_to :controller => :users, :action => :invite
@@ -206,7 +206,7 @@ class UsersController < ApplicationController
   def instant
     if ip_eligible_for_new_user?
       set_current_user User.create
-      SwankLog.log('USER-CREATED', { :user => current_user, :source => request.remote_ip }.to_yaml)
+      SwankLog.log 'USER-CREATED', :user => current_user, :source => request.remote_ip
       current_user.andand.add_default_entry
       flash[:error] = "You're using a cookie-based, temporary account.  Click " +
                       '<a href="/users/edit">my account</a>' +
@@ -247,8 +247,8 @@ class UsersController < ApplicationController
     conditions = [ 'message LIKE ? AND updated_at>?', "%#{request.remote_ip}%", Time.now - 2.minutes ]
 
     SwankLog.find(:all, :conditions => conditions, :order => 'updated_at DESC').each do |log|
-      if (parsed = log.parsed).kind_of? Hash
-        if parsed[:source] == request.remote_ip
+      if (message = JSON.load(log.message)).kind_of? Hash
+        if message['source'] == request.remote_ip
           flash[:error] = 'A user has recently been created by your ip address.'
           return false
         end

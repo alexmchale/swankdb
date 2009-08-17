@@ -78,9 +78,7 @@ class User < ActiveRecord::Base
 private
 
   def rehash_password
-    if password_changed?
-      self.password = User.hash_password(username, password)
-    end
+    self.password = User.hash_password(username, password) unless password.to_s =~ /^[0-9a-f]{32}$/i
   end
 
   def self.hash_password(username, password)
