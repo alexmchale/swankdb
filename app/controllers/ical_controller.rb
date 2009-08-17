@@ -1,8 +1,6 @@
 class IcalController < ApplicationController
   MAX_ENTRIES = 50
 
-  respond_to :ics
-
   def updated
     entries = get_entries(:updated)
     calendarize entries, :mode => :updated

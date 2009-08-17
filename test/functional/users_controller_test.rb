@@ -85,22 +85,22 @@ class UsersControllerTest < ActionController::TestCase
 
   test "an invalid login attempt" do
     post :login, :username => 'dummy', :password => 'badpass'
-    assert_redirected_to :action => :login
+    assert_redirected_to :controller => :users, :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
     assert_nil @controller.current_user
 
     post :login, :username => '', :password => 'badpass'
-    assert_redirected_to :action => :login
+    assert_redirected_to :controller => :users, :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
     assert_nil @controller.current_user
 
     post :login, :username => 'dummy', :password => ''
-    assert_redirected_to :action => :login
+    assert_redirected_to :controller => :users, :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
     assert_nil @controller.current_user
 
     post :login
-    assert_redirected_to :action => :login
+    assert_redirected_to :controller => :users, :action => :login
     assert_equal "The username or password you entered is incorrect.", flash[:error]
     assert_nil @controller.current_user
   end
@@ -197,7 +197,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_difference 'Email.count' do
       post :invite, :email => email, :message => message
       assert_equal 'Your invitation has been saved and will be sent shortly.  Thank you! :-)', flash[:notice]
-      assert_redirected_to :action => :invite
+      assert_redirected_to :controller => :users, :action => :invite
     end
   end
 
