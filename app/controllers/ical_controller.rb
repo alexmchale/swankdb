@@ -40,7 +40,7 @@ private
       cal.add event
     end
 
-    render :text => cal.to_ical
+    send_data cal.to_ical, :filename => "swankdb.ics"
   end
 
   def clean_text(s)
