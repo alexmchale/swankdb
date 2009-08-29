@@ -10,6 +10,6 @@ class MonkeyTest < ActiveSupport::TestCase
   end
 
   test "stripping html from a string" do
-    assert_equal "hello\nworld", "hello<br>world".striphtml
+    assert_equal "helloworld", "hello<br>world".striphtml
   end
 end
