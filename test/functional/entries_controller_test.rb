@@ -5,6 +5,8 @@ class EntriesControllerTest < ActionController::TestCase
   end
 
   test "creating and editing an entry with session based authentication" do
+    get :index
+
     @controller.set_current_user @bob
     Entry.destroy_all
 
@@ -37,6 +39,8 @@ class EntriesControllerTest < ActionController::TestCase
   end
 
   test "destroying an entry with session based authentication" do
+    get :index
+
     @controller.set_current_user @bob
 
     assert_not_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
@@ -47,6 +51,8 @@ class EntriesControllerTest < ActionController::TestCase
   end
 
   test "destroying an entry with restful authentication" do
+    get :index
+
     assert_not_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
 
     delete :destroy, :id => @entry1.id, :username => @bob.username, :password => '123456'
@@ -55,6 +61,8 @@ class EntriesControllerTest < ActionController::TestCase
   end
 
   test "creating an entry with the api" do
+    get :index
+
     @controller.set_current_user nil
 
     assert_difference('Entry.count') do

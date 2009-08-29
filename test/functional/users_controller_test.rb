@@ -53,6 +53,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "account settings page exists" do
+    get :login
+
     # Act like we're logged in as bob.
     @controller.set_current_user @bob
 
@@ -106,6 +108,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "setting a new user password" do
+    get :login
+
     # Act like we're logged in as bob.
     @controller.set_current_user @bob
 
@@ -186,6 +190,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "invite a friend" do
+    get :login
+
     @controller.set_current_user @bob
     email = 'test@foo.com'
     message = 'Hey bud!'
@@ -223,6 +229,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "make sure you can't change a non-temporary username" do
+    get :login
+
     assert_not_nil User.authenticate('bob', '123456')
 
     @controller.set_current_user @bob
@@ -239,6 +247,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "check if a username is valid" do
+    get :login
+
     assert_nil flash[:error]
     assert !@controller.check_username(nil)
     assert !@controller.check_username('')
@@ -248,6 +258,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "new user page logs-out the current user" do
+    get :login
+
     @controller.set_current_user @bob
 
     assert_not_nil @controller.current_user
