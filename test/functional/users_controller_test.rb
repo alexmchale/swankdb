@@ -23,6 +23,7 @@ class UsersControllerTest < ActionController::TestCase
 
     # Create the new user.
     post :create, :username => username, :password1 => password, :password2 => password, :email => email
+    assert_equal '', flash[:error].to_s
     assert_response :redirect
     assert_redirected_to :controller => :entries, :action => :index
 

@@ -4,6 +4,15 @@ class EntriesControllerTest < ActionController::TestCase
   def setup
   end
 
+  test "getting a list of entries" do
+    get :index
+
+    @controller.set_current_user @bob
+
+    get :index
+    assert_response :success
+  end
+
   test "creating and editing an entry with session based authentication" do
     get :index
 
