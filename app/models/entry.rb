@@ -58,12 +58,12 @@ class Entry < ActiveRecord::Base
     "\r\n--\r\n"
   end
 
-  comma do
-    updated_at
-    created_at
-    pretty_tags
-    content.to_s
-  end
+#  comma do
+#    updated_at
+#    created_at
+#    pretty_tags
+#    content.to_s
+#  end
 
 private
 
