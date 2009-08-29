@@ -13,7 +13,8 @@ end
 
 class String
   def striphtml
-    Hpricot(self).to_plain_text
+#    Hpricot(self).to_plain_text
+    gsub /<[^>]*?>/, ''
   end
 end
 

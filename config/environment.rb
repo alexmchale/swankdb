@@ -15,8 +15,6 @@ Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"
   config.gem "andand"
   config.gem "rdiscount"
-  config.gem "hpricot"
-  config.gem "redgreen" if RAILS_ENV == 'test'
   config.gem "htmlentities"
   config.gem "smtp_tls"
   config.gem "cldwalker-hirb", :lib => "hirb"
@@ -31,7 +29,7 @@ end
 Sass::Plugin.options[:template_location] = File.join(RAILS_ROOT, 'app/sass')
 Sass::Plugin.options[:css_location] = File.join(RAILS_ROOT, 'public/stylesheets')
 
-Hirb.enable
+Hirb.enable rescue nil # Try to load Hirb if it's available.
 
 ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
