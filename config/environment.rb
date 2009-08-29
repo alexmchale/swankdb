@@ -10,13 +10,13 @@ require 'digest/sha1'
 require 'monkey'
 require 'detector'
 require 'email_verifier'
+require 'smtp_tls'
 
 Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"
   config.gem "andand"
   config.gem "rdiscount"
   config.gem "htmlentities"
-  config.gem "smtp_tls"
   config.gem "cldwalker-hirb", :lib => "hirb"
   config.gem "alexmchale-gmail-client", :lib => "gmail"
   config.gem "icalendar"
