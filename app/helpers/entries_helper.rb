@@ -18,10 +18,12 @@ module EntriesHelper
   end
 
   def summarize_entry_content(entry)
-    shortened = if entry.content.to_s.length > MAX_ENTRY_CONTENT_SUMMARY_LENGTH
-                  entry.content[0, MAX_ENTRY_CONTENT_SUMMARY_LENGTH] + '&hellip;'
+    content = entry.content.to_s
+
+    shortened = if content.length > MAX_ENTRY_CONTENT_SUMMARY_LENGTH
+                  content[0, MAX_ENTRY_CONTENT_SUMMARY_LENGTH] + '&hellip;'
                 else
-                  entry.content.to_s
+                  content
                 end
 
     stripped = RDiscount.new(shortened).to_html.striphtml
