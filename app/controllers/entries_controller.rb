@@ -194,7 +194,11 @@ class EntriesController < ApplicationController
     mode = DOWNLOAD_MODES.find {|m| m['type'] == params[:mode]}
 
     if current_user && mode
-      data = mode['describe'].call(current_user.entries)
+      starting_time = Time.parse(params[:starting_at] || '01/01/2000')
+      conditions = [ "updated_at > ? AND user_id = ?", starting_time, current_user_id ]
+      entries = Entry.find(:all, :conditions => conditions)
+
+      data = mode['describe'].call(entries)
       send_data data, :type => mode['mime-type'], :disposition => 'attachment', :filename => "swankdb.#{mode['type']}"
     end
   end
