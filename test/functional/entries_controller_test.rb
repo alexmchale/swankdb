@@ -47,7 +47,7 @@ class EntriesControllerTest < ActionController::TestCase
     assert_equal entry.tags, ' 7 8 9 '
   end
 
-  test "destroying an entry with session based authentication" do
+  test "destroying an entry with session based authentication should merely empty the record" do
     get :index
 
     @controller.set_current_user @bob
@@ -56,17 +56,21 @@ class EntriesControllerTest < ActionController::TestCase
 
     delete :destroy, :id => @entry1.id
 
-    assert_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+    entry = Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+    assert_not_nil entry
+    assert_equal '', entry.content
   end
 
-  test "destroying an entry with restful authentication" do
+  test "destroying an entry with restful authentication should merely empty the record" do
     get :index
 
     assert_not_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
 
     delete :destroy, :id => @entry1.id, :username => @bob.username, :password => '123456'
 
-    assert_nil Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+    entry = Entry.find_by_id_and_user_id(@entry1.id, @bob.id)
+    assert_not_nil entry
+    assert_equal '', entry.content
   end
 
   test "creating an entry with the api" do

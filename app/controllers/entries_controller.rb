@@ -154,7 +154,11 @@ class EntriesController < ApplicationController
 
   def destroy
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
-    @entry.destroy
+
+    if @entry
+      @entry.content = ''
+      @entry.save
+    end
 
     if params.has_key? :json
       render_data true
