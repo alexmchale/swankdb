@@ -14,6 +14,8 @@ class Entry < ActiveRecord::Base
     top_and << 'entries.user_id = ?'
     fields << options[:user_id]
 
+    top_and << 'LENGTH(content) > 0'
+
     if options[:tag]
       top_and << 'tags LIKE ?'
       fields << '% ' + options[:tag].downcase + ' %'
