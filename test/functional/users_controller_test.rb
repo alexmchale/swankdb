@@ -86,6 +86,23 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal @bob.id, @controller.current_user_id
   end
 
+  test "logging into an account with a json response" do
+    # Set a known password.
+    @bob.password = '123456'
+    @bob.save
+
+    # Post to the login page.
+    post :login, :username => @bob.username, :password => '123456', :json => true
+    assert_response :success
+
+    # Verify the response.
+    response = JSON.load(@response.body)
+    assert_not_nil response
+    assert_not_nil response['frob']
+    assert_equal 40, response['frob'].length
+    assert_equal @bob.frob, response['frob']
+  end
+
   test "an invalid login attempt" do
     post :login, :username => 'dummy', :password => 'badpass'
     assert_redirected_to :controller => :users, :action => :login

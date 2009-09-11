@@ -99,7 +99,9 @@ class UsersController < ApplicationController
     if request.post?
       set_current_user User.authenticate(params[:username], params[:password])
 
-      if current_user
+      if params.has_key? :json
+        render_data :frob => current_user.andand.frob
+      elsif current_user
         # flash[:notice] = "You have successfully logged in as #{current_user.username}."
         redirect_to :controller => :entries, :action => :index
       else
