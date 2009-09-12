@@ -32,4 +32,19 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 0, ActiveCode.count(:conditions => { :user_id => alice_id })
     assert_equal 0, Entry.count(:conditions => { :user_id => alice_id })
   end
+
+  test "new users get a good, valid frob" do
+    user = User.new
+    assert_not_nil user
+
+    user.username = 'snake'
+    user.password = 'password1'
+    user.email = 'snake@fakeland.com'
+    assert user.save
+
+    f = user.frob
+    assert_not_nil f
+    assert_kind_of String, f
+    assert_equal 40, f.length
+  end
 end

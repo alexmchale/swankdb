@@ -29,11 +29,15 @@ class User < ActiveRecord::Base
   end
 
   def frob
-    frobs.first || new_active_code('frob').code
+    self.frobs.first || new_active_code('frob').code
   end
 
   def frobs
-    active_codes.find_all {|c| c.section == 'frob'}.map {|c| c.code}
+    self.active_codes.select do |c|
+      c.section == 'frob'
+    end.map do |c|
+      c.code
+    end
   end
 
   def active_code(section)

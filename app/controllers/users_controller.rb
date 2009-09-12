@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user_account
   skip_filter :authenticate_user_account, :only => [ :new, :create, :login, :logout, :reset_password, :instant ]
+  skip_before_filter :verify_authenticity_token, :only => [ :create ]
 
   def new
     set_current_user nil
@@ -21,22 +22,19 @@ class UsersController < ApplicationController
       :email => email = params[:email].to_s.strip
     }
 
-    if !ip_eligible_for_new_user?
-      redirect_to :action => :new
-    elsif User.find_by_username(username)
-      flash[:error] = 'That username is not available.'
-      redirect_to :action => :new
-    elsif User.find_by_email(email)
-      flash[:error] = 'An account with that email address already exists.'
-      redirect_to :action => :new
-    elsif !email.email?
-      flash[:error] = 'Please enter a valid email address.'
-      redirect_to :action => :new
-    elsif username.blank?
-      flash[:error] = 'Please enter a username.'
-      redirect_to :action => :new
-    elsif !check_password(password1, password2)
-      redirect_to :action => :new
+    flash[:error] = nil
+    #flash[:error] ||= ip_eligible_for_new_user?
+    flash[:error] ||= check_username(username)
+    flash[:error] ||= check_password(password1, password2)
+    #flash[:error] ||= 'An account with that email address already exists.' if User.find_by_email(email)
+    #flash[:error] ||= 'Please enter a valid email address.' unless email.email?
+
+    if !flash[:error].blank?
+      if params.has_key? :json
+        render_data :error_message => flash[:error]
+      else
+        redirect_to :action => :new
+      end
     else
       session.delete :newuser
 
@@ -52,7 +50,12 @@ class UsersController < ApplicationController
 
       set_current_user user
       flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
-      redirect_to :controller => :entries, :action => :index
+
+      if params.has_key? :json
+        render_data :frob => user.frob
+      else
+        redirect_to :controller => :entries, :action => :index
+      end
     end
   end
 
@@ -70,7 +73,9 @@ class UsersController < ApplicationController
     email = params[:email].to_s
 
     if current_user.temporary
-      if check_username(username) && check_password(password1, password2)
+      flash[:error] = check_username(username) || check_password(password1, password2)
+
+      if flash[:error].blank?
         flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
 
         @user.username = username
@@ -81,7 +86,10 @@ class UsersController < ApplicationController
         return redirect_to :controller => :entries, :action => :index
       end
     else
-      if (password1.blank? && password2.blank?) || check_password(password1, password2)
+      flash[:error] = check_password(password1, password2)
+      flash[:error] = nil if (password1.blank? && password2.blank?)
+
+      if flash[:error].blank?
         flash[:notice] = 'Your account settings have been updated.'
 
         @user.password = password1 unless password1.blank?
@@ -152,7 +160,9 @@ class UsersController < ApplicationController
     if @code && @user && password1 && password2
       # User has presented a valid reset code and entered new passwords.
 
-      if check_password(password1, password2)
+      flash[:error] = check_password(password1, password2)
+
+      if flash[:error].blank?
         @user.password = password1
         @user.save
 
@@ -206,7 +216,9 @@ class UsersController < ApplicationController
   end
 
   def instant
-    if ip_eligible_for_new_user?
+    flash[:error] = ip_eligible_for_new_user?
+
+    if flash[:error].blank?
       set_current_user User.create
       SwankLog.log 'USER-CREATED', :user => current_user, :source => request.remote_ip
       current_user.andand.add_default_entry
@@ -225,24 +237,19 @@ class UsersController < ApplicationController
   end
 
   def check_username(username)
-    not
     if username.blank?
-      flash[:error] = 'Please enter a username for your new account.'
+      'Please enter a username for your new account.'
     elsif User.find_by_username(username)
-      flash[:error] = "I'm sorry, that username is already in use."
+      "I'm sorry, that username is already in use."
     end
   end
 
   def check_password(password1, password2)
     if password1 != password2
-      flash[:error] = 'Those passwords do not match.'
-      return false
+      'Those passwords do not match.'
     elsif password1.length < 3
-      flash[:error] = 'Your password must be at least three characters.'
-      return false
+      'Your password must be at least three characters.'
     end
-
-    return true
   end
 
   def ip_eligible_for_new_user?
@@ -251,12 +258,11 @@ class UsersController < ApplicationController
     SwankLog.find(:all, :conditions => conditions, :order => 'updated_at DESC').each do |log|
       if (message = JSON.load(log.message)).kind_of? Hash
         if message['source'] == request.remote_ip
-          flash[:error] = 'A user has recently been created by your ip address.'
-          return false
+          return 'A user has recently been created by your ip address.'
         end
       end
     end
 
-    true
+    nil
   end
 end
