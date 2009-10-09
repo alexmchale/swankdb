@@ -195,7 +195,7 @@ class EntriesController < ApplicationController
 
     if current_user && mode
       starting_time = Time.parse(params[:starting_at] || '01/01/2000')
-      conditions = [ "updated_at > ? AND user_id = ?", starting_time, current_user_id ]
+      conditions = [ "updated_at > ? AND user_id = ? AND LENGTH(content) > 0", starting_time, current_user_id ]
       entries = Entry.find(:all, :conditions => conditions)
 
       data = mode['describe'].call(entries)
