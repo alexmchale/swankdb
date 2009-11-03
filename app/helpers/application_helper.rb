@@ -57,6 +57,11 @@ module ApplicationHelper
     link_to 'Destroy', entry, htmloptions
   end
 
+  def email_entry_link(entry, htmloptions = {})
+    htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'email_link'
+    link_to '&nbsp;Email&nbsp;', url_for(:controller => :entries, :action => :email, :id => entry.id), htmloptions
+  end
+
   def edit_entry_link(entry, htmloptions = {})
     htmloptions[:class] = htmloptions[:class].to_s + ' ' + 'edit_link'
     link_to '&nbsp;Edit&nbsp;', edit_entry_path(entry), htmloptions

@@ -1,0 +1,19 @@
+%p
+
+  - form_tag do
+
+    = label_tag :destination, "Please enter your recipient's email address"
+    = text_field_tag :destination, '', :class => :full_width_edit
+
+    %p.totheright
+
+      = submit_link 'Send'
+
+%p
+
+  = render :partial => 'display'
+
+:javascript
+
+  $('#destination').highlightWhenFocused();
+  $('#destination').focus();

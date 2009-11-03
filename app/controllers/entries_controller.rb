@@ -108,6 +108,29 @@ class EntriesController < ApplicationController
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
   end
 
+  def email
+    @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
+
+    if request.post? && !params[:destination].blank?
+      content = RDiscount.new(@entry.linkup).to_html
+      content += "<br><br>"
+      content += "--<br>"
+      content += 'This email was sent by <a href="https://swankdb.com">SwankDB</a>.  '
+      content += 'SwankDB is an online, personal database.  '
+      content += 'Please come check it out!  '
+
+      email = Email.new
+      email.user = current_user
+      email.destination = params[:destination]
+      email.subject = "A Swank Note from #{current_user.username}"
+      email.body = content
+      email.content_type = 'text/html'
+      email.save
+
+      redirect_to :action => :show, :id => @entry.id
+    end
+  end
+
   def create
     @entry = Entry.new
     @entry.user_id = current_user_id
