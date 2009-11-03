@@ -1,5 +1,5 @@
 .content_display
-  %div= RDiscount.new(@entry.linkup).to_html
+  %div= @entry.render
 
   - unless @entry.tags.blank?
     = separator

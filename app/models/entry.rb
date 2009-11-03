@@ -1,3 +1,5 @@
+require 'gfm'
+
 class Entry < ActiveRecord::Base
   DESTROY_TEXT = 'Are you sure you want to destroy this entry?'
 
@@ -30,6 +32,10 @@ class Entry < ActiveRecord::Base
     end
 
     [top_and.join(' AND '), fields].flatten
+  end
+
+  def render
+    RDiscount.new(self.linkup.gfm).to_html
   end
 
   def linkup

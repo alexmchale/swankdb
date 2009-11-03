@@ -2,12 +2,24 @@
 
   - form_tag do
 
-    = label_tag :destination, "Please enter your recipient's email address"
-    = text_field_tag :destination, '', :class => :full_width_edit
+    %p
+
+      = label_tag :destination, "Please enter your recipient's email address"
+      %br
+      = text_field_tag :destination, '', :class => :full_width_edit
+
+    %p
+
+      = label_tag :subject, "Please enter a subject for the email"
+      %br
+      = text_field_tag :subject, "A Swank Note from #{@user.andand.username.andand.capitalize}", :class => :full_width_edit
 
     %p.totheright
 
+      = cancel_link
       = submit_link 'Send'
+
+= separator
 
 %p
 
@@ -15,5 +27,5 @@
 
 :javascript
 
-  $('#destination').highlightWhenFocused();
+  $('#destination,#subject').highlightWhenFocused();
   $('#destination').focus();

@@ -110,9 +110,10 @@ class EntriesController < ApplicationController
 
   def email
     @entry = Entry.find(params[:id], :conditions => { :user_id => current_user_id })
+    @user = current_user
 
     if request.post? && !params[:destination].blank?
-      content = RDiscount.new(@entry.linkup).to_html
+      content = @entry.render
       content += "<br><br>"
       content += "--<br>"
       content += 'This email was sent by <a href="https://swankdb.com">SwankDB</a>.  '
@@ -121,8 +122,8 @@ class EntriesController < ApplicationController
 
       email = Email.new
       email.user = current_user
-      email.destination = params[:destination]
-      email.subject = "A Swank Note from #{current_user.username}"
+      email.destination = params[:destination].to_s
+      email.subject = params[:subject].to_s
       email.body = content
       email.content_type = 'text/html'
       email.save
