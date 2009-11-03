@@ -127,6 +127,8 @@ class EntriesController < ApplicationController
       email.content_type = 'text/html'
       email.save
 
+      flash[:notice] = "You have successfully sent <b>#{params[:destination]}</b> this note."
+
       redirect_to :action => :show, :id => @entry.id
     end
   end
