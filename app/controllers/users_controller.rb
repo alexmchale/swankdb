@@ -120,6 +120,8 @@ class UsersController < ApplicationController
       set_current_user current_user
       redirect_to :controller => :entries, :action => :index
     end
+
+    current_user.andand.reset_tags
   end
 
   def logout

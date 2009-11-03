@@ -26,6 +26,8 @@ class User < ActiveRecord::Base
     self.all_tags = Entry.find(:all, :conditions => { :user_id => id }).map do |e|
       e.tags.to_s.split
     end.flatten.uniq.sort.join(' ')
+
+    self.save
   end
 
   def frob
