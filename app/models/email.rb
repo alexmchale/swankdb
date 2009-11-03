@@ -3,7 +3,8 @@ class Email < ActiveRecord::Base
 
   def dispatch
     begin
-      GMail.new('swank@swankdb.com', 'bt60M32FWfJHOX7O1yaY').send(destination, subject, body)
+      content_type = self.content_type.blank? ? 'text/plain' : self.content_type
+      GMail.new('swank@swankdb.com', 'bt60M32FWfJHOX7O1yaY').send(destination, subject, body, content_type)
       true
     rescue
       false
