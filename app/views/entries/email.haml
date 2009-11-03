@@ -4,13 +4,13 @@
 
     %p
 
-      = label_tag :destination, "Please enter your recipient's email address"
+      = label_tag :destination, "Enter your recipient's email address"
       %br
       = text_field_tag :destination, '', :class => :full_width_edit
 
     %p
 
-      = label_tag :subject, "Please enter a subject for the email"
+      = label_tag :subject, "&hellip; and a subject for the email."
       %br
       = text_field_tag :subject, "A Swank Note from #{@user.andand.username.andand.capitalize}", :class => :full_width_edit
 
