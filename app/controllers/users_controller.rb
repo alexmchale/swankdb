@@ -52,7 +52,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Your new account has been created.  Thanks for joining SwankDB!"
 
       if params.has_key? :json
-        render_data :frob => user.frob
+        render_data :frob => user.frob, :id => user.id
       else
         redirect_to :controller => :entries, :action => :index
       end
