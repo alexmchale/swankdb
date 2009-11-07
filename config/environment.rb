@@ -10,7 +10,6 @@ require 'digest/sha1'
 require 'monkey'
 require 'detector'
 require 'email_verifier'
-require 'smtp_tls'
 
 Rails::Initializer.run do |config|
   config.gem "sqlite3-ruby", :lib => "sqlite3"
@@ -18,7 +17,6 @@ Rails::Initializer.run do |config|
   config.gem "rdiscount"
   config.gem "htmlentities"
   config.gem "cldwalker-hirb", :lib => "hirb"
-  config.gem "alexmchale-gmail-client", :lib => "gmail"
   config.gem "icalendar"
 #  config.gem "crafterm-comma", :lib => "comma"
 
@@ -34,6 +32,7 @@ ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
   :address => "smtp.gmail.com",
   :port => "587",
+  :tls => true,
   :domain => "gmail.com",
   :authentication => :plain,
   :user_name => "swank@swankdb.com",

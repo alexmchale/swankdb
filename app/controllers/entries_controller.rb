@@ -113,20 +113,10 @@ class EntriesController < ApplicationController
     @user = current_user
 
     if request.post? && !params[:destination].blank?
-      content = @entry.render
-      content += "<br><br>"
-      content += "--<br>"
-      content += 'This email was sent by <a href="https://swankdb.com">SwankDB</a>.  '
-      content += 'SwankDB is an online, personal database.  '
-      content += 'Please come check it out!  '
+      destination = params[:destination]
+      subject = params[:subject].to_s
 
-      email = Email.new
-      email.user = current_user
-      email.destination = params[:destination].to_s
-      email.subject = params[:subject].to_s
-      email.body = content
-      email.content_type = 'text/html'
-      email.save
+      UserEmails.deliver_entry current_user, destination, subject, @entry
 
       flash[:notice] = "You have successfully sent <b>#{params[:destination]}</b> this note."
 

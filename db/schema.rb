@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091103032724) do
+ActiveRecord::Schema.define(:version => 20091107104730) do
 
   create_table "active_codes", :force => true do |t|
     t.integer  "user_id"
@@ -18,16 +18,6 @@ ActiveRecord::Schema.define(:version => 20091103032724) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "expires_at"
-  end
-
-  create_table "emails", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "subject"
-    t.text     "body"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "destination"
-    t.string   "content_type", :default => "text/plain"
   end
 
   create_table "entries", :force => true do |t|

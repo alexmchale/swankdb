@@ -132,14 +132,12 @@ class UsersController < ApplicationController
   def invite
     if request.post?
       if params[:email].andand.email?
-        email = Email.new
-        email.user = current_user
-        email.destination = params[:email].strip
-        email.subject = "#{current_user.username} invites you to try SwankDB"
-        email.body = params[:message].strip + "\r\n\r\n#{current_user.username} (#{current_user.email})\r\n\r\n-- \r\n" + File.read('config/signature.txt')
-        email.save
+        destination = params[:email]
+        message = params[:message].strip
 
-        SwankLog.log 'INVITATION-CREATED', :user => current_user, :text => email
+        UserEmails.deliver_invitation current_user, destination, message
+
+        SwankLog.log 'INVITATION-CREATED', :user => current_user, :text => message
 
         flash[:notice] = 'Your invitation has been saved and will be sent shortly.  Thank you! :-)'
         redirect_to :controller => :users, :action => :invite
@@ -192,14 +190,9 @@ class UsersController < ApplicationController
       if @user
         @user.active_code('reset-password').andand.destroy
         reset_code = @user.new_active_code('reset-password', Time.now + 2.days).code
+        reset_url = "http://#{request.env['HTTP_HOST']}/users/reset_password?reset_code=#{reset_code}"
 
-        email = Email.new
-        email.user = @user
-        email.destination = @user.email
-        email.subject = 'Password reset requested on SwankDB'
-        email.body = "Please click this link to reset your password:\r\n" +
-                     "http://#{request.env['HTTP_HOST']}/users/reset_password?reset_code=#{reset_code}"
-        email.save
+        UserEmails.deliver_password_reset_request @user, reset_url
 
         flash[:notice] = "We have sent a password reset request to the email address on file."
 
