@@ -27,14 +27,14 @@
 <h3>Params</h3>
 <% for key, val in @params -%>
 <p><b><%= key %></b></p>
-<p><%= val.to_yaml.to_a.join("</p>\n<p>  ") %></p>
+<p><%= val.to_s %></p>
 <% end if @params -%>
 <hr/>
 
 <h3>Session</h3>
 <% for key, val in @session -%>
 <p><b><%= key %></b></p>
-<p><%= val.to_yaml.to_a.join("</p>\n<p>  ") %></p>
+<p><%= val.to_s %></p>
 <% end if @session -%>
 <hr/>
 
