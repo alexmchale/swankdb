@@ -7,15 +7,15 @@ class ApplicationController < ActionController::Base
 
   layout 'main'
 
-  rescue_from Exception do |ex|
-    if RAILS_ENV == 'production'
-      ErrorMailer.deliver_snapshot(ex, ex.backtrace, session, params, request.env)
-      flash[:error] = "I'm sorry, an error has occurred in SwankDB.  A report has been filed."
-      redirect_to '/'
-    else
-      raise ex
-    end
-  end
+#  rescue_from Exception do |ex|
+#    if RAILS_ENV == 'production'
+#      ErrorMailer.deliver_snapshot(ex, ex.backtrace, session, params, request.env)
+#      flash[:error] = "I'm sorry, an error has occurred in SwankDB.  A report has been filed."
+#      redirect_to '/'
+#    else
+#      raise ex
+#    end
+#  end
 
   def set_current_user(user)
     @_user = if user.kind_of? User
