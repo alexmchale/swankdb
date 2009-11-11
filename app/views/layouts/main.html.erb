@@ -38,7 +38,7 @@
             <input type="text" name="keywords" id="keywords" class="search_box" size="30" />
             <%= 3.spaces %>
             <input type="submit" value="Search" style="display: none" />
-            <a href="javascript:$('#searchbox').submit" class="view_link">Search</a>
+            <a href="javascript:$('form#searchbox').submit()" class="view_link">Search</a>
           </form>
         </p>
       <% else %>
