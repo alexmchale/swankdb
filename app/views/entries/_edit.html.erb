@@ -31,17 +31,6 @@
 <% end %>
 
 <script lang="JavaScript">
-  var auto_suggest_options = {
-    script: '/entries/suggest_tags?',
-    varname: 'input',
-    json: true,
-    maxresults: 20,
-    timeout: 10000,
-    shownoresults: false,
-    minchars: 1
-  };
-  var auto_suggest = new bsn.AutoSuggest('entry_tags', auto_suggest_options);
-
   $('#preview_link').click(function() {
     var preview = $('#content_preview');
     var edit = $('#content_edit_section');
