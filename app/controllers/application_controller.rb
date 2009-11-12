@@ -2,20 +2,15 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  if RAILS_ENV == 'production'
+    include ExceptionNotifiable
+    rescue_from Exception, :with => :rescue_action_in_public
+  end
+
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   layout 'main'
-
-#  rescue_from Exception do |ex|
-#    if RAILS_ENV == 'production'
-#      ErrorMailer.deliver_snapshot(ex, ex.backtrace, session, params, request.env)
-#      flash[:error] = "I'm sorry, an error has occurred in SwankDB.  A report has been filed."
-#      redirect_to '/'
-#    else
-#      raise ex
-#    end
-#  end
 
   def set_current_user(user)
     @_user = if user.kind_of? User
