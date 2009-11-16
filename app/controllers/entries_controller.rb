@@ -9,12 +9,12 @@ class EntriesController < ApplicationController
       'describe'    => Proc.new {|list| list.map {|e| e.plaintext}.join("\r\n")}
     },
 
-    {
-      'type'        => 'csv',
-      'mime-type'   => 'text/csv',
-      'description' => 'Comma Separated Values (CSV)',
-      'describe'    => Proc.new {|list| list.to_comma}
-    },
+#    {
+#      'type'        => 'csv',
+#      'mime-type'   => 'text/csv',
+#      'description' => 'Comma Separated Values (CSV)',
+#      'describe'    => Proc.new {|list| list.to_comma}
+#    },
 
     {
       'type'        => 'json',
