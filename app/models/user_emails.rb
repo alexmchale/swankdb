@@ -1,11 +1,11 @@
 class UserEmails < ActionMailer::Base
   def invitation(user, destination, message, subject = nil)
-    @recipients = destination
+    @recipients = destination.to_s.strip
     @subject = subject || "#{user.andand.username.to_s.capitalize} invites you to try SwankDB"
 
     @body = {
       :username => user.andand.username,
-      :email => user.andand.email,
+      :email => user.andand.email.to_s.strip,
       :message => message.to_s.strip
     }
 
@@ -13,7 +13,7 @@ class UserEmails < ActionMailer::Base
   end
 
   def password_reset_request(user, reset_url)
-    @recipients = user.email
+    @recipients = user.email.to_s.strip
     @subject = 'Password reset requested on SwankDB'
 
     @body = {
@@ -22,7 +22,7 @@ class UserEmails < ActionMailer::Base
   end
 
   def entry(user, destination, subject, entry)
-    @recipients = destination
+    @recipients = destination.to_s.strip
     @subject = subject || "A Swank Note from #{user.andand.username.to_s.capitalize}"
 
     @body = {

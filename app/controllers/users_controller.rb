@@ -103,6 +103,10 @@ class UsersController < ApplicationController
     redirect_to edit_user_path(current_user)
   end
 
+  def show
+    redirect_to :action => :logout
+  end
+
   def login
     if request.post?
       set_current_user User.authenticate(params[:username], params[:password])
