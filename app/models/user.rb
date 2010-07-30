@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   end
 
   def reset_tags
-    self.all_tags = Entry.find(:all, :conditions => { :user_id => id }).map do |e|
+    self.all_tags = Entry.all(:conditions => { :user_id => id }).map do |e|
       e.tags.to_s.split
     end.flatten.uniq.sort.join(' ')
 

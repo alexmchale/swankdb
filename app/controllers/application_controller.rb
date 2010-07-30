@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  if RAILS_ENV == 'production'
+  if Rails.env == 'production'
     include ExceptionNotifiable
     rescue_from Exception, :with => :rescue_action_in_public
   end

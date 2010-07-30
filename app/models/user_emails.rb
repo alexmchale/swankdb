@@ -1,35 +1,42 @@
 class UserEmails < ActionMailer::Base
+
+  default :from => "swank@swankdb.com"
+
   def invitation(user, destination, message, subject = nil)
-    @recipients = destination.to_s.strip
-    @subject = subject || "#{user.andand.username.to_s.capitalize} invites you to try SwankDB"
 
-    @body = {
-      :username => user.andand.username,
-      :email => user.andand.email.to_s.strip,
-      :message => message.to_s.strip
-    }
+    @username = user.andand.username
+    @email    = user.andand.email.to_s.strip
+    @subject  = subject || "#{user.andand.username.to_s.capitalize} invites you to try SwankDB"
+    @message  = message.to_s.strip
+    @reply_to = user.andand.email unless user.andand.email.blank?
 
-    @headers['reply-to'] = user.andand.email unless user.andand.email.blank?
+    mail :to       => destination,
+         :subject  => @subject,
+         :reply_to => @reply_to
+
   end
 
   def password_reset_request(user, reset_url)
-    @recipients = user.email.to_s.strip
-    @subject = 'Password reset requested on SwankDB'
 
-    @body = {
-      :reset_url => reset_url
-    }
+    @reset_url = reset_url
+
+    mail :to      => user.andand.email.to_s.strip,
+         :subject => "Password reset requested on SwankDB"
+
   end
 
   def entry(user, destination, subject, entry)
+
+    @content    = entry.andand.render
     @recipients = destination.to_s.strip
-    @subject = subject || "A Swank Note from #{user.andand.username.to_s.capitalize}"
+    @subject    = subject || "A Swank Note from #{user.andand.username.to_s.capitalize}"
+    @reply_to   = user.andand.email unless user.andand.email.blank?
 
-    @body = {
-      :content => entry.andand.render
-    }
+    mail :to           => @recipients,
+         :subject      => @subject,
+         :reply_to     => @reply_to,
+         :content_type => "text/html"
 
-    @content_type = 'text/html'
-    @headers['reply-to'] = user.andand.email unless user.andand.email.blank?
   end
+
 end

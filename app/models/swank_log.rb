@@ -9,6 +9,6 @@ class SwankLog < ActiveRecord::Base
   end
 
   def self.codes
-    find(:all, :group => :code).map {|l| l.code}.sort
+    all(:group => :code).map {|l| l.code}.sort
   end
 end

@@ -139,7 +139,7 @@ class UsersController < ApplicationController
         destination = params[:email]
         message = params[:message].strip
 
-        UserEmails.deliver_invitation current_user, destination, message
+        UserEmails.invitation(current_user, destination, message).deliver
 
         SwankLog.log 'INVITATION-CREATED', :user => current_user, :text => message
 
@@ -158,7 +158,7 @@ class UsersController < ApplicationController
     password1 = params[:password1]
     password2 = params[:password2]
 
-    @code = ActiveCode.find(:first, :conditions => { :code => params[:reset_code] })
+    @code = ActiveCode.first(:conditions => { :code => params[:reset_code] })
     @user = @code.andand.user
 
     if @code && @user && password1 && password2
@@ -196,7 +196,7 @@ class UsersController < ApplicationController
         reset_code = @user.new_active_code('reset-password', Time.now + 2.days).code
         reset_url = "http://#{request.env['HTTP_HOST']}/users/reset_password?reset_code=#{reset_code}"
 
-        UserEmails.deliver_password_reset_request @user, reset_url
+        UserEmails.password_reset_request(@user, reset_url).deliver
 
         flash[:notice] = "We have sent a password reset request to the email address on file."
 
@@ -254,7 +254,7 @@ class UsersController < ApplicationController
   def ip_eligible_for_new_user?
     conditions = [ 'message LIKE ? AND updated_at>?', "%#{request.remote_ip}%", Time.now - 2.minutes ]
 
-    SwankLog.find(:all, :conditions => conditions, :order => 'updated_at DESC').each do |log|
+    SwankLog.all(:conditions => conditions, :order => 'updated_at DESC').each do |log|
       if (message = JSON.load(log.message)).kind_of? Hash
         if message['source'] == request.remote_ip
           return 'A user has recently been created by your ip address.'

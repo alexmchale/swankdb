@@ -1,5 +1,5 @@
-SwankDB::Application.routes.draw do
-
+(in /home/alexmchale/src/swankdb)
+Swankdb::Application.routes.draw do
   match 'entries/suggest_tags' => 'entries#suggest_tags'
   match 'entries/preview' => 'entries#preview'
   match 'entries/download' => 'entries#download'
@@ -17,5 +17,4 @@ SwankDB::Application.routes.draw do
   match '/' => 'about#index'
   match '/:controller(/:action(/:id))'
   match ':controller/:action.:format' => '#index'
-
 end

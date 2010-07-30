@@ -38,7 +38,7 @@
 
         %p
 
-          - form_tag('/entries', :method => :get, :id => :searchbox) do
+          = form_tag('/entries', :method => :get, :id => :searchbox) do
 
             = text_field_tag :keywords, '', :class => :search_box, :size => 30
             = 3.spaces

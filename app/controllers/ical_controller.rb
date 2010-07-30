@@ -17,7 +17,7 @@ private
     order = (mode == :created) ? 'created_at DESC' : 'updated_at DESC'
     conditions = [ 'user_id = ? AND LENGTH(content) > 0', current_user_id ]
 
-    Entry.find(:all, :conditions => conditions, :limit => MAX_ENTRIES, :order => order)
+    Entry.all(:conditions => conditions, :limit => MAX_ENTRIES, :order => order)
   end
 
   def calendarize(entries, options = {})
