@@ -11,7 +11,7 @@ class ErrorMailer < ActionMailer::Base
 
     mail :to      => 'alexmchale@gmail.com',
          :from    => 'swank@swankdb.com',
-         :subject => "[SwankDB Error] #{env['REQUEST_URI']}",
+         :subject => "[SwankDB Error] #{env['REQUEST_URI']}"
 
   end
 

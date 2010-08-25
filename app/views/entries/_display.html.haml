@@ -1,7 +1,7 @@
 .content_display
-  %div= @entry.render
+  %div= raw @entry.render
 
   - unless @entry.tags.blank?
     = separator
-    %p{:style => "text-align: right; font-style: italic; font-size: 0.75em"}= link_entry_tags(@entry, :class => 'entrytags')
+    %p{:style => "text-align: right; font-style: italic; font-size: 0.75em"}= raw link_entry_tags(@entry, :class => 'entrytags')
 

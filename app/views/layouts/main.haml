@@ -5,11 +5,14 @@
     %meta{'http-equiv' => 'content-type', 'content' => 'text/html;charset=UTF-8'}
     %title SwankDB
 
+    = csrf_meta_tag
+
     = stylesheet_link_tag 'style'
     = stylesheet_link_tag 'autosuggest_inquisitor'
 
     = javascript_include_tag 'jquery-1.3.2.min.js'
     = javascript_include_tag 'jquery.hotkeys-0.7.9.min.js'
+    = javascript_include_tag 'rails'
     = javascript_include_tag 'application.js'
 
 %div.main_container
@@ -41,7 +44,7 @@
           = form_tag('/entries', :method => :get, :id => :searchbox) do
 
             = text_field_tag :keywords, '', :class => :search_box, :size => 30
-            = 3.spaces
+            = raw 3.spaces
             = submit_tag '', :class => :hidden
             = link_to 'Search', "javascript:$('form#searchbox').submit()", :class => :view_link
 
@@ -50,25 +53,25 @@
         %p
 
           = link_to 'log in', { :controller => :users, :action => :login }, :class => 'lookatme'
-          = 3.spaces
+          = raw 3.spaces
           or
-          = 3.spaces
+          = raw 3.spaces
           = link_to 'create a new account', { :controller => :users, :action => :new }, :class => 'lookatme'
-          = 3.spaces
+          = raw 3.spaces
           or
-          = 3.spaces
+          = raw 3.spaces
           = link_to 'start immediately', { :controller => :users, :action => :instant }, :class => 'lookatme'
 
   - if controller.current_user
-    = separator
+    = raw separator
 
     %div.tags_list
       - clazz = (controller.controller_name == 'entries' && controller.action_name == 'index' && params[:tag].blank?) ? 'tagcloud_highlight' : 'tagcloud'
-      = link_to 2.spaces + 'All' + 2.spaces, { :controller => :entries, :action => :index }, :class => clazz
+      = link_to "All", { :controller => :entries, :action => :index }, :class => clazz
 
       - controller.current_user.tags.each do |tag|
         - clazz = (tag == params[:tag]) ? 'tagcloud_highlight' : 'tagcloud'
-        = link_to 2.spaces + tag + 2.spaces, { :controller => :entries, :action => :index, :tag => tag }, :class => clazz
+        = link_to tag, { :controller => :entries, :action => :index, :tag => tag }, :class => clazz
 
   - unless flash[:error].blank?
     = separator
@@ -96,8 +99,8 @@
 
   #page_footer
     %p
-      = "#{link_to 'SwankDB', 'http://swankdb.com'} is currently in beta testing."
-      = "My blog about SwankDB and more is #{link_to 'Small Steps, Big Steps', 'http://blog.swankdb.com'}."
+      = raw "#{link_to 'SwankDB', 'http://swankdb.com'} is currently in beta testing."
+      = raw "My blog about SwankDB and more is #{link_to 'Small Steps, Big Steps', 'http://blog.swankdb.com'}."
 
     %p
       Please send comments, requests, complaints, issues, queries, puzzles, quandries

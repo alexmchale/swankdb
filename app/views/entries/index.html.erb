@@ -42,10 +42,10 @@
         <td class="list_cell">
 
           <p class="entry_index_content">
-            <%= summarize_entry_content entry %>
+            <%= raw summarize_entry_content entry %>
           </p>
 
-          <p class="entry_index_tags"><%= link_entry_tags(entry, :class => :list_tag) %></p>
+          <p class="entry_index_tags"><%= raw link_entry_tags(entry, :class => :list_tag) %></p>
 
           <p class="entry_index_hidden_links">
             <%= view_entry_link entry %>
