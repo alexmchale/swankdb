@@ -1,6 +1,3 @@
 [submodule "vendor/plugins/action_mailer_optional_tls"]
 	path = vendor/plugins/action_mailer_optional_tls
 	url = git://github.com/alexmchale/action_mailer_optional_tls.git
-[submodule "vendor/plugins/railz_scout"]
-	path = vendor/plugins/railz_scout
-	url = git://github.com/alexmchale/railz_scout.git
