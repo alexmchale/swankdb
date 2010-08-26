@@ -2,11 +2,6 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  if Rails.env == 'production'
-    include ExceptionNotifiable
-    rescue_from Exception, :with => :rescue_action_in_public
-  end
-
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
