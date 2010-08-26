@@ -75,11 +75,11 @@
 
   - unless flash[:error].blank?
     = separator
-    %div.page_error= flash[:error]
+    %div.page_error= raw flash[:error]
 
   - unless flash[:notice].blank?
     = separator
-    %div.page_notice= flash[:notice]
+    %div.page_notice= raw flash[:notice]
 
   = separator
 
