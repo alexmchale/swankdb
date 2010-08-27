@@ -5,7 +5,7 @@ module EntriesHelper
     if params[:order] == 'created'
       link_to 'Created', params.merge(:order => 'updated')
     else
-      link_to 'Last&nbsp;Update', params.merge(:order => 'created')
+      link_to raw('Last&nbsp;Update'), params.merge(:order => 'created')
     end
   end
 
@@ -31,6 +31,6 @@ module EntriesHelper
     lines = stripped.split(/\n+/)
     lines[0] = '<b>' + lines[0] + '</b><br>' unless lines[1].blank?
     #lines[0] = '<span class="entry_index_first_line">%s</span>' % lines[0].to_s
-    lines.join(' ')
+    raw lines.join(' ')
   end
 end

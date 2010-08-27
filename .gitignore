@@ -6,3 +6,4 @@ public/stylesheets
 tmp
 config/database.yml
 junk
+.bundle/
