@@ -1,3 +1,0 @@
-[submodule "vendor/plugins/action_mailer_optional_tls"]
-	path = vendor/plugins/action_mailer_optional_tls
-	url = git://github.com/alexmchale/action_mailer_optional_tls.git
