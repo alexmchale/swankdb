@@ -1,0 +1,21 @@
+base: &base
+  adapter: sqlite3
+  timeout: 5000
+
+development:
+  database: #{shared_path}/db/development.sqlite3
+  <<: *base
+
+test:
+  database: #{shared_path}/db/test.sqlite3
+  <<: *base
+
+production:
+  adapter: mysql
+  database: swankdb_production
+  pool: 5
+  timeout: 5000
+  username: root
+  password: rBUN783v6pg10kRnSWrt
+  socket: /tmp/mysql.sock
+  encoding: utf8
