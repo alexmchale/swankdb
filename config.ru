@@ -9,4 +9,3 @@ use Rack::Static, :root => "tmp/public", :urls => %w( /stylesheets )
 
 # Dispatch the request
 run ActionController::Dispatcher.new
-
