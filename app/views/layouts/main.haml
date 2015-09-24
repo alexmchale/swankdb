@@ -95,7 +95,7 @@
 
   %div.page_content= yield
 
-  = separator * 3
+  = raw(separator * 3)
 
   #page_footer
     %p
@@ -110,7 +110,7 @@
       Follow me on <a href="http://twitter.com/alexmchale">Twitter</a> for the latest about SwankDB
       and whatever other junk that I tweet.
 
-  = separator * 3
+  = raw(separator * 3)
 
 :javascript
   $('#searchbox #keywords').highlightWhenFocused();

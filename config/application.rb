@@ -30,6 +30,8 @@ module SwankDB
 
     ActiveRecord::Base.include_root_in_json = false
 
+    ActionController::Base.config.relative_url_root = ''
+
   end
 
 end
