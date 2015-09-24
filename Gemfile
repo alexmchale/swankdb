@@ -3,6 +3,9 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.20'
 gem 'pg'
 
+gem 'puma'
+gem 'rails_12factor'
+
 gem 'rdiscount'
 gem 'htmlentities'
 gem 'icalendar'

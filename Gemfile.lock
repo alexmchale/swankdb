@@ -47,6 +47,8 @@ GEM
     mime-types (1.25.1)
     pg (0.18.1)
     polyglot (0.3.5)
+    puma (2.11.2)
+      rack (>= 1.1, < 2.0)
     rack (1.2.8)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
@@ -60,6 +62,11 @@ GEM
       activesupport (= 3.0.20)
       bundler (~> 1.0)
       railties (= 3.0.20)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.4)
+    rails_stdout_logging (0.0.4)
     railties (3.0.20)
       actionpack (= 3.0.20)
       activesupport (= 3.0.20)
@@ -86,5 +93,7 @@ DEPENDENCIES
   htmlentities
   icalendar
   pg
+  puma
   rails (= 3.0.20)
+  rails_12factor
   rdiscount
