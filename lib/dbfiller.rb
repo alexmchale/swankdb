@@ -179,7 +179,7 @@ def self.loremof(length)
   end
 end
 
-user = User.find_by_username('test-scale')
+user = User.find_by(username: 'test-scale')
 
 raise 'could not find user test-scale' unless user
 

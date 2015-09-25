@@ -5,9 +5,10 @@ class User < ActiveRecord::Base
   before_save :rehash_password
 
   def self.authenticate(username, password)
-    User.find :first,
-              :conditions => { :username => username.to_s.downcase,
-                               :password => hash_password(username, password) }
+    User.where({
+      :username => username.to_s.downcase,
+      :password => hash_password(username, password),
+    }).first
   end
 
   def tags
@@ -23,7 +24,7 @@ class User < ActiveRecord::Base
   end
 
   def reset_tags
-    self.all_tags = Entry.all(:conditions => { :user_id => id }).map do |e|
+    self.all_tags = Entry.where(:user_id => id).map do |e|
       e.tags.to_s.split
     end.flatten.uniq.sort.join(' ')
 

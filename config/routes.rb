@@ -1,21 +1,21 @@
 SwankDB::Application.routes.draw do
 
-  match 'entries/suggest_tags' => 'entries#suggest_tags'
-  match 'entries/preview' => 'entries#preview'
-  match 'entries/download' => 'entries#download'
-  match 'users/login' => 'users#login'
-  match 'users/logout' => 'users#logout'
-  match 'users/invite' => 'users#invite'
-  match 'users/reset_password' => 'users#reset_password'
-  match 'users/instant' => 'users#instant'
-  match 'users/syndication' => 'users#syndication'
-  match 'ical/created' => 'ical#created'
-  match 'ical/updated' => 'ical#updated'
+  get "entries/suggest_tags" => "entries#suggest_tags"
+  get "entries/preview" => "entries#preview"
+  get "entries/download" => "entries#download"
+  get "users/login" => "users#login"
+  get "users/logout" => "users#logout"
+  get "users/invite" => "users#invite"
+  get "users/reset_password" => "users#reset_password"
+  get "users/instant" => "users#instant"
+  get "users/syndication" => "users#syndication"
+  get "ical/created" => "ical#created"
+  get "ical/updated" => "ical#updated"
+
   resources :entries
   resources :users
   resources :about
-  match '/' => 'about#index'
-  match '/:controller(/:action(/:id))'
-  match ':controller/:action.:format' => '#index'
+
+  root :to => "about#index"
 
 end

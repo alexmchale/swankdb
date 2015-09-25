@@ -9,9 +9,9 @@ class ApplicationController < ActionController::Base
 
   def set_current_user(user)
     @_user = if user.kind_of? User
-               User.find_by_id(user.id)
+               User.find_by(id: user.id)
              elsif user
-               User.find_by_id(user)
+               User.find_by(id: user)
              end
 
     session[:user_id] = @_user.andand.id
@@ -19,9 +19,9 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @_user ||= ActiveCode.find_by_code(params[:frob]).andand.user
+    @_user ||= ActiveCode.find_by(code: params[:frob]).andand.user
     @_user ||= User.authenticate(params[:username], params[:password])
-    @_user ||= User.find_by_id(session[:user_id])
+    @_user ||= User.find_by(id: session[:user_id])
   end
 
   def current_user_id

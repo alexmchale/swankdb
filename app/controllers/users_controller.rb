@@ -188,8 +188,8 @@ class UsersController < ApplicationController
       # Verify that we have a user that exists for one of the two provided credentials.
       # Create a new reset code for this user and email it to them.
 
-      @user = User.find_by_username(username)
-      @user ||= User.find_by_email(email)
+      @user = User.find_by(username: username)
+      @user ||= User.find_by(email: email)
 
       if @user
         @user.active_code('reset-password').andand.destroy
@@ -238,7 +238,7 @@ class UsersController < ApplicationController
   def check_username(username)
     if username.blank?
       'Please enter a username for your new account.'
-    elsif User.find_by_username(username)
+    elsif User.find_by(username: username)
       "I'm sorry, that username is already in use."
     end
   end
@@ -254,7 +254,7 @@ class UsersController < ApplicationController
   def ip_eligible_for_new_user?
     conditions = [ 'message LIKE ? AND updated_at>?', "%#{request.remote_ip}%", Time.now - 2.minutes ]
 
-    SwankLog.all(:conditions => conditions, :order => 'updated_at DESC').each do |log|
+    SwankLog.where(conditions).order("updated_at DESC").each do |log|
       if (message = JSON.load(log.message)).kind_of? Hash
         if message['source'] == request.remote_ip
           return 'A user has recently been created by your ip address.'

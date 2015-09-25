@@ -5,7 +5,7 @@ class ErrorMailer < ActionMailer::Base
     @exception = exception
     @trace     = trace
     @session   = session
-    @user      = User.find_by_id(session.andand[:user_id])
+    @user      = User.find_by(id: session.andand[:user_id])
     @params    = params
     @env       = env
 

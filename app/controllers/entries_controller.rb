@@ -70,7 +70,7 @@ class EntriesController < ApplicationController
     return render_data(:count => @entries_count, :description => @description) if params.has_key?(:query)
 
     # Retrieve the requested entries from the database.
-    @entries = Entry.all(:conditions => @conditions, :order => order, :limit => ENTRIES_PER_LOAD, :offset => params[:offset].to_i)
+    @entries = Entry.where(@conditions).order(order).limit(ENTRIES_PER_LOAD).offset(params[:offset].to_i).to_a
 
     # Store the current URI if this was an original request.  This is for redirects from edit pages.
     session[:last_view] = request.fullpath unless @results_only
@@ -84,7 +84,7 @@ class EntriesController < ApplicationController
   end
 
   def show
-    @entry = Entry.find_by_id_and_user_id(params[:id], current_user_id)
+    @entry = Entry.find_by(id: params[:id], user_id: current_user_id)
 
     # Store the current URI.  This is for redirects from edit pages.
     session[:last_view] = request.request_uri unless @results_only
@@ -105,11 +105,11 @@ class EntriesController < ApplicationController
   end
 
   def edit
-    @entry = Entry.find_by_id_and_user_id(params[:id], current_user_id)
+    @entry = Entry.find_by(id: params[:id], user_id: current_user_id)
   end
 
   def email
-    @entry = Entry.find_by_id_and_user_id(params[:id], current_user_id)
+    @entry = Entry.find_by(id: params[:id], user_id: current_user_id)
     @user = current_user
 
     if request.post? && !params[:destination].blank?
@@ -148,7 +148,7 @@ class EntriesController < ApplicationController
   end
 
   def update
-    @entry = Entry.find_by_id_and_user_id(params[:id], current_user_id)
+    @entry = Entry.find_by(id: params[:id], user_id: current_user_id)
     @entry.content = params[:entry_content].strip
     @entry.tags = Entry.split_tags(params[:entry_tags]).join(' ')
 
@@ -169,7 +169,7 @@ class EntriesController < ApplicationController
   end
 
   def destroy
-    @entry = Entry.find_by_id_and_user_id(params[:id], current_user_id)
+    @entry = Entry.find_by(id: params[:id], user_id: current_user_id)
 
     if @entry
       @entry.content = ''
@@ -212,7 +212,7 @@ class EntriesController < ApplicationController
     if current_user && mode
       starting_time = Time.parse(params[:starting_at] || '01/01/2000')
       conditions = [ "updated_at > ? AND user_id = ? AND LENGTH(content) > 0", starting_time, current_user_id ]
-      entries = Entry.all(:conditions => conditions)
+      entries = Entry.where(conditions).to_a
 
       data = mode['describe'].call(entries)
       send_data data, :type => mode['mime-type'], :disposition => 'attachment', :filename => "swankdb.#{mode['type']}"

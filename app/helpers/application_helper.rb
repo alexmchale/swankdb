@@ -88,4 +88,15 @@ module ApplicationHelper
 
     "%s%s%s" % [ protocol, host, port ]
   end
+
+  def form_errors(form)
+    if form.object.errors.present?
+      raw <<-HTML
+        <div>
+          <h1>ERRORS</h1>
+          <div>#{ h f.object.errors.full_messages }</div>
+        </div>
+      HTML
+    end
+  end
 end

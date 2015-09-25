@@ -1,5 +1,6 @@
 <%= form_for(@entry) do |f| %>
-  <%= f.error_messages %>
+
+  = form_errors(f)
 
   <div id="content_preview" style="display: none">
   </div>
