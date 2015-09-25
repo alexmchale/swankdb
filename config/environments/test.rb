@@ -32,4 +32,7 @@ SwankDB::Application.configure do
 
   config.eager_load = true
 
+  # See everything in the log (default is :info)
+  config.log_level = :debug
+
 end
